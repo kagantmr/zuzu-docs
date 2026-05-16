@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% if page.title %}{{ page.title }} — {% endif %}ZuzuOS</title>
+  <link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}">
+</head>
+<body>
+
+<aside id="sidebar">
+  <div class="site-title">
+    ZuzuOS
+    <span>ARMv7-A microkernel</span>
+  </div>
+
+  <nav>
+    <ul>
+      <li><a href="{{ '/' | relative_url }}"{% if page.url == '/' %} class="active"{% endif %}>Overview</a></li>
+
+      <li><span class="nav-section">Kernel</span></li>
+      <li><a href="{{ '/docs/architecture/' | relative_url }}"{% if page.url contains 'architecture' %} class="active"{% endif %}>Architecture</a></li>
+      <li><a href="{{ '/docs/memory/' | relative_url }}"{% if page.url contains 'memory' %} class="active"{% endif %}>Memory</a></li>
+      <li><a href="{{ '/docs/processes/' | relative_url }}"{% if page.url contains 'processes' %} class="active"{% endif %}>Processes & threads</a></li>
+      <li><a href="{{ '/docs/ipc/' | relative_url }}"{% if page.url contains 'ipc' %} class="active"{% endif %}>IPC</a></li>
+      <li><a href="{{ '/docs/interrupts/' | relative_url }}"{% if page.url contains 'interrupts' %} class="active"{% endif %}>Interrupts</a></li>
+      <li><a href="{{ '/docs/syscalls/' | relative_url }}"{% if page.url contains 'syscalls' %} class="active"{% endif %}>Syscall ABI</a></li>
+
+      <li><span class="nav-section">Userspace</span></li>
+      <li><a href="{{ '/docs/servers/' | relative_url }}"{% if page.url contains 'servers' %} class="active"{% endif %}>Server processes</a></li>
+      <li><a href="{{ '/docs/protocols/' | relative_url }}"{% if page.url contains 'protocols' %} class="active"{% endif %}>IPC protocols</a></li>
+      <li><a href="{{ '/docs/libzuzu/' | relative_url }}"{% if page.url contains 'libzuzu' %} class="active"{% endif %}>libzuzu</a></li>
+
+      <li><span class="nav-section">Porting</span></li>
+      <li><a href="{{ '/docs/boot/' | relative_url }}"{% if page.url contains 'boot' %} class="active"{% endif %}>Boot sequence</a></li>
+      <li><a href="{{ '/docs/hal/' | relative_url }}"{% if page.url contains 'hal' %} class="active"{% endif %}>HAL & portability</a></li>
+      <li><a href="{{ '/docs/debugging/' | relative_url }}"{% if page.url contains 'debugging' %} class="active"{% endif %}>Debugging</a></li>
+
+      <li><span class="nav-section">Project</span></li>
+      <li><a href="{{ '/docs/roadmap/' | relative_url }}"{% if page.url contains 'roadmap' %} class="active"{% endif %}>Roadmap</a></li>
+      <li><a href="{{ '/docs/zuzuphone/' | relative_url }}"{% if page.url contains 'zuzuphone' %} class="active"{% endif %}>zuzuPhone</a></li>
+      <li><a href="https://github.com/kagantmr/zuzu">GitHub ↗</a></li>
+    </ul>
+  </nav>
+</aside>
+
+<main id="content">
+  {{ content }}
+</main>
+
+</body>
+</html>
