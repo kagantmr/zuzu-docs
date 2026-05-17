@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Syscall ABI — zuzu</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<nav id="nav"></nav>
+<main id="content">
+
+<div class="breadcrumb"><a href="index.html">zuzu</a> / Kernel / Syscall ABI</div>
+<h1>System call ABI</h1>
+
+<p>System calls are services offered by zuzu for userspace programs to request from the kernel that they are not allowed direct access to,
+    such as virtual memory management, IPC, devices or handle management. zuzu defines an Application Binary Interface (ABI) that dictates
+    how registers etc. must be configured for the system call to be reliably serviced.</p>
+
+<h2>Calling convention</h2>
+
+<div class="table-wrap">
+<table>
+<thead><tr><th>Field</th><th>Location</th><th>Notes</th></tr></thead>
+<tbody>
+<tr><td>Syscall number</td><td><code>SVC #n</code> immediate (lower 8 bits)</td><td>ARM mode only</td></tr>
+<tr><td>Arg 0 / return value</td><td><code>r0</code></td><td>Modified by kernel on return</td></tr>
+<tr><td>Arg 1</td><td><code>r1</code></td><td>Preserved if unused</td></tr>
+<tr><td>Arg 2</td><td><code>r2</code></td><td>Preserved if unused</td></tr>
+<tr><td>Arg 3</td><td><code>r3</code></td><td>Preserved if unused</td></tr>
+<tr><td>Clobbered</td><td><code>r0</code> only</td><td><code>r1-r12</code>, <code>sp</code>, <code>lr</code> preserved</td></tr>
+</tbody>
+</table>
+</div>
+
+<p>Negative <code>r0</code> on return indicates an error (check <a href="./error_codes.html">error codes table</a>). Zero or positive is success.</p>
+
+<p>The kernel extracts the syscall number at <code>LR_svc - 4</code> (the instruction word before the return address) by masking the lower 8 bits. Arguments are already in <code>r0-r3</code> per AAPCS so call site wrappers need zero register shuffling.</p>
+<p><i>AArch64 actually doesn't need an extra memory access, instead the kernel can read the ESR and grab the SVC number.</i></p>
+<hr>
+
+<h2>Alignment requirements</h2>
+
+<p>Any pointer passed as a syscall argument must be 4-byte aligned. Also, <code>sp</code> must be 8-byte aligned before syscall entry (but this is not enforced by the kernel).</p>
+
+<h2>Syscall table</h2>
+
+<h3>Task lifecycle (0x00-0x0F)</h3>
+
+<div class="table-wrap">
+<table>
+<thead><tr><th>Number</th><th>Name</th><th>Signature</th></tr></thead>
+<tbody>
+<tr><td><code>0x00</code></td><td><code>pquit</code></td><td><code>(status) -> never returns</code></td></tr>
+<tr><td><code>0x01</code></td><td><code>yield</code></td><td><code>() -> 0</code></td></tr>
+<tr><td><code>0x03</code></td><td><code>wait</code></td><td><code>(pid, &amp;status, flags) -> 0 or -err</code></td></tr>
+<tr><td><code>0x04</code></td><td><code>getpid</code></td><td><code>() -> pid</code></td></tr>
+<tr><td><code>0x05</code></td><td><code>sleep</code></td><td><code>(ms) -> 0</code></td></tr>
+<tr><td><code>0x06</code></td><td><code>pspawn</code></td><td><code>(name_ptr) -> {handle, pid} in r0, r1</code></td></tr>
+<tr><td><code>0x07</code></td><td><code>kickstart</code></td><td><code>(args_struct_ptr) -> handle</code></td></tr>
+<tr><td><code>0x08</code></td><td><code>kill</code></td><td><code>(task_handle) -> 0 or -err</code></td></tr>
+<tr><td><code>0x09</code></td><td><code>tmake</code></td><td><code>(entry, user_sp, arg) -> tid</code></td></tr>
+<tr><td><code>0x0A</code></td><td><code>tjoin</code></td><td><code>(tid) -> exit_status or -err</code></td></tr>
+<tr><td><code>0x0B</code></td><td><code>tquit</code></td><td><code>(status) -> never returns</code></td></tr>
+</tbody>
+</table>
+</div>
+
+<h4>pquit — terminate process</h4>
+<p><code>SVC #0x00 &nbsp; r0=status</code></p>
+<p>Terminates the calling process with the given exit status. Marks all threads as zombie, removes them from the run queue, and schedules. Never returns to the caller. The exit status is retrievable by the parent via <code>wait</code>.</p>
+<div class="note">Kills the entire process. To exit a single thread, use <code>tquit</code>.</div>
+
+<h3>IPC (0x10-0x1F)</h3>
+
+<div class="table-wrap">
+<table>
+<thead><tr><th>Number</th><th>Name</th><th>Signature</th></tr></thead>
+<tbody>
+<tr><td><code>0x10</code></td><td><code>send</code></td><td><code>(port, r1, r2, r3) -> 0 or -err</code></td></tr>
+<tr><td><code>0x11</code></td><td><code>recv</code></td><td><code>(port) -> sender_pid; r1–r3 payload</code></td></tr>
+<tr><td><code>0x12</code></td><td><code>call</code></td><td><code>(port, r1, r2, r3) -> r0–r3 reply</code></td></tr>
+<tr><td><code>0x13</code></td><td><code>reply</code></td><td><code>(r0, r1, r2, r3) -> 0 or -err</code></td></tr>
+<tr><td><code>0x14</code></td><td><code>sendx</code></td><td><code>(port, buf_len) -> 0 or -err</code> — data in IPCX buffer</td></tr>
+<tr><td><code>0x15</code></td><td><code>callx</code></td><td><code>(port, buf_len) -> {0, recv_len}</code></td></tr>
+<tr><td><code>0x16</code></td><td><code>replyx</code></td><td><code>(reply_handle, buf_len) -> 0 or -err</code></td></tr>
+<tr><td><code>0x17</code></td><td><code>recvany</code></td><td><code>(handles_ptr, count, timeout, result_ptr) -> 0 or -err</code></td></tr>
+</tbody>
+</table>
+</div>
+
+<h3>Ports &amp; notifications (0x20-0x2F)</h3>
+
+<div class="table-wrap">
+<table>
+<thead><tr><th>Number</th><th>Name</th><th>Signature</th></tr></thead>
+<tbody>
+<tr><td><code>0x20</code></td><td><code>port_create</code></td><td><code>() -> handle or -err</code></td></tr>
+<tr><td><code>0x21</code></td><td><code>port_destroy</code></td><td><code>(handle) -> 0 or -err</code></td></tr>
+<tr><td><code>0x22</code></td><td><code>port_grant</code></td><td><code>(handle, pid) -> 0 or -err</code></td></tr>
+<tr><td><code>0x23</code></td><td><code>ntfn_create</code></td><td><code>() -> handle or -err</code></td></tr>
+<tr><td><code>0x24</code></td><td><code>ntfn_signal</code></td><td><code>(ntfn_handle, bits) -> 0 or -err</code></td></tr>
+<tr><td><code>0x25</code></td><td><code>ntfn_wait</code></td><td><code>(ntfn_handle) -> bits or -err</code></td></tr>
+<tr><td><code>0x26</code></td><td><code>ntfn_poll</code></td><td><code>(ntfn_handle) -> bits or -err</code></td></tr>
+</tbody>
+</table>
+</div>
+
+<h3>Memory (0x30-0x3F)</h3>
+
+<div class="table-wrap">
+<table>
+<thead><tr><th>Number</th><th>Name</th><th>Signature</th></tr></thead>
+<tbody>
+<tr><td><code>0x30</code></td><td><code>memmap</code></td><td><code>(addr, size, prot) -> addr or -err</code></td></tr>
+<tr><td><code>0x31</code></td><td><code>memunmap</code></td><td><code>(addr, size) -> 0 or -err</code></td></tr>
+<tr><td><code>0x32</code></td><td><code>memshare</code></td><td><code>(size) -> id or -err</code></td></tr>
+<tr><td><code>0x33</code></td><td><code>attach</code></td><td><code>(id, addr) -> addr or -err</code></td></tr>
+<tr><td><code>0x34</code></td><td><code>mapdev</code></td><td><code>(phys, size) -> addr or -err</code></td></tr>
+<tr><td><code>0x35</code></td><td><code>detach</code></td><td><code>(addr, size) -> 0 or -err</code></td></tr>
+<tr><td><code>0x36</code></td><td><code>querydev</code></td><td><code>(handle, out_buf, len) -> irq or -err</code></td></tr>
+<tr><td><code>0x37</code></td><td><code>mprotect</code></td><td><code>(addr, size, prot) -> 0 or -err</code></td></tr>
+<tr><td><code>0x38</code></td><td><code>asinject</code></td><td><code>(args_struct_ptr) -> 0 or -err</code></td></tr>
+</tbody>
+</table>
+</div>
+
+<h3>Interrupts (0x40-0x4F)</h3>
+
+<div class="table-wrap">
+<table>
+<thead><tr><th>Number</th><th>Name</th><th>Signature</th></tr></thead>
+<tbody>
+<tr><td><code>0x40</code></td><td><code>claim</code></td><td><code>(irq_num) -> 0 or -err</code></td></tr>
+<tr><td><code>0x41</code></td><td><code>bind</code></td><td><code>(irq_num) -> 0 or -err</code></td></tr>
+<tr><td><code>0x42</code></td><td><code>done</code></td><td><code>(irq_num) -> 0 or -err</code></td></tr>
+</tbody>
+</table>
+</div>
+
+<hr>
+
+<h2>Two-result returns</h2>
+
+<p>Syscalls that need two return values use both <code>r0</code> and <code>r1</code>. The wrapper captures both explicitly:</p>
+
+<pre>static inline tspawn_result_t _pspawn(const char *name) {
+    register uintptr_t r0 __asm__("r0") = (uintptr_t)name;
+    register zpid_t    r1 __asm__("r1");
+    __asm__ volatile("svc %[num]"
+        : "+r"(r0), "=r"(r1)
+        : [num] "i"(pspawn)
+        : "memory");
+    return (tspawn_result_t){ .task_handle = (handle_t)r0, .pid = r1 };
+}</pre>
+
+<hr>
+
+<h2>Notes</h2>
+
+<ul>
+<li>The syscall number is limited to 8 bits. In ARM mode, the full 24-bit SVC immediate is available but only the lower 8 bits are used. In Thumb mode, the SVC immediate is natively 8 bits. Both modes are handled by checking the T bit in SPSR and reading a 2-byte or 4-byte instruction accordingly.</li>
+<li>Syscall number extraction reads the instruction word at <code>LR_svc - 4</code> through the D-cache.</li>
+<li><code>CLREX</code> is issued at the top of each exception vector entry in <code>entry.S</code> to clear any outstanding exclusive monitor reservation from preempted LDREX/STREX sequences.</li>
+</ul>
+
+</main>
+<script src="nav.js"></script>
+</body>
+</html>

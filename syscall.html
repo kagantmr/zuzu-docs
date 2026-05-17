@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Syscall ABI — zuzu</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<nav id="nav"></nav>
+<main id="content">
+
+<h2>Syscall table</h2>
+
+<h3>Task lifecycle (0x00-0x0F)</h3>
+
+<div class="table-wrap">
+<table>
+<thead><tr><th>Number</th><th>Name</th><th>Signature</th></tr></thead>
+<tbody>
+<tr><td><code>0x00</code></td><td><code>pquit</code></td><td><code>(status) -> never returns</code></td></tr>
+<tr><td><code>0x01</code></td><td><code>yield</code></td><td><code>() -> 0</code></td></tr>
+<tr><td><code>0x03</code></td><td><code>wait</code></td><td><code>(pid, &amp;status, flags) -> 0 or -err</code></td></tr>
+<tr><td><code>0x04</code></td><td><code>getpid</code></td><td><code>() -> pid</code></td></tr>
+<tr><td><code>0x05</code></td><td><code>sleep</code></td><td><code>(ms) -> 0</code></td></tr>
+<tr><td><code>0x06</code></td><td><code>pspawn</code></td><td><code>(name_ptr) -> {handle, pid} in r0, r1</code></td></tr>
+<tr><td><code>0x07</code></td><td><code>kickstart</code></td><td><code>(args_struct_ptr) -> handle</code></td></tr>
+<tr><td><code>0x08</code></td><td><code>kill</code></td><td><code>(task_handle) -> 0 or -err</code></td></tr>
+<tr><td><code>0x09</code></td><td><code>tmake</code></td><td><code>(entry, user_sp, arg) -> tid</code></td></tr>
+<tr><td><code>0x0A</code></td><td><code>tjoin</code></td><td><code>(tid) -> exit_status or -err</code></td></tr>
+<tr><td><code>0x0B</code></td><td><code>tquit</code></td><td><code>(status) -> never returns</code></td></tr>
+<tr><td><code>0x10</code></td><td><code>send</code></td><td><code>(port, r1, r2, r3) -> 0 or -err</code></td></tr>
+<tr><td><code>0x11</code></td><td><code>recv</code></td><td><code>(port) -> sender_pid; r1–r3 payload</code></td></tr>
+<tr><td><code>0x12</code></td><td><code>call</code></td><td><code>(port, r1, r2, r3) -> r0–r3 reply</code></td></tr>
+<tr><td><code>0x13</code></td><td><code>reply</code></td><td><code>(r0, r1, r2, r3) -> 0 or -err</code></td></tr>
+<tr><td><code>0x14</code></td><td><code>sendx</code></td><td><code>(port, buf_len) -> 0 or -err</code> — data in IPCX buffer</td></tr>
+<tr><td><code>0x15</code></td><td><code>callx</code></td><td><code>(port, buf_len) -> {0, recv_len}</code></td></tr>
+<tr><td><code>0x16</code></td><td><code>replyx</code></td><td><code>(reply_handle, buf_len) -> 0 or -err</code></td></tr>
+<tr><td><code>0x17</code></td><td><code>recvany</code></td><td><code>(handles_ptr, count, timeout, result_ptr) -> 0 or -err</code></td></tr>
+<tr><td><code>0x20</code></td><td><code>port_create</code></td><td><code>() -> handle or -err</code></td></tr>
+<tr><td><code>0x21</code></td><td><code>port_destroy</code></td><td><code>(handle) -> 0 or -err</code></td></tr>
+<tr><td><code>0x22</code></td><td><code>port_grant</code></td><td><code>(handle, pid) -> 0 or -err</code></td></tr>
+<tr><td><code>0x23</code></td><td><code>ntfn_create</code></td><td><code>() -> handle or -err</code></td></tr>
+<tr><td><code>0x24</code></td><td><code>ntfn_signal</code></td><td><code>(ntfn_handle, bits) -> 0 or -err</code></td></tr>
+<tr><td><code>0x25</code></td><td><code>ntfn_wait</code></td><td><code>(ntfn_handle) -> bits or -err</code></td></tr>
+<tr><td><code>0x26</code></td><td><code>ntfn_poll</code></td><td><code>(ntfn_handle) -> bits or -err</code></td></tr>
+<tr><td><code>0x30</code></td><td><code>memmap</code></td><td><code>(addr, size, prot) -> addr or -err</code></td></tr>
+<tr><td><code>0x31</code></td><td><code>memunmap</code></td><td><code>(addr, size) -> 0 or -err</code></td></tr>
+<tr><td><code>0x32</code></td><td><code>memshare</code></td><td><code>(size) -> id or -err</code></td></tr>
+<tr><td><code>0x33</code></td><td><code>attach</code></td><td><code>(id, addr) -> addr or -err</code></td></tr>
+<tr><td><code>0x34</code></td><td><code>mapdev</code></td><td><code>(phys, size) -> addr or -err</code></td></tr>
+<tr><td><code>0x35</code></td><td><code>detach</code></td><td><code>(addr, size) -> 0 or -err</code></td></tr>
+<tr><td><code>0x36</code></td><td><code>querydev</code></td><td><code>(handle, out_buf, len) -> irq or -err</code></td></tr>
+<tr><td><code>0x37</code></td><td><code>mprotect</code></td><td><code>(addr, size, prot) -> 0 or -err</code></td></tr>
+<tr><td><code>0x38</code></td><td><code>asinject</code></td><td><code>(args_struct_ptr) -> 0 or -err</code></td></tr>
+<tr><td><code>0x40</code></td><td><code>claim</code></td><td><code>(irq_num) -> 0 or -err</code></td></tr>
+<tr><td><code>0x41</code></td><td><code>bind</code></td><td><code>(irq_num) -> 0 or -err</code></td></tr>
+<tr><td><code>0x42</code></td><td><code>done</code></td><td><code>(irq_num) -> 0 or -err</code></td></tr>
+</tbody>
+</table>
+</div>
+
+<h2>Syscall descriptions</h2>
+
+<h3>pquit</h3>
+<p>Terminate the calling process.</p>
+
+<h4>Arguments</h4>
+<div class="table-wrap">
+<table>
+<thead><tr><th>Register</th><th>Name</th><th>Description</th></tr></thead>
+<tbody>
+<tr><td><code>r0</code></td><td>status</td><td>Exit status code stored in the PCB, retrievable by parent via <code>wait</code></td></tr>
+</tbody>
+</table>
+</div>
+
+<h4>Returns</h4>
+<p>Does not return.</p>
+
+<h4>Errors</h4>
+<p>None. This syscall always succeeds.</p>
+
+<h4>Pitfalls</h4>
+<p>Do <b>not</b> use <code>pquit</code> to exit a thread unless you want the thread to terminate the entire process.</p>
+
+<hr>
+
+<h3>yield</h3>
+<p>Voluntarily reschedule the process away.</p>
+
+<h4>Returns</h4>
+<p><code>r0</code> = 0.</p>
+
+<h4>Errors</h4>
+<p>None. This syscall always succeeds.</p>
+
+<hr>
+
+<h4>wait</h4>
+<p>Waits for a child process to exit.</p>
+
+<h4>Arguments</h4>
+<div class="table-wrap">
+<table>
+<thead><tr><th>Register</th><th>Name</th><th>Description</th></tr></thead>
+<tbody>
+<tr><td><code>r0</code></td><td>pid</td><td>PID of process to wait on</td></tr>
+<tr><td><code>r1</code></td><td>arg</td><td>Pointer to buffer that kernel will fill as exit status</td></tr>
+</tbody>
+</table>
+</div>
+
+<h4>Returns</h4>
+<p>0 on success.</p>
+
+<h4>Errors</h4>
+<div class="table-wrap">
+<table>
+<thead><tr><th>Code</th><th>Condition</th></tr></thead>
+<tbody>
+<tr><td><code>ERR_BADARG</code></td><td>Negative PID</td></tr>
+<tr><td><code>ERR_NOENT</code></td><td>No process with that PID exists</td></tr>
+<tr><td><code>ERR_BADPTR</code></td><td>Status pointer is invalid.</td></tr>
+</tbody>
+</table>
+</div>
+
+<hr>
+
+<h4>getpid</h4>
+<p>Get PID of current process.</p>
+
+<h4>Returns</h4>
+<p>PID of the process.</p>
+
+<hr>
+
+<h4>sleep</h4>
+<p>Voluntarily block process for a specified duration of time.</p>
+
+<h4>Arguments</h4>
+<div class="table-wrap">
+<table>
+<thead><tr><th>Register</th><th>Name</th><th>Description</th></tr></thead>
+<tbody>
+<tr><td><code>r0</code></td><td>ms</td><td>Sleeping time in milliseconds</td></tr>
+</tbody>
+</table>
+</div>
+
+<h4>Returns</h4>
+<p>0 no matter what.</p>
+
+<hr>
+
+<h4>pspawn</h4>
+<p>Create a frozen child process.</p>
+
+<h4>Arguments</h4>
+<div class="table-wrap">
+<table>
+<thead><tr><th>Register</th><th>Name</th><th>Description</th></tr></thead>
+<tbody>
+<tr><td><code>r0</code></td><td>name</td><td>Pointer to name string</td></tr>
+</tbody>
+</table>
+</div>
+
+<h4>Returns</h4>
+<p>0 on success.</p>
+
+<h4>Errors</h4>
+<div class="table-wrap">
+<table>
+<thead><tr><th>Code</th><th>Condition</th></tr></thead>
+<tbody>
+<tr><td><code>ERR_BADARG</code></td><td>Failed in name copy</td></tr>
+<tr><td><code>ERR_NOMEM</code></td><td>Failed to create and fill PCB or handle vector full.</td></tr>
+<tr><td><code>ERR_BADPTR</code></td><td>String pointer is invalid.</td></tr>
+</tbody>
+</table>
+</div>
+
+<h4>Pitfalls</h4>
+<p>This syscall simply creates a FROZEN process that will not be scheduled. To actually fill
+    the process address space, the init process must call <code>asinject</code> with parsed ELF data.
+</p>
+
+<hr>
+
+<h4>kickstart</h4>
+<p>Mark a FROZEN process as schedulable.</p>
+
+<h4>Arguments</h4>
+<div class="table-wrap">
+<table>
+<thead><tr><th>Register</th><th>Name</th><th>Description</th></tr></thead>
+<tbody>
+<tr><td><code>r0</code></td><td>args</td><td>Pointer to argument struct</td></tr>
+</tbody>
+</table>
+</div>
+
+<h4>Returns</h4>
+<p>0 on success.</p>
+
+<h4>Errors</h4>
+<div class="table-wrap">
+<table>
+<thead><tr><th>Code</th><th>Condition</th></tr></thead>
+<tbody>
+<tr><td><code>ERR_BADARG</code></td><td>Failed in struct copy or handle vector retrieval, or the task isn't frozen, or there's no such task.</td></tr>
+<tr><td><code>ERR_BADPTR</code></td><td>Struct pointer is invalid.</td></tr>
+</tbody>
+</table>
+</div>
+
+<h4>Pitfalls</h4>
+<p>Do not call kickstart on a process that does not have its address space filled with
+    <code>asinject</code>, or you will get a prefetch abort and the process will be killed.
+    Ordinary processes cannot call <code>asinject</code>, and if you're willing to spawn a child
+    process, you must message the init process. 
+</p>
+
+<hr>
+
+<h4>kill</h4>
+<p>Terminate a child process.</p>
+
+<h4>Arguments</h4>
+<div class="table-wrap">
+<table>
+<thead><tr><th>Register</th><th>Name</th><th>Description</th></tr></thead>
+<tbody>
+<tr><td><code>r0</code></td><td>handle_idx</td><td>Slot index of task handle</td></tr>
+</tbody>
+</table>
+</div>
+
+<h4>Returns</h4>
+<p>0 on success.</p>
+
+<h4>Errors</h4>
+<div class="table-wrap">
+<table>
+<thead><tr><th>Code</th><th>Condition</th></tr></thead>
+<tbody>
+<tr><td><code>ERR_BADARG</code></td><td>If the handle doesn't exist, is not a process handle, or the process doesn't exist</td></tr>
+</tbody>
+</table>
+</div>
+
+<h4>Pitfalls</h4>
+<p>You cannot kill threads this way.</p>
+
+<hr>
+
+<h4>tmake</h4>
+<p>Create a new thread.</p>
+
+<h4>Arguments</h4>
+<div class="table-wrap">
+<table>
+<thead><tr><th>Register</th><th>Name</th><th>Description</th></tr></thead>
+<tbody>
+<tr><td><code>r0</code></td><td>entry</td><td>Entry point in code (must be <code>void (*entry)(void *)</code>)</td></tr>
+<tr><td><code>r1</code></td><td>usr_sp</td><td>User stack pointer (base)</td></tr>
+<tr><td><code>r2</code></td><td>arg</td><td>Argument pointer</td></tr>
+</tbody>
+</table>
+</div>
+
+<h4>Returns</h4>
+<p>Thread ID (TID) of the new thread.</p>
+
+<h4>Errors</h4>
+<div class="table-wrap">
+<table>
+<thead><tr><th>Code</th><th>Condition</th></tr></thead>
+<tbody>
+<tr><td><code>ERR_BADPTR</code></td><td>Any of the three pointers are invalid</td></tr>
+<tr><td><code>ERR_NOMEM</code></td><td>Failed to allocate kernel stack or TCB</td></tr>
+</tbody>
+</table>
+</div>
+
+<hr>
+
+<h4>tjoin</h4>
+<p>Wait for a thread to exit</p>
+
+<h4>Arguments</h4>
+<div class="table-wrap">
+<table>
+<thead><tr><th>Register</th><th>Name</th><th>Description</th></tr></thead>
+<tbody>
+<tr><td><code>r0</code></td><td>tid</td><td>TID of thread to wait for</td></tr>
+</tbody>
+</table>
+</div>
+
+<h4>Returns</h4>
+<p>Return code of the thread.</p>
+
+<h4>Errors</h4>
+<div class="table-wrap">
+<table>
+<thead><tr><th>Code</th><th>Condition</th></tr></thead>
+<tbody>
+<tr><td><code>ERR_BADARG</code></td><td>If calling process doesn't own the thread</td></tr>
+</tbody>
+</table>
+</div>
+
+<hr>
+
+<h4>tquit</h4>
+<p>Terminate the calling thread. If this was the last, act like <code>pquit</code></p>
+
+<h4>Arguments</h4>
+<div class="table-wrap">
+<table>
+<thead><tr><th>Register</th><th>Name</th><th>Description</th></tr></thead>
+<tbody>
+<tr><td><code>r0</code></td><td>status</td><td>Return code</td></tr>
+</tbody>
+</table>
+</div>
+
+<h4>Returns</h4>
+<p><code>r0</code> = 0.</p>
+
+<h4>Errors</h4>
+<p>None. This syscall always succeeds.</p>
+
+</main>
+<script src="nav.js"></script>
+</body>
+</html>

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Syscall ABI - zuzu</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <nav id="nav"></nav>
+    <main id="content">
+
+        <div class="breadcrumb"><a href="index.html">zuzu</a> / Shared / Syscall Error Codes</div>
+        <h1>System call returns</h1>
+        <p> If an error occurs during system call service, the kernel will return a negative value in <code>r0</code>.
+            You can use this table
+            to deduce which error was returned.</p>
+
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Value</th>
+                        <th>Name</th>
+                        <th>Meaning</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>0</code></td>
+                        <td><code>ZUZU_OK</code></td>
+                        <td>Success</td>
+                    </tr>
+                    <tr>
+                        <td><code>-1</code></td>
+                        <td><code>ERR_NOPERM</code></td>
+                        <td>Operation not permitted</td>
+                    </tr>
+                    <tr>
+                        <td><code>-2</code></td>
+                        <td><code>ERR_NOENT</code></td>
+                        <td>Resource or name not found</td>
+                    </tr>
+                    <tr>
+                        <td><code>-3</code></td>
+                        <td><code>ERR_BUSY</code></td>
+                        <td>Resource busy, try again</td>
+                    </tr>
+                    <tr>
+                        <td><code>-4</code></td>
+                        <td><code>ERR_NOMEM</code></td>
+                        <td>Out of memory</td>
+                    </tr>
+                    <tr>
+                        <td><code>-5</code></td>
+                        <td><code>ERR_BADFORM</code></td>
+                        <td>Bad handle, invalid or wrong slot number</td>
+                    </tr>
+                    <tr>
+                        <td><code>-6</code></td>
+                        <td><code>ERR_BADARG</code></td>
+                        <td>Invalid argument</td>
+                    </tr>
+                    <tr>
+                        <td><code>-7</code></td>
+                        <td><code>ERR_NOMATCH</code></td>
+                        <td>Syscall not implemented</td>
+                    </tr>
+                    <tr>
+                        <td><code>-8</code></td>
+                        <td><code>ERR_BADPTR</code></td>
+                        <td>Bad pointer: out of userspace range or would cause a page fault</td>
+                    </tr>
+                    <tr>
+                        <td><code>-9</code></td>
+                        <td><code>ERR_DEAD</code></td>
+                        <td>Endpoint destroyed while a thread was waiting on it</td>
+                    </tr>
+                    <tr>
+                        <td><code>-10</code></td>
+                        <td><code>ERR_TIMEOUT</code></td>
+                        <td>Message request or operation timed out</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </main>
+    <script src="nav.js"></script>
+</body>
+
+</html>

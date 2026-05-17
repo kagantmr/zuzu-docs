@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>zuzu</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <nav id="nav"></nav>
+    <main id="content">
+
+        <h1>zuzu</h1>
+
+        <p>zuzu is a lightweight microkernel written from scratch in C and ARM assembly. It is named after zuzu,
+            the Scottish Fold cat.</p>
+
+        <p>
+            As a microkernel, zuzu provides only the most essential services such as memory management, inter-process
+            communication, and scheduling.
+            Higher-level services such as device drivers, filesystems, and network stacks are implemented in userspace.
+            This design allows for better modularity, security, and reliability. zuzu prioritizes use in embedded systems,
+             IoT devices, and other resource-constrained environments.
+        </p>
+
+        <hr>
+
+        <h2>OS family</h2>
+
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Variant</th>
+                        <th>Target</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>zuzu</td>
+                        <td>Cortex-A, full MMU</td>
+                        <td><span class="wip">active</span></td>
+                    </tr>
+                    <tr>
+                        <td>tinyZuzu</td>
+                        <td>Cortex-M, MPU</td>
+                        <td><span class="planned">planned</span></td>
+                    </tr>
+                    <tr>
+                        <td>tinyZuzuRT</td>
+                        <td>Cortex-M, MPU, hard RT</td>
+                        <td><span class="planned">planned</span></td>
+                    </tr>
+                    <tr>
+                        <td>zuzu64</td>
+                        <td>AArch64/ARMv8</td>
+                        <td><span class="planned">planned</span></td>
+                    </tr>
+                    <tr>
+                        <td>zuzu_x86</td>
+                        <td>x86_64</td>
+                        <td><span class="planned">far future</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <h2>Status</h2>
+
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Stage</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Build, boot, UART, PMM, DTB, heap, MMU, GIC, scheduler</td>
+                        <td><span class="done">done</span></td>
+                    </tr>
+                    <tr>
+                        <td>Process lifecycle, userspace drop, messaging/msgX, shared memory</td>
+                        <td><span class="done">done</span></td>
+                    </tr>
+                    <tr>
+                        <td>Storage stack (fat32d, zusd, fbox)</td>
+                        <td><span class="done">done</span></td>
+                    </tr>
+                    <tr>
+                        <td>NIC driver (LAN9118)</td>
+                        <td><span class="wip">next</span></td>
+                    </tr>
+                    <tr>
+                        <td>Network stack (ARP, IPv4, UDP, TCP)</td>
+                        <td><span class="planned">planned</span></td>
+                    </tr>
+                    <tr>
+                        <td>Hardening, SMP, smarter scheduling, synchronization primitives</td>
+                        <td><span class="planned">in the future</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <h2>Quick start</h2>
+
+        <pre>
+git clone https://github.com/kagantmr/zuzu
+cd zuzu
+make
+make run
+</pre>
+
+        <p>Requires <code>arm-none-eabi-gcc</code>, <code>qemu-system-arm</code>, and <code>cpio</code>. Tested on QEMU
+            10.1.2.</p>
+
+        <p>Also looking for contributors and reviewers!</p>
+
+    </main>
+    <script src="nav.js"></script>
+</body>
+
+</html>
