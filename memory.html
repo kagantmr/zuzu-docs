@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Memory - zuzu</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <nav id="nav"></nav>
+    <main id="content">
+
+        <div class="breadcrumb"><a href="index.html">zuzu</a> / Kernel / Memory</div>
+        <h1>Memory</h1>
+
+        <p>zuzu keeps only address-space management in the kernel. Everything above it (allocation policy, the heap, the
+            object model) is built from: 1. a physical page allocator, 2. per-process page tables, 3. a handle-based
+            syscall surface for mapping memory into a process. This page covers all three. The high-level virtual layout
+            lives on the <a href="architecture.html">Architecture</a> page; here it is the reference for everything
+            below.</p>
+
+
+        <h2>Virtual address space</h2>
+
+        <pre>0xFFFFFFFF ┌─────────────────────┐
+           │   Kernel stacks     │
+0xF0100000 ├─────────────────────┤
+           │   MMIO region       │  (ioremap area, Device memory)
+0xF0000000 ├─────────────────────┤
+           │   (unmapped guard)  │
+           ├─────────────────────┤
+           │   Kernel BSS/data   │
+           │   Kernel text       │
+0xC0000000 ├─────────────────────┤  <- KERNEL_VA_BASE (TTBCR.N = 1)
+           │   (unmapped)        │
+0x80000000 ├─────────────────────┤  <- TTBR split (TTBCR.N = 1)
+           │   User space        │  (per-process, switched via TTBR0)
+           │   User stack (^)    │
+           │   User heap  (v)    │
+           │   User text/data    │
+           │                     │
+0x00001000 ├─────────────────────┤
+           │   NULL guard page   │
+0x00000000 └─────────────────────┘</pre>
+
+        <p>The ARM MMU uses two translation table base registers at once. <code>TTBR1</code> holds the kernel's L1 table
+            and <strong>never changes</strong> meaning the kernel is mapped for every process, so it stays visible
+            without copying its mappings into each address space. <code>TTBR0</code> holds the
+            current process's L1 table and is rewritten on every context switch. <code>TTBCR.N = 1</code> puts the split
+            at <code>0x80000000</code>: addresses below it resolve through <code>TTBR0</code> (per-process), addresses
+            at or above through <code>TTBR1</code> (kernel).</p>
+
+        <p>Two pages are left unmapped. The <strong>NULL guard page</strong> at <code>0x0</code> turns
+            null-pointer dereferences into faults instead of silent reads of low memory. The <strong>guard below the
+                MMIO region</strong> separates kernel data from the ioremap window so an overrun faults rather than
+            scribbling on device registers.</p>
+
+        <div class="note">Because <code>TTBR0</code> still points at the faulting process during a syscall, the kernel
+            can read user memory directly while servicing the call, which is what makes pointer validation and the
+            <code>SVC</code> instruction fetch possible.
+        </div>
+
+        <hr>
+
+        <h2>Physical memory</h2>
+
+        <p>Physical RAM is tracked by a <strong>bitmap page allocator</strong> along with a freelist (PMM), one bit per
+            4&nbsp;KB frame. The
+            extent of RAM and the MMIO ranges are discovered from the <strong>device tree</strong> at boot. Nothing
+            about the physical map is hardcoded in the kernel.</p>
+
+        <p>The allocator hands out single 4&nbsp;KB frames. L1 translation tables need <strong>16&nbsp;KB
+                alignment</strong>, so address-space creation requests four contiguous frames on a 16&nbsp;KB boundary
+            rather than a single page — a misaligned L1 base makes the MMU index the wrong table entries silently.</p>
+
+        <h2>Kernel heap</h2>
+
+        <p>Space for kernel objects such as PCBs, endpoints, notification objects, handle tables, page-table metadata
+            are allocated from a
+            small in-kernel heap via <code>kmalloc</code> / <code>kfree</code>. This is distinct from userspace
+            allocation: the kernel heap lives in the <code>TTBR1</code> region and is never exposed to processes.
+        </p>
+
+
+        <h2>Page tables and permissions</h2>
+
+        <p>ARMv7 translation is two-level: L1 entries cover 1&nbsp;MB sections, L2 tables refine them to 4&nbsp;KB
+            pages. User
+            mappings carry AP bits marking them user-accessible; kernel mappings are privileged-only, so a user access
+            to <code>0xC0000000</code> faults rather than reading kernel text.</p>
+
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>AP[2:0]</th>
+                        <th>PL1 (kernel)</th>
+                        <th>PL0 (user)</th>
+                        <th>Use</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>0b001</td>
+                        <td>read/write</td>
+                        <td>none</td>
+                        <td>kernel code/data</td>
+                    </tr>
+                    <tr>
+                        <td>0b011</td>
+                        <td>read/write</td>
+                        <td>read/write</td>
+                        <td>user code/data</td>
+                    </tr>
+                    <tr>
+                        <td>0b101</td>
+                        <td>read-only</td>
+                        <td>none</td>
+                        <td>kernel read-only</td>
+                    </tr>
+                    <tr>
+                        <td>0b111</td>
+                        <td>read-only</td>
+                        <td>read-only</td>
+                        <td>user read-only</td>
+                    </tr>
+                    <tr>
+                        <td>0b000</td>
+                        <td>none</td>
+                        <td>none</td>
+                        <td>guard / unmapped</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <p><strong>W^X is enforced globally.</strong> No mapping is ever writable and executable at the same time, and
+            <code>EXEC</code> is rejected outright on device memory. The kernel validates userspace
+            <code>prot</code> against W^X, then ORs in
+            <code>VM_PROT_USER</code> itself so a process can never mint a kernel-privileged mapping by choosing its own
+            protection bits.
+        </p>
+
+
+        <h2>The memory ABI</h2>
+
+        <p>Loaf froze a single mapping primitive. <code>memmap</code> absorbs what were previously separate "attach
+            shared memory" and "map device" calls. Now the handle selects what backs the mapping, and everything
+            else is uniform.</p>
+
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Call</th>
+                        <th>Effect</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>memmap(handle | HANDLE_ANON(-1), size, prot, flags)</code></td>
+                        <td>Map anonymous, shared, or device memory into the caller; returns the virtual address.</td>
+                    </tr>
+                    <tr>
+                        <td><code>memunmap(addr)</code></td>
+                        <td>Unmap a whole region by its base address.</td>
+                    </tr>
+                    <tr>
+                        <td><code>grant(handle, target)</code></td>
+                        <td>Transfer a handle to another process (capability transfer).</td>
+                    </tr>
+                    <tr>
+                        <td><code>destroy(handle)</code></td>
+                        <td>Free the backing object; returns <code>ERR_BUSY</code> if it is still mapped anywhere.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <p>The first <code>memmap</code> argument is either a real handle to a shared-memory or device object from the
+            caller's handle table or the sentinel <code>HANDLE_ANON</code> (<code>-1</code>) for fresh anonymous
+            pages.</p>
+
+        <p>Lifetime is explicit and ordered. An object-backed region is released in two steps:
+            <code>memunmap(addr)</code> to remove the mapping, then <code>destroy(handle)</code> to free the object.
+            <code>destroy</code> refuses (<code>ERR_BUSY</code>) while any mapping of the object survives, so a region
+            can never be freed out from under a process that still has it mapped. Anonymous regions have no separate
+            object; <code>memunmap(addr)</code> both unmaps and frees them.
+        </p>
+
+        <div class="note">Loaf's <code>memunmap</code> is whole-region only. Partial unmapping (POSIX
+            <code>munmap</code> semantics) is a compatible 1.x addition, <code>SYS_MEMUNMAP_RANGE</code> added
+            <em>beside</em> <code>memunmap</code>.
+        </div>
+
+
+        <h2>Anonymous memory and demand paging</h2>
+
+        <p>An anonymous <code>memmap</code> reserves virtual address range without committing physical frames up front.
+            Pages are mapped invalid; the first access takes a translation fault, the kernel backs that page with a
+            fresh frame and resumes the process, which never observes the fault. </p>
+
+
+        <h2>Shared memory</h2>
+
+        <p>Message passing moves control commands: four registers per rendezvous. Long messages (lmsg) is usually used
+            for
+            strings and is capped at 512 bytes. For anything larger, two
+            processes map the same shared-memory object into their own address spaces and exchange only a small
+            message to coordinate. This is the load-bearing split in the whole system: <strong>Messages carry intent,
+                shared memory carries data.</strong></p>
+
+        <p>The owner creates an SHM object and receives a handle; it hands a handle to a peer with <code>grant</code>;
+            both call <code>memmap</code> on their handle to get a view of the same physical pages. Synchronization is
+            the callers' responsibility, so for now the kernel guarantees the shared frames, not a protocol over them.
+            SHM is part
+            of Loaf, which is what lets memory-heavy userspace avoid copying through the kernel.</p>
+
+        <h2>Device memory</h2>
+
+        <p>A userspace driver maps its device's registers with the same <code>memmap</code> call, backed by a device
+            handle. Device mappings are <strong>Device-nGnRE</strong> (non-cacheable, non-gathering, ordered), the same
+            <code>TEX/C/B</code> attributes the kernel's <code>ioremap</code> uses. <code>EXEC</code> is always rejected on device memory.
+        </p>
+
+        <p>Mapping registers hands a process real hardware, so this is a privileged operation gated by capability, not
+            open to any process.
+        </p>
+
+        <hr>
+
+    </main>
+    <script src="nav.js"></script>
+</body>
+
+</html>
