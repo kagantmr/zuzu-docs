@@ -10,7 +10,7 @@
   <li><a href="memory.html">Memory</a></li>
   <li><a href="processes.html">Processes &amp; threads</a></li>
   <li><a href="ipc.html">IPC</a></li>
-  <li><a href="interrupts.html">Interrupts</a></li>
+  <li><a href="io.html">I/O & peripherals</a></li>
   <li><a href="syscall_abi.html">Syscall ABI</a></li>
   <li><a href="syscall.html">Syscall table</a></li>
 
