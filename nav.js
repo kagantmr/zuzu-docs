@@ -1,7 +1,7 @@
 /* nav.js — injects the sidebar and marks the active link */
 (function () {
   const nav = `
-<a class="nav-logo" href="index.html">ZuzuOS <small>ARMv7-A microkernel</small></a>
+<a class="nav-logo" href="index.html">zuzu <small>the Scottish Fold microkernel</small></a>
 <ul>
   <li><a href="index.html">Overview</a></li>
 
@@ -17,7 +17,7 @@
   <li><span class="nav-section">Userspace</span></li>
   <li><a href="servers.html">Server processes</a></li>
   <li><a href="protocols.html">IPC protocols</a></li>
-  <li><a href="libzuzu.html">libzuzu</a></li>
+  <li><a href="zcrt.html">zuzu C Runtime (ZCRT)</a></li>
 
   <li><span class="nav-section">Porting</span></li>
   <li><a href="boot.html">Boot sequence</a></li>
@@ -26,7 +26,9 @@
 
   <li><span class="nav-section">Project</span></li>
   <li><a href="roadmap.html">Roadmap</a></li>
-  <li><a href="zuzuphone.html">zuzuPhone</a></li>
+  <li><a href="versioning.html">Versioning</a></li>
+  <li><a href="releases.html">Releases</a></li>
+  <li><a href="contributing.html">Contributing</a></li>
   <li><a href="https://github.com/kagantmr/zuzu" target="_blank">GitHub &#8599;</a></li>
 </ul>`;
 
