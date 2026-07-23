@@ -1,0 +1,2 @@
+{% assign crumb_title = include.crumb_title | default: page.title %}
+{% if page.section %}<div class="breadcrumb"><a href="{{ '/' | relative_url }}">zuzu</a> / {{ page.section }} / {{ crumb_title }}</div>{% endif %}

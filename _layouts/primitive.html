@@ -1,0 +1,32 @@
+---
+layout: default
+---
+{% include breadcrumb.html crumb_title=page.name %}
+<h1>{{ page.name }}</h1>
+
+{% if page.header or page.summary %}
+<div class="table-wrap">
+<table>
+<tbody>
+{% if page.header %}<tr><th>Header</th><td><code>{{ page.header }}</code></td></tr>{% endif %}
+{% if page.summary %}<tr><th>Summary</th><td>{{ page.summary }}</td></tr>{% endif %}
+</tbody>
+</table>
+</div>
+{% endif %}
+
+{{ content }}
+
+{% if page.api %}
+<h4>API</h4>
+<div class="table-wrap">
+<table>
+<thead><tr><th>Prototype</th><th>Description</th></tr></thead>
+<tbody>
+{% for fn in page.api %}
+<tr><td><code>{{ fn.proto }}</code></td><td>{{ fn.desc }}</td></tr>
+{% endfor %}
+</tbody>
+</table>
+</div>
+{% endif %}

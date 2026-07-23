@@ -1,0 +1,25 @@
+title: zuzu
+description: the Scottish Fold microkernel
+url: https://kagantmr.github.io
+baseurl: /zuzu-docs
+permalink: pretty
+
+collections:
+  syscalls:
+    output: true
+    permalink: /abi/syscall/:name/
+  sync:
+    output: true
+    permalink: /sdk/sync/:name/
+
+defaults:
+  - scope: {path: "", type: syscalls}
+    values: {layout: syscall, section: ABI}
+  - scope: {path: "", type: sync}
+    values: {layout: primitive, section: SDK}
+  - scope: {path: ""}
+    values: {layout: page}
+
+kramdown:
+  input: GFM
+exclude: [Gemfile, Gemfile.lock, README.md, JEKYLL_MIGRATION_BRIEF.md]

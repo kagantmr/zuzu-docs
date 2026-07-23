@@ -1,0 +1,62 @@
+---
+layout: default
+---
+{% include breadcrumb.html crumb_title=page.name %}
+<h1>{{ page.name }}</h1>
+
+<div class="table-wrap">
+<table>
+<tbody>
+<tr><th>Number</th><td><code>{{ page.number }}</code></td></tr>
+<tr><th>Signature</th><td><code>{{ page.signature }}</code></td></tr>
+<tr><th>Group</th><td>{{ page.group }}</td></tr>
+{% if page.since %}<tr><th>Since</th><td>{{ page.since }}</td></tr>{% endif %}
+{% if page.blocking %}<tr><th>Blocking</th><td>{{ page.blocking }}</td></tr>{% endif %}
+</tbody>
+</table>
+</div>
+
+{{ content }}
+
+{% if page.args %}
+<h4>Arguments</h4>
+<div class="table-wrap">
+<table>
+<thead><tr><th>Register</th><th>Name</th><th>Description</th></tr></thead>
+<tbody>
+{% for a in page.args %}
+<tr><td><code>{{ a.reg }}</code></td><td>{{ a.name }}</td><td>{{ a.desc }}</td></tr>
+{% endfor %}
+</tbody>
+</table>
+</div>
+{% endif %}
+
+{% if page.returns %}
+<h4>Returns</h4>
+<p>{{ page.returns }}</p>
+{% endif %}
+
+{% if page.errors %}
+<h4>Errors</h4>
+<div class="table-wrap">
+<table>
+<thead><tr><th>Code</th><th>Condition</th></tr></thead>
+<tbody>
+{% for e in page.errors %}
+<tr><td>{% assign codes = e.code | split: " / " %}{% for c in codes %}<code>{{ c }}</code>{% unless forloop.last %} / {% endunless %}{% endfor %}</td><td>{{ e.when }}</td></tr>
+{% endfor %}
+</tbody>
+</table>
+</div>
+{% endif %}
+
+{% if page.see_also %}
+<h4>See also</h4>
+<ul>
+{% for s in page.see_also %}
+{% assign target = site.syscalls | where: "name", s | first %}
+<li><a href="{{ target.url | relative_url }}"><code>{{ s }}</code></a></li>
+{% endfor %}
+</ul>
+{% endif %}

@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% assign page_title = page.title | default: page.name %}
+    <title>{% if page_title and page.url != "/" %}{{ page_title }} - {% endif %}zuzu</title>
+    <link rel="stylesheet" href="{{ '/assets/style.css' | relative_url }}">
+    <link rel="icon" type="image/png" href="{{ '/assets/favicon.png' | relative_url }}">
+</head>
+
+<body>
+    <nav id="nav">{% include nav.html %}</nav>
+    <main id="content">
+        {{ content }}
+    </main>
+</body>
+
+</html>

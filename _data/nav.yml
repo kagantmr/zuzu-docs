@@ -1,0 +1,66 @@
+- section: Overview
+  items:
+    - {title: Overview,        url: /}
+    - {title: Getting started, url: /getting-started/}
+    - {title: Glossary,        url: /glossary/}
+
+- section: Kernel
+  items:
+    - {title: Architecture,          url: /kernel/architecture/}
+    - {title: Memory,                url: /kernel/memory/}
+    - {title: Processes & threads,   url: /kernel/processes/}
+    - {title: Scheduling,            url: /kernel/scheduling/}
+    - {title: IPC,                   url: /kernel/ipc/}
+    - {title: Notifications,         url: /kernel/notifications/}
+    - {title: Handles,               url: /kernel/handles/}
+    - {title: Badging & nametable,   url: /kernel/badging-nametable/}
+    - {title: I/O & peripherals,     url: /kernel/io/}
+    - {title: Faults,                url: /kernel/faults/}
+    - {title: Locking,               url: /kernel/locking/}
+    - {title: Boot sequence,         url: /kernel/boot/}
+
+- section: ABI
+  items:
+    - {title: Syscall ABI,    url: /abi/syscall-abi/}
+    - {title: Syscall table,  url: /abi/syscall-table/}
+    - {title: Error codes,    url: /abi/error-codes/}
+    - {title: Retired slots,  url: /abi/retired-slots/}
+
+- section: SDK
+  items:
+    - {title: ZCRT,                url: /sdk/zcrt/}
+    - {title: newlib tier,         url: /sdk/newlib-tier/}
+    - {title: Sync primitives,     url: /sdk/sync/}
+    - {title: Binary formats,      url: /sdk/binary-formats/}
+    - {title: elf2zxf,             url: /sdk/elf2zxf/}
+    - {title: Writing a driver,    url: /sdk/writing-a-driver/}
+    - {title: Writing a service,   url: /sdk/writing-a-service/}
+
+- section: zuzuOS
+  items:
+    - {title: Server processes, url: /os/servers/}
+    - {title: sysd,             url: /os/sysd/}
+    - {title: devmgr,           url: /os/devmgr/}
+    - {title: Name table,       url: /os/nametable/}
+    - {title: fsd,              url: /os/fsd/}
+    - {title: netd,             url: /os/netd/}
+    - {title: glazd,            url: /os/glazd/}
+    - {title: IPC protocols,    url: /os/protocols/}
+
+- section: Platform
+  items:
+    - {title: HAL & portability, url: /platform/hal/}
+    - {title: Supported boards,  url: /platform/supported-boards/}
+    - {title: Porting guide,     url: /platform/porting-guide/}
+    - {title: vexpress-a15,      url: /platform/vexpress-a15/}
+    - {title: RPi4 (AArch32),    url: /platform/rpi4/}
+    - {title: Debugging,         url: /platform/debugging/}
+
+- section: Project
+  items:
+    - {title: Roadmap,       url: /project/roadmap/}
+    - {title: Versioning,    url: /project/versioning/}
+    - {title: Compatibility, url: /project/compatibility/}
+    - {title: Releases,      url: /project/releases/}
+    - {title: Contributing,  url: /project/contributing/}
+    - {title: "GitHub ↗",    url: "https://github.com/kagantmr/zuzu", external: true}

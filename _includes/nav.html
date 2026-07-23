@@ -1,0 +1,13 @@
+<a class="nav-logo" href="{{ '/' | relative_url }}">zuzu <small>the Scottish Fold microkernel</small></a>
+<ul>
+{% for group in site.data.nav %}
+  <li><span class="nav-section">{{ group.section }}</span></li>
+  {% for item in group.items %}
+    {% if item.external %}
+  <li><a href="{{ item.url }}" target="_blank">{{ item.title }}</a></li>
+    {% else %}
+  <li><a href="{{ item.url | relative_url }}"{% if page.url == item.url %} class="active"{% endif %}>{{ item.title }}</a></li>
+    {% endif %}
+  {% endfor %}
+{% endfor %}
+</ul>
