@@ -1,13 +1,19 @@
 <a class="nav-logo" href="{{ '/' | relative_url }}">zuzu <small>the Scottish Fold microkernel</small></a>
 <ul>
-{% for group in site.data.nav %}
-  <li><span class="nav-section">{{ group.section }}</span></li>
-  {% for item in group.items %}
-    {% if item.external %}
+{% for group in site.data.nav.sections %}
+  {% assign is_active = false %}
+  {% if group.section == page.section %}{% assign is_active = true %}{% endif %}
+  {% if group.section == "Overview" and page.url == "/" %}{% assign is_active = true %}{% endif %}
+  <li><a class="nav-section{% if is_active %} active{% endif %}" href="{{ group.section_url | relative_url }}">{{ group.section }}</a></li>
+  {% if is_active %}
+    {% for item in group.items %}
+      {% if item.external %}
   <li><a href="{{ item.url }}" target="_blank">{{ item.title }}</a></li>
-    {% else %}
+      {% else %}
   <li><a href="{{ item.url | relative_url }}"{% if page.url == item.url %} class="active"{% endif %}>{{ item.title }}</a></li>
-    {% endif %}
-  {% endfor %}
+      {% endif %}
+    {% endfor %}
+  {% endif %}
 {% endfor %}
+  <li><a href="{{ site.data.nav.external.url }}" target="_blank">{{ site.data.nav.external.title }}</a></li>
 </ul>

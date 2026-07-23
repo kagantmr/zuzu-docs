@@ -8,10 +8,10 @@ args:
   - {reg: r1, name: len, desc: "Request byte count in the lmsg buffer"}
 returns: "On success, r0 = 0 and r1 = the reply length in the lmsg buffer."
 errors:
-  - {code: ERR_OVERFLOW, when: ""}
-  - {code: ERR_BADHANDLE, when: ""}
-  - {code: ERR_BADTYPE, when: ""}
-  - {code: ERR_DEAD, when: ""}
+  - {code: ERR_OVERFLOW, when: "Length of message exceeds the lmsg buffer size."}
+  - {code: ERR_BADHANDLE, when: "No such port exists for the given handle."}
+  - {code: ERR_BADTYPE, when: "The type of handle is not a port."}
+  - {code: ERR_DEAD, when: "Recipient has died before the reply could be sent."}
 ---
 
 Large-message request/response: send from the `lmsg` buffer and block for a reply written back into it.

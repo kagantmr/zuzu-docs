@@ -7,16 +7,24 @@ permalink: pretty
 collections:
   syscalls:
     output: true
-    permalink: /abi/syscall/:name/
+    permalink: /abi/syscall/:path/
   sync:
     output: true
     permalink: /sdk/sync/:name/
 
 defaults:
   - scope: {path: "", type: syscalls}
-    values: {layout: syscall, section: ABI}
+    values:
+      layout: syscall
+      section: ABI
+      parent_title: Syscall table
+      parent_url: /abi/syscall-table/
   - scope: {path: "", type: sync}
-    values: {layout: primitive, section: SDK}
+    values:
+      layout: primitive
+      section: SDK
+      parent_title: Sync primitives
+      parent_url: /sdk/sync/
   - scope: {path: ""}
     values: {layout: page}
 
