@@ -12,7 +12,11 @@ errors:
   - {code: ERR_BADPTR, when: "String pointer is invalid"}
 ---
 
-Create a frozen child process.
+Create a frozen child process. First step of the three-step process spawn sequence: 
+
+ 1. `pspawn` creates a new FROZEN process and returns its handle.
+ 2. `asinject` fills the new process's address space with parsed ELF data.
+ 3. `kickstart` marks the process as schedulable.
 
 ## Pitfalls
 

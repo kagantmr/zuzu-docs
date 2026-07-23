@@ -4,6 +4,7 @@ number: "0x38"
 group: memory
 since: "1.0"
 blocking: no
+headers: [zuzu/spawn_args.h]
 signature: "(args*) -> 0 or -err"
 args:
   - {reg: r0, name: args, desc: "Pointer to the injection struct; its first field is a caller-set size"}
@@ -13,7 +14,11 @@ errors:
   - {code: "ERR_BADPTR / ERR_BADARG", when: "For a bad struct"}
 ---
 
-Fill a frozen process's address space from parsed ELF data. This is the privileged step between `pspawn` and `kickstart`. The asinject struct has the following form and is in {{ site.abi_source }}/spawn_args.h:
+Fill a frozen process's address space from parsed ELF data. Second step of the three-step process spawn sequence: 
+ 1. `pspawn` creates a new FROZEN process and returns its handle.
+ 2. `asinject` fills the new process's address space with parsed ELF data.
+ 3. `kickstart` marks the process as schedulable.
+This is the privileged step between `pspawn` and `kickstart`. The asinject struct has the following form and is in `spawn_args.h`:
 
 ```c
 typedef struct

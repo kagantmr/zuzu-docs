@@ -20,7 +20,7 @@ The process wakes up with the data already in its registers. Future zuzu version
 
 ### Long message passing
 
-After writing to the lmsg buffer dedicated for the thread (one can read it from the TPIDRURO register) using the `msg_lsend, msg_lcall, msg_lreply`
+After writing to the lmsg buffer dedicated for the thread (one can read it from the `TPIDRURO` register) using the `msg_lsend, msg_lcall, msg_lreply`
 syscalls will copy up to 512 bytes of data from the sender to the recipient's lmsg buffer. The recipient can then read the data from its own lmsg buffer. This is useful for sending larger messages like strings without having to use shared memory.
 
 ## Shared memory
