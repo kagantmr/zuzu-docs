@@ -1,6 +1,7 @@
 title: zuzu
 description: the Scottish Fold microkernel
 url: https://kagantmr.github.io
+abi_source: https://github.com/kagantmr/zuzu/blob/zuzu-v1.0.0-loaf/include/zuzu
 baseurl: /zuzu-docs
 permalink: pretty
 
