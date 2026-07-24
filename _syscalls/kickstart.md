@@ -38,8 +38,6 @@ typedef struct
 } kickstart_args_t;
 ```
 
-On success, the task handle is **freed**. The parent's handle is no longer valid, and subsequent accesses will return `ERR_BADHANDLE`.
-
 ## Pitfalls
 
 Do not `kickstart` a process whose address space has not been filled by `asinject`, or it takes a prefetch abort and is killed. Ordinary processes cannot call `asinject`; to spawn a child, message the init process.
