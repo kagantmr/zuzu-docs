@@ -2,6 +2,8 @@
 name: send
 number: "0x10"
 group: messaging
+since: "1.0"
+blocking: yes
 signature: "(port, w1, w2, w3) -> 0 or -err"
 args:
   - {reg: r0, name: port, desc: "Handle of the destination port"}

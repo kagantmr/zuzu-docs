@@ -2,15 +2,26 @@
 name: tmake
 number: "0x09"
 group: task
-signature: "(entry, user_sp, arg) -> tid"
+since: "1.0"
+blocking: no
+signature: "(entry, sp, arg) -> tid or -err"
 args:
-  - {reg: r0, name: entry, desc: "Entry point (must be void (*entry)(void *))"}
-  - {reg: r1, name: user_sp, desc: "User stack pointer (base)"}
-  - {reg: r2, name: arg, desc: "Argument pointer passed to the entry function"}
-returns: "Thread ID (TID) of the new thread."
+  - {reg: r0, name: entry, desc: "Thread entry point (user VA)"}
+  - {reg: r1, name: sp, desc: "Top of the thread's user stack (caller-allocated)"}
+  - {reg: r2, name: arg, desc: "Single argument passed to the entry function"}
+returns: "The new thread's tid."
 errors:
-  - {code: ERR_BADPTR, when: "Any of the three pointers are invalid"}
-  - {code: ERR_NOMEM, when: "Failed to allocate the kernel stack or TCB"}
+  - {code: ERR_BADPTR, when: "entry or sp is not a valid user address"}
+  - {code: ERR_NOMEM, when: "No free thread, or no free TCB slot in the process"}
+see_also: [tjoin, tquit, pspawn]
 ---
 
-Create a new thread in the calling process.
+Create a thread in the calling process, sharing its address space and handle table. The
+thread starts at `entry(arg)` on the stack you provide.
+
+The caller owns the stack. `tmake` does not allocate one so pass the top of a region you
+mapped yourself, and size it for the thread's needs.
+
+The new thread gets its own TCB slot in the process's TCB page, so its `lmsg` buffer and
+tid are reachable via the frozen `TPIDRURO -> tdata_t` path. A process is capped at
+`TCB_MAX_SLOTS` (7) threads by that page.
