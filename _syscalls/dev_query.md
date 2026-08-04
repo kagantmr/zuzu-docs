@@ -1,5 +1,5 @@
 ---
-name: dev_query
+name: DeviceQuery
 number: "0x22"
 group: handles
 since: "1.0"
@@ -15,10 +15,10 @@ errors:
   - {code: ERR_BADHANDLE, when: "No such handle, or null device capability"}
   - {code: ERR_BADTYPE, when: "Handle is not a device handle"}
   - {code: ERR_BADPTR, when: "Output buffer is not writable"}
-see_also: [memmap, irq_bind, destroy]
+see_also: [MemMap, IrqBind, Destroy]
 ---
 
-Look up a device by name or class along with its metadata (such as its IRQ). This is the gate to mapping device registers with `memmap` and binding its interrupt with `irq_bind`.
+Look up a device by name or class along with its metadata (such as its IRQ). This is the gate to mapping device registers with `MemMap` and binding its interrupt with `IrqBind`.
 
 ## Pitfalls
 

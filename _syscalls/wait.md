@@ -1,5 +1,5 @@
 ---
-name: wait
+name: Wait
 number: "0x03"
 group: task
 since: "1.0"
@@ -14,7 +14,7 @@ errors:
   - {code: ERR_BADARG, when: "PID is negative and not -1"}
   - {code: ERR_NOENT, when: "No matching child exists, or none became reapable"}
   - {code: ERR_BADPTR, when: "Status pointer is invalid"}
-see_also: [pquit, pkill, pspawn, kickstart]
+see_also: [PQuit, PKill, PSpawn, Kickstart]
 ---
 
 Wait for a child to exit and reap it, reading back its exit status.
@@ -25,13 +25,13 @@ none has. On success the child is reaped and its PID returned.
 
 The status word carries how the child died:
 
-- A clean exit holds whatever value the child passed to `pquit`.
+- A clean exit holds whatever value the child passed to `PQuit`.
 - A killed child holds `KILLED_TAG | reason`. Decode with `WAS_KILLED(status)` and
-  `KILL_REASON(status)`: `KILL_BY_PARENT` for `pkill`, the `KILL_FAULT_*` family for a
+  `KILL_REASON(status)`: `KILL_BY_PARENT` for `PKill`, the `KILL_FAULT_*` family for a
   fault, `KILL_OOM` for an out-of-memory kill.
 
 ## Pitfalls
 
 A child that exits but is never waited on stays a zombie until reaped. A parent that spawns
-and kills children without ever calling `wait` leaks them; a long-lived supervisor must
+and kills children without ever calling `Wait` leaks them; a long-lived supervisor must
 reap. If the parent dies first, its zombies reparent to pid 1, which reaps them.

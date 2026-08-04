@@ -1,5 +1,5 @@
 ---
-name: irq_bind
+name: IrqBind
 number: "0x41"
 group: irq
 since: "1.0"
@@ -14,10 +14,10 @@ errors:
   - {code: ERR_BUSY, when: "Another process already owns that IRQ"}
   - {code: ERR_DEAD, when: "Notification object is dead"}
   - {code: ERR_BADARG, when: "Invalid IRQ number, or the device has no IRQ"}
-see_also: [irq_done, ntfn_wait, ntfn_create, dev_query]
+see_also: [IrqDone, NtfnWait, NtfnCreate, DeviceQuery]
 ---
 
-Bind a device's interrupt to a notification object. When the IRQ fires, the kernel masks the line and signals the notification; the driver waits on it with `ntfn_wait` or `waitany`. This folds in the old `irq_claim`. The IRQ sets bit `irq_num & 31`.
+Bind a device's interrupt to a notification object. When the IRQ fires, the kernel masks the line and signals the notification; the driver waits on it with `NtfnWait` or `Waitany`. This folds in the old `irq_claim`. The IRQ sets bit `irq_num & 31`.
 
 ## Pitfalls
 

@@ -1,5 +1,5 @@
 ---
-name: ntfn_create
+name: NtfnCreate
 number: "0x21"
 group: handles
 since: "1.0"
@@ -8,7 +8,7 @@ signature: "() -> handle or -err"
 returns: "A notification handle."
 errors:
   - {code: ERR_NOMEM, when: "No free handle slot, or the object could not be allocated"}
-see_also: [ntfn_signal, ntfn_wait, waitany, irq_bind, destroy, grant]
+see_also: [NtfnSignal, NtfnWait, Waitany, IrqBind, Destroy, Grant]
 ---
 
 Create a new notification object: a lightweight, non-blocking signal carrier used for IRQ

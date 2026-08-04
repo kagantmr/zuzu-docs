@@ -1,5 +1,5 @@
 ---
-name: memmap
+name: MemMap
 number: "0x30"
 group: memory
 since: "1.0"
@@ -19,7 +19,7 @@ errors:
   - {code: ERR_BADTYPE, when: "Handle is neither a device nor a shared-memory object"}
   - {code: ERR_BUSY, when: "That handle is already mapped"}
   - {code: ERR_NOMEM, when: "Address-space cursor exhausted, or the region could not be inserted"}
-see_also: [memunmap, memprotect, shm_create, destroy]
+see_also: [MemUnmap, MemProtect, ShmemCreate, Destroy]
 ---
 
 Map memory into the caller. The first argument selects the backing: `HANDLE_ANON` for
@@ -46,14 +46,14 @@ from a second, bounded by `USER_DEVICE_LIMIT`. The two never interleave.
 The kernel ORs in `VM_PROT_USER` itself, so a process cannot mint a kernel-privileged
 mapping through `prot`. Passing that bit explicitly is rejected as `ERR_BADARG`.
 
-Both cursors are bump allocators. Address space is never reclaimed: `memunmap` releases the
+Both cursors are bump allocators. Address space is never reclaimed: `MemUnmap` releases the
 frames but not the virtual range, so a process that maps and unmaps in a loop will eventually
 return `ERR_NOMEM` with most of its address space unused. Long-lived services should reserve
-one large region up front and sub-allocate inside it rather than calling `memmap` repeatedly.
+one large region up front and sub-allocate inside it rather than calling `MemMap` repeatedly.
 
-A handle can only be mapped once. A second `memmap` on the same device or shared-memory
-handle returns `ERR_BUSY`, and it stays busy until `memunmap`. Two *handles* to one shared
-object map independently, because `grant` clears the mapped address on the copy it creates.
+A handle can only be mapped once. A second `MemMap` on the same device or shared-memory
+handle returns `ERR_BUSY`, and it stays busy until `MemUnmap`. Two *handles* to one shared
+object map independently, because `Grant` clears the mapped address on the copy it creates.
 
 Anonymous sizes are rejected if they are not page multiples, but device sizes are rounded up
 silently. Do not assume the mapping is exactly `cap->size` bytes.

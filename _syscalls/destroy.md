@@ -1,5 +1,5 @@
 ---
-name: destroy
+name: Destroy
 number: "0x24"
 group: handles
 since: "1.0"
@@ -14,11 +14,11 @@ errors:
   - {code: ERR_BUSY, when: "Object is still mapped somewhere"}
   - {code: ERR_DEAD, when: "Port/ntfn owner is dead, and the handle was cleaned up"}
   - {code: ERR_NOPERM, when: "Calling process does not own the port/ntfn"}
-see_also: [port_create, port_grant]
+see_also: [PortCreate, Grant]
 ---
 
 Destroy the object behind a handle. Dispatches on the handle's type, so it replaces the old per-type destroy calls.
 
 ## Pitfalls
 
-Unmap a shared-memory or device region with `memunmap` before destroying its handle, or you get `ERR_BUSY`. Same goes for task handles, if the process is still running while destroy is called, you get `ERR_BUSY`. 
+Unmap a shared-memory or device region with `MemUnmap` before destroying its handle, or you get `ERR_BUSY`. Same goes for task handles, if the process is still running while destroy is called, you get `ERR_BUSY`. 

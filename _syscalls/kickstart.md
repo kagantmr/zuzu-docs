@@ -1,5 +1,5 @@
 ---
-name: kickstart
+name: Kickstart
 number: "0x07"
 group: task
 since: "1.0"
@@ -10,34 +10,34 @@ args:
   - {reg: r0, name: args, desc: "Pointer to the argument struct"}
 returns: "0 on success."
 errors:
-  - {code: ERR_BADARG, when: "`size` < `sizeof(kickstart_args_t)`"}
+  - {code: ERR_BADARG, when: "`size` < `sizeof(KickstartArgs)`"}
   - {code: ERR_BADPTR, when: "Struct pointer is invalid"}
   - {code: ERR_BADHANDLE, when: "Handle is not a valid task handle"}
   - {code: ERR_BADTYPE, when: "Handle is not a task handle"}
   - {code: ERR_BUSY, when: "Task is not `FROZEN`"}
-see_also: [asinject, pspawn]
+see_also: [AsInject, PSpawn]
 ---
 
 Mark a FROZEN process as schedulable. Final step of the three-step process spawn sequence: 
 
- 1. `pspawn` creates a new FROZEN process and returns its handle.
- 2. `asinject` fills the new process's address space with parsed ELF data.
- 3. `kickstart` marks the process as schedulable.
+ 1. `PSpawn` creates a new FROZEN process and returns its handle.
+ 2. `AsInject` fills the new process's address space with parsed ELF data.
+ 3. `Kickstart` marks the process as schedulable.
 
-The argument struct has the following form and is in `spawn_args.h`:
+The argument struct is `KickstartArgs`, defined in `spawn_args.h`:
 
 ```c
 typedef struct
 {
-    uint32_t size;        /* sizeof(kickstart_args_t); wrapper sets it */
-    handle_t task_handle; // handle of the target task
-    uintptr_t entry;      // entry point address in the target task's address space
-    uintptr_t sp;         // stack pointer value for the target task
+    uint32_t size;        /* sizeof(KickstartArgs); wrapper sets it */
+    Handle taskHandle; // handle of the target task
+    VirtAddr entry;      // entry point address in the target task's address space
+    VirtAddr sp;         // stack pointer value for the target task
     uint32_t r0_val;      // value to set in register r0 of the target task
     uint32_t r1_val;      // value to set in register r1 of the target task
-} kickstart_args_t;
+} KickstartArgs;
 ```
 
 ## Pitfalls
 
-Do not `kickstart` a process whose address space has not been filled by `asinject`, or it takes a prefetch abort and is killed. Ordinary processes cannot call `asinject`; to spawn a child, message the init process.
+Do not `Kickstart` a process whose address space has not been filled by `AsInject`, or it takes a prefetch abort and is killed. Ordinary processes cannot call `AsInject`; to spawn a child, message the init process.

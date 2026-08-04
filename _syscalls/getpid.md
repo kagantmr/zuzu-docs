@@ -1,5 +1,5 @@
 ---
-name: getpid
+name: GetPid
 number: "0x04"
 group: task
 since: "1.0"

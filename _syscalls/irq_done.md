@@ -1,5 +1,5 @@
 ---
-name: irq_done
+name: IrqDone
 number: "0x42"
 group: irq
 since: "1.0"
@@ -12,11 +12,11 @@ errors:
   - {code: "ERR_BADHANDLE / ERR_BADTYPE", when: "For a bad handle"}
   - {code: ERR_BADARG, when: "Handle does not point to a valid IRQ"}
   - {code: ERR_NOPERM, when: "Calling process does not own the IRQ"}
-see_also: [irq_bind, ntfn_wait, ntfn_create, dev_query]
+see_also: [IrqBind, NtfnWait, NtfnCreate, DeviceQuery]
 ---
 
 Signal that the device has been serviced. The kernel unmasks the IRQ line so it can fire again. 
 
 ## Pitfalls
 
-Do not call `irq_done` until the device has actually been serviced and has deasserted the line, or you provoke an interrupt storm. Recalling it is fine, since the kernel ignores it if the IRQ is not masked.
+Do not call `IrqDone` until the device has actually been serviced and has deasserted the line, or you provoke an interrupt storm. Recalling it is fine, since the kernel ignores it if the IRQ is not masked.

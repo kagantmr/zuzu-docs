@@ -1,5 +1,5 @@
 ---
-name: recv
+name: MsgRecv
 number: "0x11"
 group: messaging
 since: "1.0"
@@ -14,11 +14,11 @@ errors:
   - {code: ERR_BADHANDLE, when: "Handle names no live port"}
   - {code: ERR_BADTYPE, when: "Handle is not a port"}
   - {code: ERR_DEAD, when: "The port was destroyed while waiting"}
-see_also: [send, call, reply, waitany]
+see_also: [MsgSend, MsgCall, MsgReply, Waitany]
 ---
 
 Block waiting for a message on a port, returning once a sender rendezvouses.
 
-What lands in `r0` depends on how the sender sent. A plain `send` puts the sender's PID in
-`r0`. A `call` puts a freshly minted reply handle in `r0` and the sender's PID in `r1` and the server answers with `reply` on that handle. 
+What lands in `r0` depends on how the sender sent. A plain `MsgSend` puts the sender's PID in
+`r0`. A `MsgCall` puts a freshly minted reply handle in `r0` and the sender's PID in `r1` and the server answers with `MsgReply` on that handle. 
 Check your protocol's convention to know which to expect.

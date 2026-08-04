@@ -1,5 +1,5 @@
 ---
-name: asinject
+name: AsInject
 number: "0x38"
 group: memory
 since: "1.0"
@@ -15,23 +15,28 @@ errors:
 ---
 
 Fill a frozen process's address space from parsed ELF data. Second step of the three-step process spawn sequence: 
- 1. `pspawn` creates a new FROZEN process and returns its handle.
- 2. `asinject` fills the new process's address space with parsed ELF data.
- 3. `kickstart` marks the process as schedulable.
-This is the privileged step between `pspawn` and `kickstart`. The asinject struct has the following form and is in `spawn_args.h`:
+ 1. `PSpawn` creates a new FROZEN process and returns its handle.
+ 2. `AsInject` fills the new process's address space with parsed ELF data.
+ 3. `Kickstart` marks the process as schedulable.
+This is the privileged step between `PSpawn` and `Kickstart`. The asinject struct is `AsInjectArgs`, defined in `spawn_args.h`:
 
 ```c
 typedef struct
 {
-    uint32_t size;        /* sizeof(asinject_args_t); wrapper sets it */
-    handle_t task_handle; // handle of the target task
-    uintptr_t dst_va;     // destination virtual address in the target task's address space
+    uint32_t size;        /* sizeof(AsInjectArgs); wrapper sets it */
+    Handle taskHandle;     // handle of the target task
+    VirtAddr DestVAddr;     // destination virtual address in the target task's address space
     const void *src_buf;  // pointer to the source buffer in the current task's address space
     size_t len;           // length of the source buffer in bytes
-    uint32_t prot;        // memory protection flags for the destination mapping (e.g., VM_PROT_READ | VM_PROT_WRITE)
-} asinject_args_t;
+    MemProt prot;         // memory protection flags for the destination mapping (e.g., PROT_READ | PROT_WRITE)
+    uint32_t flags;       // ASINJECT_FLAG_* bits; 0 for the original copy-in behavior
+} AsInjectArgs;
 ```
+
+`flags` accepts `ASINJECT_FLAG_RESERVE`: instead of copying `len` bytes from `src_buf`, it
+reserves `[DestVAddr, DestVAddr + len)` as demand-zero anonymous memory in the target address
+space. `src_buf` must be `NULL` when this flag is set, since no bytes are copied up front.
 
 ## Pitfalls
 
-Only the init process may call this. Ordinary processes spawn children by messaging init, not by calling `asinject` directly. The init process is granted the permission via the `PROCESS_FLAG_INIT` in the PCB.
+Only the init process may call this. Ordinary processes spawn children by messaging init, not by calling `AsInject` directly. The init process is granted the permission via the `PROC_FLAG_INIT` flag in the PCB.

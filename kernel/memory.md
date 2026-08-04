@@ -70,7 +70,7 @@ Every process gets two pages mapped before its ELF is even loaded. The **syspage
 system information there (free memory counters are updated by the page allocator on every alloc/free) so
 userspace can read it without a syscall. The **TCB page** is the first mmap-area page: a
 read-write page holding per-thread slots, which is where a thread finds its own state and its lmsg buffer.
-Both are pinned — `memunmap` and `memprotect` refuse to touch them.
+Both are pinned — `MemUnmap` and `MemProtect` refuse to touch them.
 
 The **NULL guard page** at `0x0` turns null-pointer dereferences into faults instead
 of silent reads of low memory. The **stack guard page** below the stack reserve is a region
@@ -120,7 +120,7 @@ vector of **regions**. A region records a VA range, its protection, its memory t
 </div>
 
 The region list is the truth; page tables are derived from it. Insertion keeps the vector sorted and rejects
-overlaps, so lookups (fault handling, `memprotect`, pointer validation) are binary searches.
+overlaps, so lookups (fault handling, `MemProtect`, pointer validation) are binary searches.
 Regions can exist without any page-table entries at all: that is what makes demand paging work.
 
 Each user address space gets an **ASID**, so a context switch is a TTBR0 write plus an ASID
@@ -158,7 +158,7 @@ via `kmalloc`/`kfree`: a first-fit list of blocks that splits on allocation and
 coalesces neighbours on free, growing by grabbing contiguous pages from the PMM when it runs dry. It lives
 in the linear map, so a heap VA is always `PA + offset`
 
-Objects that churn on every IPC operation skip the heap: endpoints, reply capabilities, and device
+Objects that churn on every IPC operation skip the heap: ports, reply capabilities, and device
 capabilities are carved from per-type **slab caches**, one page at a time with an intrusive
 freelist per slab. Allocation and free are O(1) pointer pops, and freeing never merges or scans.
 
@@ -217,7 +217,7 @@ to `0xC0000000` faults rather than reading kernel text.
 </div>
 
 **W^X is enforced globally.** No mapping is ever writable and executable at the same time. The
-check sits at every entrance: `memmap` and `memprotect` reject
+check sits at every entrance: `MemMap` and `MemProtect` reject
 `WRITE|EXEC` up front, the ELF loader's injection path enforces it, and the mapping layer itself
 refuses a `WRITE|EXEC` user mapping as a last line. `EXEC` is rejected outright on
 device memory. The kernel validates userspace `prot` against W^X, then ORs in
@@ -232,7 +232,7 @@ kernel-only access, then flushes the TLB so the old permissions are gone.
 
 ## The memory ABI
 
-Loaf froze a single mapping primitive. `memmap` absorbs what were previously separate "attach
+Loaf froze a single mapping primitive. `MemMap` absorbs what were previously separate "attach
 shared memory" and "map device" calls. Now the handle selects what backs the mapping, and everything
 else is uniform.
 
@@ -246,41 +246,41 @@ else is uniform.
 </thead>
 <tbody>
 <tr>
-<td><code>memmap(handle | HANDLE_ANON(-1), size, prot, flags)</code></td>
+<td><code>MemMap(handle | HANDLE_ANON(-1), size, prot, flags)</code></td>
 <td>Map anonymous, shared, or device memory into the caller; returns the virtual address.</td>
 </tr>
 <tr>
-<td><code>memunmap(addr)</code></td>
+<td><code>MemUnmap(addr)</code></td>
 <td>Unmap a whole region by its base address.</td>
 </tr>
 <tr>
-<td><code>memprotect(addr, size, prot)</code></td>
+<td><code>MemProtect(addr, size, prot)</code></td>
 <td>Change protection on a page-aligned range within one region.</td>
 </tr>
 <tr>
-<td><code>shm_create(size)</code></td>
+<td><code>ShmemCreate(size)</code></td>
 <td>Create a shared-memory object; returns a handle.</td>
 </tr>
 <tr>
-<td><code>grant(handle, target)</code></td>
+<td><code>Grant(handle, target)</code></td>
 <td>Transfer a handle to another process (capability transfer).</td>
 </tr>
 <tr>
-<td><code>destroy(handle)</code></td>
+<td><code>Destroy(handle)</code></td>
 <td>Free the backing object; returns <code>ERR_BUSY</code> if it is still mapped anywhere.</td>
 </tr>
 </tbody>
 </table>
 </div>
 
-The first `memmap` argument is either a real handle to a shared-memory or device object from the
+The first `MemMap` argument is either a real handle to a shared-memory or device object from the
 caller's handle table or the sentinel `HANDLE_ANON` (`-1`) for fresh anonymous
 pages. The rules differ slightly by what backs the mapping:
 
 - **Anonymous:** `size` must be a page multiple and is capped at 32 MB
     (`ERR_OVERFLOW` beyond that). The VA comes from the process's mmap bump cursor.
 - **Shared memory:** `size` must be `0` since the size belongs to the
-    object, fixed at `shm_create`. One mapping per handle: mapping an already-mapped handle
+    object, fixed at `ShmemCreate`. One mapping per handle: mapping an already-mapped handle
     returns `ERR_BUSY`.
 - **Device:** `size` must be `0` (the size comes from the device
     capability) and `EXEC` is refused. The VA is carved from the separate device window, not the
@@ -290,7 +290,7 @@ pages. The rules differ slightly by what backs the mapping:
 kernel add mapping flags without a new syscall. Passing `VM_PROT_USER` yourself is
 `ERR_BADARG`; the kernel adds it.
 
-On success `memmap` returns the mapped VA in `r0`; on failure it returns a small
+On success `MemMap` returns the mapped VA in `r0`; on failure it returns a small
 negative error. The two never collide because the top page of the address space is the error band: any
 return value `≥ (uintptr_t)-4095` is an error code, anything else is a valid pointer
 (`zuzu_is_err()` in libzuzu wraps this test).
@@ -303,20 +303,20 @@ mapping record so the handle can be mapped again.
 
 Lifetime is explicit and ordered. An object-backed region is released in two steps:
 `memunmap(addr)` to remove the mapping, then `destroy(handle)` to free the object.
-`destroy` refuses (`ERR_BUSY`) while any mapping of the object survives, so a region
+`Destroy` refuses (`ERR_BUSY`) while any mapping of the object survives, so a region
 can never be freed out from under a process that still has it mapped. Anonymous regions have no separate
 object; `memunmap(addr)` both unmaps and frees them.
 
-`memprotect` operates on page-aligned ranges that fall inside a single region — spanning two
+`MemProtect` operates on page-aligned ranges that fall inside a single region — spanning two
 regions is refused, as is making device memory executable, as is touching a pinned region. The region
 record is updated together with the page tables so the two never disagree.
 
-<div class="note">Loaf's <code>memunmap</code> is whole-region only. Partial unmapping (POSIX
+<div class="note">Loaf's <code>MemUnmap</code> is whole-region only. Partial unmapping (POSIX
 <code>munmap</code> semantics) is a compatible 1.x addition, <code>SYS_MEMUNMAP_RANGE</code> added
-<em>beside</em> <code>memunmap</code>.
+<em>beside</em> <code>MemUnmap</code>.
 </div>
 
-One more mapping path exists outside the general ABI: `asinject`, callable **only by
+One more mapping path exists outside the general ABI: `AsInject`, callable **only by
 init**, writes a buffer into a frozen (not-yet-started) process at a chosen VA and protection. It is
 the mechanism the userspace ELF loader uses to place segments into a child before its first instruction
 runs. It enforces the same W^X rule, and when the destination falls inside an existing anonymous region
@@ -327,7 +327,7 @@ injected protection capped by the region's own.
 
 ## Demand paging
 
-An anonymous `memmap` reserves a virtual range without committing physical frames: the region is
+An anonymous `MemMap` reserves a virtual range without committing physical frames: the region is
 recorded, no page-table entries are made. The first access takes a translation fault, and the data-abort
 handler does the work: find the region containing the fault address, check it is not a guard region or
 device memory, check the access direction against the region's protection (a write to a read-only region
@@ -358,8 +358,8 @@ slots are empty, and pages are faulted in lazily when either side first touches 
 that is sparsely used stays cheap. The pages come from scattered allocation and are never physically
 contiguous.
 
-The owner creates an SHM object and receives a handle; it hands a handle to a peer with `grant`;
-both call `memmap` on their handle to get a view of the same physical pages. The reference count
+The owner creates an SHM object and receives a handle; it hands a handle to a peer with `Grant`;
+both call `MemMap` on their handle to get a view of the same physical pages. The reference count
 counts *handles, not mappings* — creation is one reference, each grant adds one, each destroy or
 process teardown drops one — and when the last handle goes, the faulted-in pages are returned to the PMM.
 Synchronization is the callers' responsibility, so for now the kernel guarantees the shared frames, not a
@@ -368,12 +368,12 @@ the kernel.
 
 ## Device memory
 
-A userspace driver maps its device's registers with the same `memmap` call, backed by a device
+A userspace driver maps its device's registers with the same `MemMap` call, backed by a device
 handle. Device mappings are **Device-nGnRE** (non-cacheable, non-gathering, ordered), the same
 `TEX/C/B` attributes the kernel's `ioremap` uses. They live in their own VA window
 (`0x7F000000`–`0x7F7FE000`) with its own bump cursor, away from the mmap area, and
 `EXEC` is always rejected on device memory. Device regions are never demand-paged — the physical
-address is the device, mapped eagerly at `memmap` time.
+address is the device, mapped eagerly at `MemMap` time.
 
 Mapping registers hands a process real hardware, so this is a privileged operation gated by capability, not
 open to any process.

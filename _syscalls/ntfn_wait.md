@@ -1,5 +1,5 @@
 ---
-name: ntfn_wait
+name: NtfnWait
 number: "0x26"
 group: handles
 since: "1.0"
@@ -14,7 +14,7 @@ errors:
   - {code: ERR_BADHANDLE, when: "No such handle"}
   - {code: ERR_BADTYPE, when: "Handle is not a notification"}
   - {code: ERR_DEAD, when: "The notification object is dead"}
-see_also: [ntfn_signal, ntfn_create, waitany, irq_bind]
+see_also: [NtfnSignal, NtfnCreate, Waitany, IrqBind]
 ---
 
 Read and clear a notification's bits, blocking until at least one is set.
@@ -31,5 +31,5 @@ timeout never degenerates into a poll.
 The read is destructive: bits are cleared on return, so there is no way to inspect them
 without consuming them.
 
-A waiter woken by `ntfn_signal` receives every bit accumulated at that moment, not only the
+A waiter woken by `NtfnSignal` receives every bit accumulated at that moment, not only the
 bits from the signal that woke it.

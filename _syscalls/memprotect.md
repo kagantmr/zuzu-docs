@@ -1,5 +1,5 @@
 ---
-name: memprotect
+name: MemProtect
 number: "0x37"
 group: memory
 since: "1.0"
@@ -14,10 +14,10 @@ returns: "0 on success."
 errors:
   - {code: ERR_BADARG, when: "Size of 0 or not a page multiple; range not valid user memory; W+X requested; or the range could not be reprotected"}
   - {code: ERR_NOPERM, when: "`prot` contains bits outside READ/WRITE/EXEC, including `VM_PROT_USER`"}
-see_also: [memmap, memunmap]
+see_also: [MemMap, MemUnmap]
 ---
 
-Change the protection of an existing mapping. Unlike `memunmap`, this is a true range
+Change the protection of an existing mapping. Unlike `MemUnmap`, this is a true range
 operation: it takes an address and a length, and works at page granularity rather than
 requiring a whole region.
 
@@ -25,7 +25,7 @@ The kernel ORs in `VM_PROT_USER` itself. Passing that bit explicitly is rejected
 
 ## Pitfalls
 
-W^X is enforced here as well as at `memmap`, so a region cannot be made writable and
+W^X is enforced here as well as at `MemMap`, so a region cannot be made writable and
 executable by mapping it one way and reprotecting it another.
 
 The underlying reprotect returns only success or failure, so every reason a range may be

@@ -1,5 +1,5 @@
 ---
-name: lsend
+name: MsgLsend
 number: "0x14"
 group: messaging
 since: "1.0"
@@ -15,9 +15,9 @@ errors:
   - {code: ERR_BADHANDLE, when: "No capability exists for the given handle."}
   - {code: ERR_BADTYPE, when: "This capability is not a port."}
   - {code: ERR_DEAD, when: "Recipient has died before the message could be sent."}
-see_also: [lreply, lcall, send, waitany]
+see_also: [MsgLreply, MsgLcall, MsgSend, Waitany]
 ---
 
-Send a long-message to a recipient process over an endpoint.
+Send a long-message to a recipient process over a port.
 
-The long message buffer is inside the TLS ( on ARMv7: `TPIDRURO` -> `tdata_t` -> `lmsg_buf`) and is `LMSG_BUF_SIZE` bytes large. You can use functions in `channel.h` to abstract the `lmsg` buffer operations.
+The long message buffer is inside the TLS ( on ARMv7: `TPIDRURO` -> `ThreadData` -> `buf`) and is `LMSG_BUF_SIZE` bytes large. Use `ChannelSend` in `channel.h` to abstract the buffer operations instead of touching it directly.

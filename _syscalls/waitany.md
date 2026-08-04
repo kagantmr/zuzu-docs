@@ -1,5 +1,5 @@
 ---
-name: waitany
+name: Waitany
 number: "0x17"
 group: messaging
 since: "1.0"
@@ -10,21 +10,21 @@ args:
   - {reg: r0, name: handles, desc: "Array of handles (ports and/or notifications) to wait on"}
   - {reg: r1, name: count, desc: "Number of handles in the array"}
   - {reg: r2, name: timeout_ms, desc: "`TIMEOUT_POLL` to poll, `TIMEOUT_INFINITE` to block, otherwise a deadline in ms"}
-  - {reg: r3, name: result, desc: "Pointer to a `waitany_result_t` the kernel fills"}
+  - {reg: r3, name: result, desc: "Pointer to a `WaitanyResult` the kernel fills"}
 returns: "0 on success; the fired source is described in `*result`."
 errors:
   - {code: ERR_BADARG, when: "count is 0 or exceeds WAITANY_MAX_HANDLES, or result->size is smaller than the kernel's struct"}
   - {code: ERR_BADPTR, when: "handles or result pointer is invalid or unwritable"}
-  - {code: ERR_DEAD, when: "A waited endpoint or notification was destroyed while blocked"}
+  - {code: ERR_DEAD, when: "A waited port or notification was destroyed while blocked"}
   - {code: ERR_TIMEOUT, when: "TIMEOUT_POLL and nothing was ready"}
-see_also: [recv, ntfn_wait, call, lcall]
+see_also: [MsgRecv, NtfnWait, MsgCall, MsgLcall, Stamp]
 ---
 
 Wait on several sources at once. It is the multiplexing primitive behind every event-loop
 server. Blocks until any handle in the set has a message or signal ready, then fills
 `result` describing which one fired and what it carried.
 
-Unlike `recv` (one port) or `ntfn_wait` (one notification), `waitany` lets one thread serve
+Unlike `MsgRecv` (one port) or `NtfnWait` (one notification), `Waitany` lets one thread serve
 many clients and react to notifications from a single blocking point, which is why a
 server needs only one thread, not one per client.
 
@@ -34,10 +34,11 @@ version negotiation; the kernel fills the rest:
 
 | Field | Meaning |
 | --- | --- |
-| `size` | Set by the wrapper to `sizeof(waitany_result_t)`. |
+| `size` | Set by the wrapper to `sizeof(WaitanyResult)`. |
 | `matched_index` | Index into your `handles` array of the source that fired; `WAITANY_NO_MATCH` on timeout. |
 | `kind` | Which kind of event fired: **see below.** |
 | `source`, `r1`, `r2`, `r3` | Payload, **reinterpreted per `kind`**. |
+| `marker` | The badge on the handle the sender used, if it was `Stamp`ed; `MARKER_NONE` otherwise. Set for `SEND` and `CALL`, always `MARKER_NONE` for `NTFN` and `TIMEOUT`. |
 
 The four payload slots mean different things depending on `kind`:
 
@@ -49,9 +50,14 @@ The four payload slots mean different things depending on `kind`:
 | `WAITANY_KIND_TIMEOUT` | — | — | — |
 
 So a server's dispatch loop switches on `result.kind`: a `CALL` gives you a reply handle in
-`source` to answer with `reply`/`lreply`; a `SEND` is fire-and-forget with the sender in
+`source` to answer with `MsgReply`/`MsgLreply`; a `SEND` is fire-and-forget with the sender in
 `source`; an `NTFN` carries its signalled bits in `r1`; a `TIMEOUT` means the deadline
 expired with `matched_index` set to `WAITANY_NO_MATCH`.
+
+A single port can be handed out under several handles, each `Stamp`ed with a different
+`marker`. All of them wake the same `Waitany` set through the one underlying port, but
+`result.marker` tells the server which stamped handle the sender actually used, so one
+port and one wait loop can demultiplex many logical clients without a handle per client.
 
 Two subtleties in the timeout behaviour:
 
@@ -69,4 +75,4 @@ rejected with `ERR_BADARG`.
 
 `kind` must be checked before reading any payload slot, because the slots are reinterpreted
 , reading `source` as a sender PID when the kind is `CALL` gives you a reply
-handle instead, and vice versa. This is the single most common `waitany` bug.
+handle instead, and vice versa. This is the single most common `Waitany` bug.

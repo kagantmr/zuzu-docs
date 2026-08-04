@@ -1,5 +1,5 @@
 ---
-name: ntfn_signal
+name: NtfnSignal
 number: "0x25"
 group: handles
 since: "1.0"
@@ -14,7 +14,7 @@ errors:
   - {code: ERR_BADHANDLE, when: "No such handle"}
   - {code: ERR_BADTYPE, when: "Handle is not a notification"}
   - {code: ERR_DEAD, when: "The notification object is dead"}
-see_also: [ntfn_wait, ntfn_create, waitany, irq_bind]
+see_also: [NtfnWait, NtfnCreate, Waitany, IrqBind]
 ---
 
 Set bits on a notification object, waking one waiter if any is queued. Bits are OR'd into the

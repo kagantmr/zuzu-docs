@@ -16,7 +16,7 @@ sections:
       - {title: IPC,                   url: /kernel/ipc/}
       - {title: Notifications,         url: /kernel/notifications/}
       - {title: Handles,               url: /kernel/handles/}
-      - {title: Badging & nametable,   url: /kernel/badging-nametable/}
+      - {title: Markers & nametable,   url: /kernel/markers-nametable/}
       - {title: Faults,                url: /kernel/faults/}
       - {title: Locking,               url: /kernel/locking/}
 

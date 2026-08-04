@@ -80,7 +80,7 @@ Kernel mappings live in `TTBR1` and are always accessible regardless of which pr
 
 ### Synchronous rendezvous IPC
 
-`send` blocks until a receiver is ready; `recv` blocks until a sender arrives. When both are present, the kernel copies four registers (`r0–r3`) and unblocks both. No message queues, no heap allocation in the IPC fast path. This is the same model used by L4, seL4, and QNX Neutrino.
+`MsgSend` blocks until a receiver is ready; `MsgRecv` blocks until a sender arrives. When both are present, the kernel copies four registers (`r0–r3`) and unblocks both. No message queues, no heap allocation in the IPC fast path. This is the same model used by L4, seL4, and QNX Neutrino.
 
 ### IPC as mutex
 

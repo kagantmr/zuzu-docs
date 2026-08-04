@@ -1,5 +1,5 @@
 ---
-name: tmake
+name: TMake
 number: "0x09"
 group: task
 since: "1.0"
@@ -13,15 +13,15 @@ returns: "The new thread's tid."
 errors:
   - {code: ERR_BADPTR, when: "entry or sp is not a valid user address"}
   - {code: ERR_NOMEM, when: "No free thread, or no free TCB slot in the process"}
-see_also: [tjoin, tquit, pspawn]
+see_also: [TJoin, TQuit, PSpawn]
 ---
 
 Create a thread in the calling process, sharing its address space and handle table. The
 thread starts at `entry(arg)` on the stack you provide.
 
-The caller owns the stack. `tmake` does not allocate one so pass the top of a region you
+The caller owns the stack. `TMake` does not allocate one so pass the top of a region you
 mapped yourself, and size it for the thread's needs.
 
 The new thread gets its own TCB slot in the process's TCB page, so its `lmsg` buffer and
-tid are reachable via the frozen `TPIDRURO -> tdata_t` path. A process is capped at
+tid are reachable via the frozen `TPIDRURO -> ThreadData` path. A process is capped at
 `TCB_MAX_SLOTS` (7) threads by that page.

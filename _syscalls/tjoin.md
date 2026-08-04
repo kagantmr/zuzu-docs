@@ -1,5 +1,5 @@
 ---
-name: tjoin
+name: TJoin
 number: "0x0A"
 group: task
 since: "1.0"
@@ -11,7 +11,7 @@ returns: "The joined thread's exit status."
 errors:
   - {code: ERR_NOENT, when: "No thread with that tid exists"}
   - {code: ERR_NOPERM, when: "The thread belongs to another process"}
-see_also: [tmake, tquit, wait]
+see_also: [TMake, TQuit, Wait]
 ---
 
 Block until a thread in the same process exits, returning its exit status. If the thread

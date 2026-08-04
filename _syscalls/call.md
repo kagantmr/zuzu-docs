@@ -1,5 +1,5 @@
 ---
-name: call
+name: MsgCall
 number: "0x12"
 group: messaging
 since: "1.0"
@@ -13,10 +13,10 @@ errors:
   - {code: ERR_BADHANDLE, when: "Handle names no live port"}
   - {code: ERR_BADTYPE, when: "Handle is not a port"}
   - {code: ERR_DEAD, when: "The peer is gone"}
-see_also: [send, recv, reply, lcall]
+see_also: [MsgSend, MsgRecv, MsgReply, MsgLcall]
 ---
 
-Atomic send-then-receive: deliver a message and block for the reply on the same port. This is the request/response fast path, cheaper than a separate `send` + `recv`.
+Atomic send-then-receive: deliver a message and block for the reply on the same port. This is the request/response fast path, cheaper than a separate `MsgSend` + `MsgRecv`.
 
 ## Pitfalls
 

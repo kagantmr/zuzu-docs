@@ -1,5 +1,5 @@
 ---
-name: memunmap
+name: MemUnmap
 number: "0x31"
 group: memory
 since: "1.0"
@@ -12,7 +12,7 @@ returns: "0 on success."
 errors:
   - {code: ERR_BADARG, when: "No region starts at that address"}
   - {code: ERR_NOPERM, when: "The region is pinned"}
-see_also: [memmap, memprotect, destroy]
+see_also: [MemMap, MemProtect, Destroy]
 ---
 
 Unmap a whole region by its base address. The address must match a region's base exactly;
@@ -26,7 +26,7 @@ are skipped.
 
 **Shared memory and device:** The frames are not freed since they belong to the object, not the
 mapping. Instead the owning handle's recorded address is cleared, which makes the object
-mappable again and releases the `ERR_BUSY` that `memmap` and `destroy` return while a handle
+mappable again and releases the `ERR_BUSY` that `MemMap` and `Destroy` return while a handle
 is mapped.
 
 ## Pitfalls

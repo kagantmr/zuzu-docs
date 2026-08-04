@@ -1,5 +1,5 @@
 ---
-name: grant
+name: Grant
 number: "0x23"
 group: handles
 since: "1.0"
@@ -16,7 +16,7 @@ errors:
   - {code: ERR_DEAD, when: "Grantee process is dead, or port/ntfn is dead and the handle was cleaned up"}
   - {code: ERR_NOENT, when: "Target PID is invalid"}
   - {code: ERR_NOPERM, when: "Handle is not grantable, target is the caller, or handle is a REPLY or TASK type"}
-see_also: [port_create, destroy]
+see_also: [PortCreate, Destroy]
 ---
 
 Copy a handle to another process. This is the generic capability-transfer primitive. The source keeps its handle and the object's refcount rises since this is a copy, not a move.

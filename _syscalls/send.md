@@ -1,5 +1,5 @@
 ---
-name: send
+name: MsgSend
 number: "0x10"
 group: messaging
 since: "1.0"

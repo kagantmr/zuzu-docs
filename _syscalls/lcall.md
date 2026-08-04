@@ -1,5 +1,5 @@
 ---
-name: lcall
+name: MsgLcall
 number: "0x15"
 group: messaging
 since: "1.0"
@@ -16,12 +16,12 @@ errors:
   - {code: ERR_BADTYPE, when: "The type of handle is not a port."}
   - {code: ERR_DEAD, when: "Recipient has died before the reply could be sent."}
   - {code: ERR_NOMEM, when: "Reply capability allocation failed, or the receiver's handle table is full."}
-see_also: [lsend, lreply, call, waitany]
+see_also: [MsgLsend, MsgLreply, MsgCall, Waitany]
 ---
 
-Long-message request/response: send from the `lmsg` buffer and block for a reply written back into it. A reply capability is minted into the receiver's table, and its slot index is what arrives in the receiver's `r0` (or `res->source` under `waitany`).
+Long-message request/response: send from the `lmsg` buffer and block for a reply written back into it. A reply capability is minted into the receiver's table, and its slot index is what arrives in the receiver's `r0` (or `res->source` under `Waitany`).
 
-The long message buffer is inside the TLS ( on ARMv7: `TPIDRURO` -> `tdata_t` -> `lmsg_buf`) and is `LMSG_BUF_SIZE` bytes large.  That's how `lreply` gets addressed. You can use functions in `channel.h` to abstract the lmsg buffer operations.
+The long message buffer is inside the TLS ( on ARMv7: `TPIDRURO` -> `ThreadData` -> `buf`) and is `LMSG_BUF_SIZE` bytes large. That's how `MsgLreply` gets addressed. Use `ChannelCall` in `channel.h` to abstract the buffer operations instead of touching it directly.
 
 ## Pitfalls
 
