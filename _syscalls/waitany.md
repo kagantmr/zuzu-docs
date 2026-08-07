@@ -38,16 +38,18 @@ version negotiation; the kernel fills the rest:
 | `matched_index` | Index into your `handles` array of the source that fired; `WAITANY_NO_MATCH` on timeout. |
 | `kind` | Which kind of event fired: **see below.** |
 | `source`, `r1`, `r2`, `r3` | Payload, **reinterpreted per `kind`**. |
-| `marker` | The badge on the handle the sender used, if it was `Stamp`ed; `MARKER_NONE` otherwise. Set for `SEND` and `CALL`, always `MARKER_NONE` for `NTFN` and `TIMEOUT`. |
+| `marker` | *(since 1.1)* The marker on the handle the sender used, if `Stamp`ed; `MARKER_NONE` otherwise. Set for `SEND` and `CALL`, always `MARKER_NONE` for `NTFN` and `TIMEOUT`. |
 
 The four payload slots mean different things depending on `kind`:
 
 | `kind` | `source` | `r1` | `r2`, `r3` |
 | --- | --- | --- | --- |
-| `WAITANY_KIND_SEND` | sender PID | payload / lmsg length | payload words |
-| `WAITANY_KIND_CALL` | reply handle | sender PID | payload / lmsg length |
+| `WAITANY_KIND_SEND` | sender PID  **deprecated, see below** | payload / lmsg length | payload words |
+| `WAITANY_KIND_CALL` | reply handle | sender PID **deprecated, see below** | payload / lmsg length |
 | `WAITANY_KIND_NTFN` | 0 | notification bits | — |
 | `WAITANY_KIND_TIMEOUT` | — | — | — |
+
+**As of zuzu v1.1, the sender PID field has been deprecated and will be removed by zuzu v2.0 Prowl. Use the marker field to identify the sender.**
 
 So a server's dispatch loop switches on `result.kind`: a `CALL` gives you a reply handle in
 `source` to answer with `MsgReply`/`MsgLreply`; a `SEND` is fire-and-forget with the sender in
@@ -73,6 +75,4 @@ rejected with `ERR_BADARG`.
 
 ## Pitfalls
 
-`kind` must be checked before reading any payload slot, because the slots are reinterpreted
-, reading `source` as a sender PID when the kind is `CALL` gives you a reply
-handle instead, and vice versa. This is the single most common `Waitany` bug.
+`kind` must be checked before reading any payload slot, because the slots are reinterpreted, reading `source` as a sender PID when the kind is `CALL` gives you a reply handle instead, and vice versa. This is the single most common `Waitany` bug.
