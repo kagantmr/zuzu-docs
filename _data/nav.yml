@@ -69,7 +69,8 @@ sections:
       - {title: Roadmap,       url: /project/roadmap/}
       - {title: Versioning,    url: /project/versioning/}
       - {title: Compatibility, url: /project/compatibility/}
-      - {title: Releases,      url: /project/releases/}
+      - {title: zuzu Releases,      url: /project/releases_kernel/}
+      - {title: zuzuOS Releases,      url: /project/releases_os/}
       - {title: Contributing,  url: /project/contributing/}
 
 external:
