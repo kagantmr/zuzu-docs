@@ -8,7 +8,6 @@ sections:
   - section: Kernel
     items:
       - {title: Architecture,          url: /kernel/architecture/}
-      - {title: Memory,                url: /kernel/memory/}
       - {title: Processes & threads,   url: /kernel/processes/}
       - {title: Scheduling,            url: /kernel/scheduling/}
       - {title: IPC,                   url: /kernel/ipc/}
