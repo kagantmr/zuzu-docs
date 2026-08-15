@@ -75,7 +75,7 @@ body {
   margin-top: 0.1rem;
 }
 
-#nav a.nav-section {
+#nav .nav-section {
   display: block;
   font-size: 0.63rem;
   font-weight: bold;
@@ -120,7 +120,7 @@ body {
   background-size: contain;
 }
 
-#nav a.nav-section.active { color: var(--text); font-weight: bold; }
+#nav .nav-section.active { color: var(--text); font-weight: bold; }
 
 #content {
   flex: 1;

@@ -31,6 +31,10 @@ tion handler which enables it and hands it off.
 - `lmsg` wrapper clobber list fix from `v1.0.1`
 - **Fix data aborts from userspace panicking the kernel:** A stray case in the data abort handler caused the kernel to panic despite the exception trapping from user mode, this is now fixed.
 
+### zuzu v1.1.1
+
+- **Labels** Process-specific 32-bit values used to distinguish them.
+
 ### zuzu v1.2
 
 - `MemUnmapRange` syscall (specifically for POSIX)

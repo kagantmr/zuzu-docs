@@ -8,6 +8,7 @@ signature: "(handle, pid) -> slot or -err"
 args:
   - {reg: r0, name: handle, desc: "Handle to transfer"}
   - {reg: r1, name: pid, desc: "PID of the receiving process"}
+  - {reg: r2, name: flags, desc: "Extra flags *v1.1.1*"}
 returns: "The handle index in the grantee's table."
 errors:
   - {code: ERR_BADHANDLE, when: "Source handle names no live entry"}
@@ -20,6 +21,8 @@ see_also: [PortCreate, Destroy]
 ---
 
 Copy a handle to another process. This is the generic capability-transfer primitive. The source keeps its handle and the object's refcount rises since this is a copy, not a move.
+
+**v1.1.1 added the flags argument: By passing GRANT_REGRANTABLE, the endpoint can be granted with no grantability change.**
 
 ## Pitfalls
 

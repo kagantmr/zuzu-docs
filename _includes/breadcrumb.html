@@ -1,5 +1,4 @@
 {% assign crumb_title = include.crumb_title | default: page.title %}
 {% if page.section %}
-{% assign section_data = site.data.nav.sections | where: "section", page.section | first %}
-<div class="breadcrumb"><a href="{{ '/' | relative_url }}">zuzu</a> / <a href="{{ section_data.section_url | relative_url }}">{{ page.section }}</a>{% if page.parent_title %} / <a href="{{ page.parent_url | relative_url }}">{{ page.parent_title }}</a>{% endif %} / {{ crumb_title }}</div>
+<div class="breadcrumb"><a href="{{ '/' | relative_url }}">zuzu</a> / {{ page.section }}{% if page.parent_title %} / <a href="{{ page.parent_url | relative_url }}">{{ page.parent_title }}</a>{% endif %} / {{ crumb_title }}</div>
 {% endif %}

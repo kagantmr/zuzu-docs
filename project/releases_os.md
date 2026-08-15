@@ -28,15 +28,19 @@ Click [here](https://github.com/kagantmr/zuzu/releases#release-zuzuos-v0.7.0) fo
 
 Planned:
 
-- Supervision by `sysd`
-- Resurrection thread running on `sysd`.
-- Using shm to store data to give back after resurrection
+- Use POSIX shim to bring in binutils, sbase, etc.
+- Fully working TCC
 - Remove dens for a cleaner nametable
+- New nameserver architecture
+- TCP options parsing, SACK, congestion control
 
 ### zuzuOS v0.9-beta
 
-- Use POSIX shim to bring in binutils, sbase, etc.
-- Fully working TCC
+
+- Supervision by `sysd`
+- Resurrection thread running on `sysd`.
+- Using shm to store data to give back after resurrection
+- TCP completion
 
 ### zuzuOS v1.0 Sherbet
 

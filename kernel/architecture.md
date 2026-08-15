@@ -72,7 +72,7 @@ Processes discover each other through `sysd`'s name table. A server registers it
 
 ### SVC immediate as syscall number
 
-The syscall number is encoded in the lower 8 bits of the `SVC #n` immediate field rather than a register (Linux uses `r7`). Arguments pass in `r0–r3` per AAPCS — no register shuffling required at the call site. This commits the ABI to ARM mode; Thumb `SVC` has only 8 usable bits and would need different extraction logic.
+The syscall number is encoded in the lower 8 bits of the `SVC #n` immediate field rather than a register (Linux uses `r7`). Arguments pass in `r0–r3` per AAPCS, no register shuffling required at the call site. This commits the ABI to ARM mode; Thumb `SVC` has only 8 usable bits and would need different extraction logic.
 
 ### TTBR0/TTBR1 split
 

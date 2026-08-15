@@ -1,13 +1,11 @@
 sections:
   - section: Overview
-    section_url: /
     items:
       - {title: Overview,        url: /}
       - {title: Getting started, url: /getting-started/}
       - {title: Glossary,        url: /glossary/}
 
   - section: Kernel
-    section_url: /kernel/
     items:
       - {title: Architecture,          url: /kernel/architecture/}
       - {title: Memory,                url: /kernel/memory/}
@@ -21,7 +19,6 @@ sections:
       - {title: Locking,               url: /kernel/locking/}
 
   - section: ABI
-    section_url: /abi/
     items:
       - {title: Syscall ABI,    url: /abi/syscall-abi/}
       - {title: Syscall table,  url: /abi/syscall-table/}
@@ -29,18 +26,16 @@ sections:
       - {title: Retired slots,  url: /abi/retired-slots/}
 
   - section: SDK
-    section_url: /sdk/
     items:
       - {title: ZCRT,                url: /sdk/zcrt/}
       - {title: newlib tier,         url: /sdk/newlib-tier/}
       - {title: Sync primitives,     url: /sdk/sync/}
       - {title: Binary formats,      url: /sdk/binary-formats/}
-      - {title: elf2zxf,             url: /sdk/elf2zxf/}
+      - {title: ZXF,                 url: /sdk/zxf/}
       - {title: Writing a driver,    url: /sdk/writing-a-driver/}
       - {title: Writing a service,   url: /sdk/writing-a-service/}
 
   - section: zuzuOS
-    section_url: /os/
     items:
       - {title: Server processes, url: /os/servers/}
       - {title: sysd,             url: /os/sysd/}
@@ -48,23 +43,18 @@ sections:
       - {title: Name table,       url: /os/nametable/}
       - {title: fsd,              url: /os/fsd/}
       - {title: netd,             url: /os/netd/}
-      - {title: glazd,            url: /os/glazd/}
       - {title: IPC protocols,    url: /os/protocols/}
 
   - section: Platform
-    section_url: /platform/
     items:
       - {title: HAL & portability, url: /platform/hal/}
       - {title: Boot sequence,     url: /platform/boot/}
       - {title: I/O & peripherals, url: /platform/io/}
       - {title: Supported boards,  url: /platform/supported-boards/}
       - {title: Porting guide,     url: /platform/porting-guide/}
-      - {title: vexpress-a15,      url: /platform/vexpress-a15/}
-      - {title: RPi4 (AArch32),    url: /platform/rpi4/}
       - {title: Debugging,         url: /platform/debugging/}
 
   - section: Project
-    section_url: /project/
     items:
       - {title: Roadmap,       url: /project/roadmap/}
       - {title: Versioning,    url: /project/versioning/}
