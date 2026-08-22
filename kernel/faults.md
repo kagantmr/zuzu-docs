@@ -38,4 +38,4 @@ Processes do not get the VFP enabled on startup. Instead, when a VFP instruction
 
 ### Resurrection 
 
-Because each service runs isolated in its own address space with no kernel privilege, a fatal user fault is contained: the process dies, but the kernel and every other service keep running. The same fault in a monolithic kernel (a driver touching bad memory) would be a kernel fault that crashes the whole system. Automatic resurrection (a supervisor observing the death and restarting the service) is planned for zuzuOS v0.8 and not yet implemented.
+Because each service runs isolated in its own address space with no kernel privilege, a fatal user fault is contained: the process dies, but the kernel and every other service keep running. The same fault in a monolithic kernel (a driver touching bad memory) would be a kernel fault that crashes the whole system. Automatic resurrection (a supervisor observing the death and restarting the service) is planned for zuzuOS v0.9 and not yet implemented.
