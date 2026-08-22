@@ -8,7 +8,7 @@ section: SDK
 
 # Writing a driver
 
-Drivers in zuzuOS are ordinary userspace processes. They must ask [the device manager](../../os/devmgr.md/) for a device capability, map the peripheral's MMIO region into their own address space, bind a [notification](../../kernel/notifications.md/) to the peripheral's IRQ line, and expose a service via [IPC](../../kernel/ipc.md/). Everything a driver does is done through syscalls anyone else could call, driver code is only privileged in that devmgr has granted it a specific device capability.
+Drivers in zuzuOS are ordinary userspace processes. They must ask [the device manager](../../os/devmgr/) for a device capability, map the peripheral's MMIO region into their own address space, bind a [notification](../../kernel/notifications/) to the peripheral's IRQ line, and expose a service via [IPC](../../kernel/ipc/). Everything a driver does is done through syscalls anyone else could call, driver code is only privileged in that devmgr has granted it a specific device capability.
 
 This page describes the anatomy of a driver. It uses `pl011drv` (the PL011 UART driver) as the running example because it exercises every part of the driver surface. Drivers with different shapes (polled-only, IRQ-less or DMA-heavy) deviate from this template in obvious ways, called out inline.
 
