@@ -1,4 +1,0 @@
-{% assign crumb_title = include.crumb_title | default: page.title %}
-{% if page.section %}
-<div class="breadcrumb"><a href="{{ '/' | relative_url }}">zuzu</a> / {{ page.section }}{% if page.parent_title %} / <a href="{{ page.parent_url | relative_url }}">{{ page.parent_title }}</a>{% endif %} / {{ crumb_title }}</div>
-{% endif %}

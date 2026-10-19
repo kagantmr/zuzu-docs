@@ -1,8 +1,8 @@
-name: Deploy Jekyll site to Pages
+name: Deploy site to Pages
 
 on:
   push:
-    branches: ["main"]
+    branches: [main]
   workflow_dispatch:
 
 permissions:
@@ -11,39 +11,76 @@ permissions:
   id-token: write
 
 concurrency:
-  group: "pages"
+  group: pages
   cancel-in-progress: false
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Setup Ruby
-        uses: ruby/setup-ruby@v1
+      - uses: actions/checkout@v4
         with:
-          ruby-version: '3.3'
+          ref: main
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Build 2.x
+        env:
+          NO_MKDOCS_2_WARNING: "1"
+        run: |
+          pip install -r requirements.txt
+          mkdocs build --strict --site-dir _site/2.x
+
+      - uses: actions/checkout@v4
+        with:
+          ref: v1
+          path: v1
+
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "3.3"
           bundler-cache: true
-      - name: Setup Pages
-        id: pages
-        uses: actions/configure-pages@v5
-      - name: Build with Jekyll
-        run: bundle exec jekyll build --baseurl "${{ steps.pages.outputs.base_path }}"
+          working-directory: v1
+
+      - name: Build 1.x
+        working-directory: v1
         env:
           JEKYLL_ENV: production
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
+        run: bundle exec jekyll build --baseurl /zuzu-docs/1.x --destination ../_site/1.x
+
+      - name: Version list and redirect
+        run: |
+          cat > _site/versions.json <<'EOF'
+          [
+            {"version": "2.x", "title": "2.x Prowl", "aliases": ["latest"]},
+            {"version": "1.x", "title": "1.x Loaf", "aliases": []}
+          ]
+          EOF
+          cat > _site/index.html <<'EOF'
+          <!doctype html>
+          <meta charset="utf-8">
+          <title>zuzu</title>
+          <meta http-equiv="refresh" content="0; url=/zuzu-docs/2.x/">
+          <link rel="canonical" href="/zuzu-docs/2.x/">
+          <a href="/zuzu-docs/2.x/">zuzu documentation</a>
+          EOF
+          cp _site/index.html _site/404.html
+
+      - uses: actions/configure-pages@v5
+
+      - uses: actions/upload-pages-artifact@v3
         with:
-          path: ./_site
+          path: _site
 
   deploy:
+    needs: build
+    runs-on: ubuntu-latest
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: ubuntu-latest
-    needs: build
     steps:
-      - name: Deploy to GitHub Pages
-        id: deployment
+      - id: deployment
         uses: actions/deploy-pages@v4

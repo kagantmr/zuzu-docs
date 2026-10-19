@@ -1,0 +1,125 @@
+site_name: zuzu
+site_description: the Scottish Fold microkernel
+site_url: https://kagantmr.github.io/zuzu-docs/2.x/
+repo_url: https://github.com/kagantmr/zuzu
+repo_name: kagantmr/zuzu
+edit_uri: ""
+
+theme:
+  name: material
+  favicon: assets/favicon.png
+  logo: assets/favicon.png
+  font: false
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: custom
+      accent: custom
+      toggle:
+        icon: material/weather-night
+        name: Switch to Night
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: custom
+      accent: custom
+      toggle:
+        icon: material/weather-sunny
+        name: Switch to Paper
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.indexes
+    - navigation.top
+    - navigation.footer
+    - search.suggest
+    - search.highlight
+    - content.code.copy
+
+extra_css:
+  - assets/zuzu.css
+
+extra:
+  version:
+    provider: mike
+    default: 2.x
+
+markdown_extensions:
+  - admonition
+  - attr_list
+  - md_in_html
+  - tables
+  - toc:
+      permalink: true
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.highlight
+  - pymdownx.inlinehilite
+
+validation:
+  links:
+    not_found: warn
+    anchors: warn
+
+nav:
+  - Home: index.md
+  - Start:
+      - start/index.md
+      - Build and run in QEMU: start/qemu.md
+      - Raspberry Pi 4: start/rpi4.md
+      - Your first program: start/first-program.md
+      - Supported boards: start/boards.md
+  - Concepts:
+      - concepts/index.md
+      - Objects and handles: concepts/objects-handles.md
+      - Spaces and tasks: concepts/spaces-tasks.md
+      - IPC: concepts/ipc.md
+      - Events: concepts/events.md
+      - Memory and DMA: concepts/memory.md
+      - Scheduling and time: concepts/scheduling-time.md
+      - Faults, suspend and inspect: concepts/faults.md
+      - The syspage: concepts/syspage.md
+  - Reference:
+      - reference/index.md
+      - Syscalls: reference/syscalls/index.md
+      - Types: reference/types.md
+      - Errors: reference/errors.md
+      - Syspage: reference/syspage.md
+      - Sync primitives:
+          - Zone: reference/sync/zone.md
+          - Semaphore: reference/sync/sem.md
+          - Condition variable: reference/sync/cv.md
+      - Libraries: reference/lib/index.md
+      - Syscall ABI: reference/abi.md
+      - Binary formats:
+          - reference/formats/index.md
+          - ZXF: reference/formats/zxf.md
+  - Guides:
+      - guides/index.md
+      - ZCRT: guides/zcrt.md
+      - newlib: guides/newlib.md
+      - Writing a service: guides/service.md
+      - Writing a driver: guides/driver.md
+      - Porting to a board: guides/porting-board.md
+      - Porting to an architecture: guides/porting-arch.md
+  - zuzuOS:
+      - os/index.md
+      - Boot: os/boot.md
+      - Name service: os/names.md
+      - tty: os/tty.md
+      - fsd: os/fsd.md
+      - netd and sockets: os/netd.md
+      - Drivers: os/drivers.md
+      - zzsh: os/zzsh.md
+  - Internals:
+      - internals/index.md
+      - Source tree: internals/source-tree.md
+      - Kernel design: internals/kernel.md
+      - Documentation rules: internals/docs.md
+  - Project:
+      - project/index.md
+      - Versioning: project/versioning.md
+      - Compatibility: project/compatibility.md
+      - Roadmap: project/roadmap.md
+      - Contributing: project/contributing.md
+      - zuzu releases: project/releases-zuzu.md
+      - zuzuOS releases: project/releases-zuzuos.md
