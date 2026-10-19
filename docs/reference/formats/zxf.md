@@ -128,7 +128,7 @@ Only `0x01` is produced or accepted today.
 | 3 | `COMPRESSED` | segment data is stored compressed |
 | 4–7 | — | reserved, must be zero |
 
-**Warning:** `elf2zxf` sets `STATIC` and nothing else. `PIC`, `HAS_DEBUG`, and `COMPRESSED` are reserved for future use and are not produced or honoured today.
+**Warning:** `elf2zxf` sets `STATIC` and nothing else. `PIC` and `COMPRESSED` are reserved for future use and are not produced or honoured today. `HAS_DEBUG` is set by the lld ZXF writer (see [Debug info](#debuginfo-block)); the loader ignores it.
 
 ## Segment table
 
@@ -185,11 +185,105 @@ they are marked `OPTIONAL`.
 | --- | --- | --- | --- |
 | `0x0001` | `DYNLINK` | loader | reserved, not implemented |
 | `0x0002` | `HINTS` | `sysd` | reserved, not implemented |
-| `0x0003` | `DEBUGINFO` | debugger | reserved, not implemented |
+| `0x0003` | `DEBUGINFO` | debugger, `zxf-debug` | produced by `ld.lld --oformat=zxf` |
 | `0x0004` | `SIGNATURE` | `devmgr` | reserved, not implemented |
 
-No block types are produced or consumed today. `elf2zxf` emits
-`block_count = 0` and omits the block table entirely.
+`elf2zxf` emits `block_count = 0` and omits the block table entirely. The lld
+ZXF writer emits at most one block, `DEBUGINFO`, and sets `block_count = 1`.
+
+When a block is present the layout is: header, segment table, block table,
+block data, padding to the next page boundary, then the segments. Blocks are
+never mapped into the process. Only the file grows.
+
+### DEBUGINFO block
+
+Type `0x0003`, `OPTIONAL`. Present when the `HAS_DEBUG` header flag is set.
+All integers are little-endian. All offsets inside the block are relative to
+the start of the block data.
+
+| Offset | Size | Field | Description |
+| --- | --- | --- | --- |
+| 0 | 4 | `magic` | `5A 44 42 47` (`ZDBG`) |
+| 4 | 2 | `version` | `1` |
+| 6 | 2 | `part_count` | number of parts |
+| 8 | 12 × `part_count` | parts | part table |
+
+Each part table entry:
+
+| Offset | Size | Field | Description |
+| --- | --- | --- | --- |
+| 0 | 2 | `kind` | `1` = SYMTAB, `2` = DWARF |
+| 2 | 2 | `reserved` | zero |
+| 4 | 4 | `offset` | part data, from block start (4-byte aligned) |
+| 8 | 4 | `size` | part data size in bytes |
+
+A reader must skip parts with an unknown `kind`.
+
+#### SYMTAB part
+
+A compact, address-sorted function and object table. Only defined `STT_FUNC`
+and `STT_OBJECT` symbols with a non-empty name are kept.
+
+| Offset | Size | Field | Description |
+| --- | --- | --- | --- |
+| 0 | 4 | `count` | number of entries |
+| 4 | 4 | `strtab_offset` | string table, from part start |
+| 8 | 4 | `strtab_size` | string table size |
+| 12 | 4 | `reserved` | zero |
+| 16 | 16 × `count` | entries | sorted by `addr` (ascending) |
+
+Entry (16 bytes):
+
+| Offset | Size | Field | Description |
+| --- | --- | --- | --- |
+| 0 | 4 | `addr` | symbol address |
+| 4 | 4 | `size` | symbol size in bytes (0 if unknown) |
+| 8 | 4 | `name_off` | offset of the NUL-terminated name in the string table |
+| 12 | 1 | `type` | ELF `STT_FUNC` (2) or `STT_OBJECT` (1) |
+| 13 | 1 | `bind` | ELF `STB_*` (0 local, 1 global, 2 weak) |
+| 14 | 2 | `reserved` | zero |
+
+To resolve an address, binary-search for the last entry with `addr <= pc`, and
+accept it if `size == 0` or `pc < addr + size`.
+
+#### DWARF part
+
+The linked, relocated `.debug_*` sections of the executable, copied byte for
+byte. They are non-allocated `SHT_PROGBITS` sections whose names start with
+`.debug_`.
+
+| Offset | Size | Field | Description |
+| --- | --- | --- | --- |
+| 0 | 4 | `count` | number of sections |
+| 4 | 16 × `count` | entries | section table |
+
+Section entry (16 bytes, offsets from part start):
+
+| Offset | Size | Field | Description |
+| --- | --- | --- | --- |
+| 0 | 4 | `name_off` | NUL-terminated section name |
+| 4 | 4 | `data_off` | section data (4-byte aligned) |
+| 8 | 4 | `size` | section data size |
+| 12 | 4 | `flags` | bit 0: data is `SHF_COMPRESSED` (zlib) |
+
+Addresses in the DWARF are link-time virtual addresses, which are the same
+as the runtime addresses because ZXF executables are loaded at their linked
+`load_base`.
+
+## Producing ZXF with lld
+
+The zuzu clang toolchain (`zuzu-toolchain`) patches lld so the linker writes
+ZXF directly, with no ELF intermediate and no `elf2zxf` step:
+
+```
+ld.lld --oformat=zxf [--zxf-debug=none|symtab|dwarf|all] -T user.ld ... -o prog.zxf
+```
+
+`--zxf-debug` selects which DEBUGINFO parts are embedded. The default is
+`symtab`. With `none` the output is byte-identical to `elf2zxf` on the same
+ELF. `zuzu-clang` links with `--oformat=zxf` by default and passes
+`--zxf-debug=all` when `-g` is given. Only 32-bit little-endian ARM is
+supported.
 
 ## Loading sequence
 

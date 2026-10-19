@@ -1,0 +1,65 @@
+---
+layout: default
+---
+{% include breadcrumb.html crumb_title=page.name %}
+<h1>{{ page.name }}</h1>
+
+<div class="table-wrap">
+<table>
+<tbody>
+{% if page.helper %}<tr><th>Kind</th><td>Library helper (no syscall of its own)</td></tr>{% else %}
+<tr><th>Number</th><td><code>{{ page.number }}</code>{% if page.svc %} <code>{{ page.svc }}</code>{% endif %}</td></tr>{% endif %}
+{% if page.selector %}<tr><th>Selector</th><td><code>{{ page.selector }}</code></td></tr>{% endif %}
+{% if page.proto %}<tr><th>C</th><td><code>{{ page.proto }}</code></td></tr>{% endif %}
+{% if page.signature %}<tr><th>Registers</th><td><code>{{ page.signature }}</code></td></tr>{% endif %}
+<tr><th>Group</th><td>{{ page.group }}</td></tr>
+{% if page.since %}<tr><th>Since</th><td>{{ page.since }}</td></tr>{% endif %}
+{% if page.blocking %}<tr><th>Blocking</th><td>{{ page.blocking }}</td></tr>{% endif %}
+</tbody>
+</table>
+</div>
+
+{{ content }}
+
+{% if page.args %}
+<h4>Arguments</h4>
+<div class="table-wrap">
+<table>
+<thead><tr><th>Name</th><th>Direction</th><th>Description</th></tr></thead>
+<tbody>
+{% for a in page.args %}
+<tr><td><code>{{ a.name }}</code></td><td>{{ a.dir }}</td><td>{{ a.desc | markdownify | remove: '<p>' | remove: '</p>' }}</td></tr>
+{% endfor %}
+</tbody>
+</table>
+</div>
+{% endif %}
+
+{% if page.returns %}
+<h4>Returns</h4>
+<p>{{ page.returns | markdownify | remove: '<p>' | remove: '</p>' }}</p>
+{% endif %}
+
+{% if page.errors %}
+<h4>Errors</h4>
+<div class="table-wrap">
+<table>
+<thead><tr><th>Code</th><th>Condition</th></tr></thead>
+<tbody>
+{% for e in page.errors %}
+<tr><td>{% assign codes = e.code | split: " / " %}{% for c in codes %}<code>{{ c }}</code>{% unless forloop.last %} / {% endunless %}{% endfor %}</td><td>{{ e.when | markdownify | remove: '<p>' | remove: '</p>' }}</td></tr>
+{% endfor %}
+</tbody>
+</table>
+</div>
+{% endif %}
+
+{% if page.see_also %}
+<h4>See also</h4>
+<ul>
+{% for s in page.see_also %}
+{% assign target = site.syscalls | where: "name", s | first %}
+<li><a href="{{ target.url | relative_url }}"><code>{{ s }}</code></a></li>
+{% endfor %}
+</ul>
+{% endif %}
