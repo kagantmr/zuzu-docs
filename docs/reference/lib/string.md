@@ -253,18 +253,7 @@ Examples: zu (unsigned size_t), zd (signed size_t), zx (size_t in hex)
 int vsnprintf(char *buf, size_t size, const char *fmt, va_list args);
 ```
 
-Format a string into a fixed-size buffer using a va_list.
-
-Writes at most size-1 characters plus a terminating NUL (unless size is 0, in which case buf is left untouched). Same format specifiers as vstrfmt/strfmt.
-
-| Parameter | Direction | Description |
-|---|---|---|
-| `buf` | out | Destination buffer, or NULL if size is 0. |
-| `size` | in | Size of buf in bytes, including the terminating NUL. |
-| `fmt` | in | Format string. |
-| `args` | in | Variable arguments matching the format specifiers. |
-
-**Returns:** The number of characters that would have been written had size been unlimited (excluding the terminating NUL).
+Bounded formatted output into a buffer; documented in snprintf.h.
 
 ### `snprintf` { #snprintf }
 
@@ -272,13 +261,4 @@ Writes at most size-1 characters plus a terminating NUL (unless size is 0, in wh
 int snprintf(char *buf, size_t size, const char *fmt,...);
 ```
 
-Format a string into a fixed-size buffer.
-
-| Parameter | Direction | Description |
-|---|---|---|
-| `buf` | out | Destination buffer, or NULL if size is 0. |
-| `size` | in | Size of buf in bytes, including the terminating NUL. |
-| `fmt` | in | Format string. |
-| `...` | in | Variable arguments matching the format specifiers. |
-
-**Returns:** The number of characters that would have been written had size been unlimited (excluding the terminating NUL).
+Bounded formatted output into a buffer; documented in snprintf.h.

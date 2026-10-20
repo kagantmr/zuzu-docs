@@ -33,22 +33,6 @@ Skips leading whitespace, accepts a sign, and stops at the first non-hex charact
 
 **Returns:** The converted integer value.
 
-### `atoi` { #atoi }
-
-```c
-int atoi(const char *str);
-```
-
-Convert a decimal string to an integer.
-
-Skips leading whitespace, accepts a sign, and stops at the first non-digit. No overflow check.
-
-| Parameter | Direction | Description |
-|---|---|---|
-| `str` | in | Pointer to the null-terminated string. |
-
-**Returns:** The converted integer value.
-
 ### `itoa` { #itoa }
 
 ```c

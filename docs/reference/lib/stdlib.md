@@ -16,7 +16,15 @@ Freestanding stdlib subset: conversions, sorting, searching and rand().
 int atoi(const char *str);
 ```
 
-Converts a decimal string to an integer; documented in convert.h.
+Converts a decimal string to an integer.
+
+Skips leading whitespace, accepts a sign, and stops at the first non-digit. No overflow check.
+
+| Parameter | Direction | Description |
+|---|---|---|
+| `str` | in | The null-terminated string. |
+
+**Returns:** The converted value.
 
 ### `strtol` { #strtol }
 
