@@ -142,6 +142,11 @@ body {
   position: relative;
 }
 
+.md-sidebar--primary .md-sidebar__scrollwrap {
+  padding-left: 1rem;
+  box-sizing: border-box;
+}
+
 .md-sidebar--primary .md-nav__link--active::before {
   content: "";
   position: absolute;
