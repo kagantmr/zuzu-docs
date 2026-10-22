@@ -2,6 +2,8 @@
 layout: page
 title: Retired slots
 section: ABI
+prowl:
+  - {title: "ABI", url: "/zuzu-docs/2.x/reference/abi/"}
 ---
 
 These syscalls are retired and no longer supported (as of v1.0 Loaf). They are

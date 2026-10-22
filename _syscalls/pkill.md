@@ -12,6 +12,10 @@ errors:
   - {code: ERR_BADHANDLE, when: "No such handle, or the task has no live process or thread"}
   - {code: ERR_BADTYPE, when: "Handle is not a task handle"}
 see_also: [PSpawn, Kickstart, PQuit, Wait]
+prowl:
+  - {title: "TaskKill", url: "/zuzu-docs/2.x/reference/syscalls/taskkill/"}
+  - {title: "HandleDestroy", url: "/zuzu-docs/2.x/reference/syscalls/handledestroy/"}
+prowl_note: "Kill a task with TaskKill, or tear down a whole space with HandleDestroy."
 ---
 
 Terminate a child process through its task handle. The process is killed unconditionally unlike `PQuit`, which a process calls on itself, `PKill` is how a parent ends a child. The child exits with status `KILLED_TAG | KILL_BY_PARENT`, which the parent reads through `Wait`.

@@ -15,6 +15,9 @@ errors:
   - {code: ERR_BADTYPE, when: "Handle is not a notification"}
   - {code: ERR_DEAD, when: "The notification object is dead"}
 see_also: [NtfnWait, NtfnCreate, Waitany, IrqBind]
+prowl:
+  - {title: "Signal", url: "/zuzu-docs/2.x/reference/syscalls/signal/"}
+prowl_note: "Notifications became events."
 ---
 
 Set bits on a notification object, waking one waiter if any is queued. Bits are OR'd into the

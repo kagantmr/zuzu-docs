@@ -2,6 +2,8 @@
 layout: page
 title: Compatibility
 section: Project
+prowl:
+  - {title: "Compatibility", url: "/zuzu-docs/2.x/project/compatibility/"}
 ---
 
 What zuzu runs on, and what it needs from the machine underneath it. For
@@ -9,7 +11,7 @@ version and ABI compatibility between releases, see [Versioning](versioning).
 
 ## Architecture
 
-zuzu currently targets **ARMv7-A** — 32-bit, little-endian, MMU-equipped. The kernel
+zuzu currently targets **ARMv7-A**. The kernel
 assumes:
 
 - Two translation table base registers (`TTBR0`/`TTBR1`) with the split at

@@ -16,6 +16,10 @@ errors:
   - {code: ERR_BADTYPE, when: "This capability is not a reply capability."}
   - {code: ERR_DEAD, when: "Recipient has died or timed out before the reply could be sent."}
 see_also: [MsgLsend, MsgLcall, MsgReply, Waitany]
+prowl:
+  - {title: "Reply", url: "/zuzu-docs/2.x/reference/syscalls/reply/"}
+  - {title: "ReplyTo", url: "/zuzu-docs/2.x/reference/syscalls/replyto/"}
+prowl_note: "Long messages became the per-task message box used by every Reply."
 ---
 
 Reply to a long-message caller using the minted reply capability. 

@@ -15,6 +15,7 @@
     <nav id="nav">{% include nav.html %}</nav>
     <main id="content">
         <div class="note">You are reading the documentation for zuzu 1.x (Loaf). <a href="/zuzu-docs/">The current version is 2.x (Prowl).</a></div>
+        {% if page.prowl %}<div class="note">In zuzu 2.x (Prowl): {% for l in page.prowl %}<a href="{{ l.url }}">{{ l.title }}</a>{% unless forloop.last %}, {% endunless %}{% endfor %}.{% if page.prowl_note %} {{ page.prowl_note }}{% endif %}</div>{% endif %}
         {{ content }}
     </main>
 </body>

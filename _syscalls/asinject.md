@@ -12,6 +12,10 @@ returns: "0 on success."
 errors:
   - {code: ERR_NOPERM, when: "For a non-privileged caller"}
   - {code: "ERR_BADPTR / ERR_BADARG", when: "For a bad struct"}
+prowl:
+  - {title: "MemInjectObj", url: "/zuzu-docs/2.x/reference/syscalls/meminjectobj/"}
+  - {title: "MemInjectBytes", url: "/zuzu-docs/2.x/reference/syscalls/meminjectbytes/"}
+prowl_note: "Space contents are now injected from a memory object or a byte buffer into an object-held space."
 ---
 
 Fill a frozen process's address space from parsed ELF data. Second step of the three-step process spawn sequence: 

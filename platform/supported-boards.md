@@ -2,6 +2,8 @@
 layout: page
 title: Supported boards
 section: Platform
+prowl:
+  - {title: "Boards", url: "/zuzu-docs/2.x/start/boards/"}
 ---
 
 The current list of supported boards are:

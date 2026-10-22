@@ -2,6 +2,8 @@
 layout: page
 title: Binary formats
 section: SDK
+prowl:
+  - {title: "Binary formats", url: "/zuzu-docs/2.x/reference/formats/"}
 ---
 
 zuzuOS runs two executable formats. **ZXF** is the native one, produced by the
@@ -73,7 +75,7 @@ ELF's `PF_R`/`PF_W`/`PF_X` are 4/2/1. The two agree for `R|X` and disagree for
 
 ## Not supported
 
-- **Dynamic linking.** Everything is statically linked today. ZXF reserves a
+- **Dynamic linking.** Everything is statically linked. ZXF reserves a
   `DYNLINK` block and ELF has `.dynamic`, but neither is implemented.
 - **PIE / position-independent executables.** `elf2zxf` rejects `ET_DYN`, and
   neither loader relocates.

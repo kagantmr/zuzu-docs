@@ -12,6 +12,9 @@ errors:
   - {code: ERR_BADARG, when: "For a bad size"}
   - {code: ERR_NOMEM, when: "If frames or a handle slot cannot be allocated"}
 see_also: [MemMap, MemUnmap, Destroy]
+prowl:
+  - {title: "CreateMem", url: "/zuzu-docs/2.x/reference/syscalls/createmem/"}
+prowl_note: "Shared memory became memory objects."
 ---
 
 Create a shared-memory object and receive a handle to it. Map it with `MemMap`; hand it to a peer with `Grant`.

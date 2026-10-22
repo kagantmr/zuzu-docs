@@ -14,6 +14,10 @@ errors:
   - {code: ERR_BADTYPE, when: "Handle is not a port"}
   - {code: ERR_DEAD, when: "The peer is gone"}
 see_also: [MsgSend, MsgRecv, MsgReply, MsgLcall]
+prowl:
+  - {title: "Call", url: "/zuzu-docs/2.x/reference/syscalls/call/"}
+  - {title: "CallTimeout", url: "/zuzu-docs/2.x/reference/syscalls/calltimeout/"}
+prowl_note: "MsgCall became Call; the three-word register payload became a message box."
 ---
 
 Atomic send-then-receive: deliver a message and block for the reply on the same port. This is the request/response fast path, cheaper than a separate `MsgSend` + `MsgRecv`.

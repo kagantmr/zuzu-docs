@@ -15,6 +15,10 @@ errors:
   - {code: ERR_BADTYPE, when: "Handle is not a port"}
   - {code: ERR_DEAD, when: "The port was destroyed while waiting"}
 see_also: [MsgSend, MsgCall, MsgReply, Waitany]
+prowl:
+  - {title: "WaitOnPort", url: "/zuzu-docs/2.x/reference/syscalls/waitonport/"}
+  - {title: "WaitOn", url: "/zuzu-docs/2.x/reference/syscalls/waiton/"}
+prowl_note: "Receiving became WaitOn on a port."
 ---
 
 Block waiting for a message on a port, returning once a sender rendezvouses.

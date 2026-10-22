@@ -9,6 +9,9 @@ returns: "A notification handle."
 errors:
   - {code: ERR_NOMEM, when: "No free handle slot, or the object could not be allocated"}
 see_also: [NtfnSignal, NtfnWait, Waitany, IrqBind, Destroy, Grant]
+prowl:
+  - {title: "CreateEvent", url: "/zuzu-docs/2.x/reference/syscalls/createevent/"}
+prowl_note: "Notifications became events."
 ---
 
 Create a new notification object: a lightweight, non-blocking signal carrier used for IRQ

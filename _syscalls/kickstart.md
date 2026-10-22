@@ -16,6 +16,9 @@ errors:
   - {code: ERR_BADTYPE, when: "Handle is not a task handle"}
   - {code: ERR_BUSY, when: "Task is not `FROZEN`"}
 see_also: [AsInject, PSpawn]
+prowl:
+  - {title: "TaskStart", url: "/zuzu-docs/2.x/reference/syscalls/taskstart/"}
+prowl_note: "A new task is started with TaskStart after CreateTask."
 ---
 
 Mark a FROZEN process as schedulable. Final step of the three-step process spawn sequence: 

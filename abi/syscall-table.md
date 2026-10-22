@@ -2,6 +2,8 @@
 layout: page
 title: Syscall table
 section: ABI
+prowl:
+  - {title: "Syscalls", url: "/zuzu-docs/2.x/reference/syscalls/"}
 ---
 
 The syscall number is the `SVC` immediate; arguments pass in `r0–r3` and the result returns in `r0`, with negative values meaning error (see [Syscall ABI]({{ '/abi/syscall-abi/' | relative_url }}) for the convention and [error codes]({{ '/abi/error-codes/' | relative_url }}) for the full list). Every kernel object -port, notification, shared-memory region, device, task- is named by a **handle**, a small per-process slot index; userspace never holds a raw kernel pointer.

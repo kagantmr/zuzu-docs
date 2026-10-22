@@ -18,6 +18,9 @@ errors:
   - {code: ERR_DUPLICATE, when: "handle is already marked; a marked handle cannot itself be re-stamped"}
   - {code: ERR_NOMEM, when: "Caller's handle table is full"}
 see_also: [PortCreate, Waitany, Grant, Destroy]
+prowl:
+  - {title: "HandleDuplicate", url: "/zuzu-docs/2.x/reference/syscalls/handleduplicate/"}
+prowl_note: "Markers are set while duplicating a handle."
 ---
 
 Badge a port. `Stamp` mints a new handle in the caller's own table that points at the same

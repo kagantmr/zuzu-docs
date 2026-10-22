@@ -2,6 +2,8 @@
 layout: page
 title: Faults/exceptions
 section: Kernel
+prowl:
+  - {title: "Faults", url: "/zuzu-docs/2.x/concepts/faults/"}
 ---
 
 An **exception** is when a section of code causes the CPU hardware to transfer control to a handler function because of a synchronous or asynchronous condition. Exceptions can occur in kernel and user code alike, however the way they are handled are very distinct. Zuzu adopts a strict approach to exception handling.

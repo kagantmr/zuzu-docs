@@ -9,6 +9,8 @@ args:
   - {reg: r0, name: status, desc: "Exit status, readable by a joiner via `TJoin`"}
 returns: "Does not return."
 see_also: [TMake, TJoin, PQuit]
+prowl:
+  - {title: "Quit", url: "/zuzu-docs/2.x/reference/syscalls/quit/"}
 ---
 
 Terminate the calling thread. Its status is delivered to any thread blocked in `TJoin` on

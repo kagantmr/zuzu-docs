@@ -2,6 +2,8 @@
 layout: page
 title: Contributing
 section: Project
+prowl:
+  - {title: "Contributing", url: "/zuzu-docs/2.x/project/contributing/"}
 ---
 
 zuzu would love contributors!

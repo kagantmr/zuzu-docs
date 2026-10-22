@@ -9,6 +9,8 @@ args:
   - {reg: r0, name: status, desc: "Exit status stored in the PCB, retrievable by the parent via wait"}
 returns: "Does not return."
 see_also: [TQuit, PSpawn, PKill]
+prowl:
+  - {title: "Quit", url: "/zuzu-docs/2.x/reference/syscalls/quit/"}
 ---
 
 Terminate the calling process. The status is delivered verbatim to the parent through

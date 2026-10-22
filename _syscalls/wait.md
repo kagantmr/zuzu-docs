@@ -15,6 +15,10 @@ errors:
   - {code: ERR_NOENT, when: "No matching child exists, or none became reapable"}
   - {code: ERR_BADPTR, when: "Status pointer is invalid"}
 see_also: [PQuit, PKill, PSpawn, Kickstart]
+prowl:
+  - {title: "WaitOnSpace", url: "/zuzu-docs/2.x/reference/syscalls/waitonspace/"}
+  - {title: "WaitOnTask", url: "/zuzu-docs/2.x/reference/syscalls/waitontask/"}
+prowl_note: "Waiting for children became waiting on space and task handles."
 ---
 
 Wait for a child to exit and reap it, reading back its exit status.

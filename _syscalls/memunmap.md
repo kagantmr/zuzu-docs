@@ -13,6 +13,8 @@ errors:
   - {code: ERR_BADARG, when: "No region starts at that address"}
   - {code: ERR_NOPERM, when: "The region is pinned"}
 see_also: [MemMap, MemProtect, Destroy]
+prowl:
+  - {title: "MemUnmap", url: "/zuzu-docs/2.x/reference/syscalls/memunmap/"}
 ---
 
 Unmap a whole region by its base address. The address must match a region's base exactly;

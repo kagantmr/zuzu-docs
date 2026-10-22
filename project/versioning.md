@@ -2,6 +2,8 @@
 layout: page
 title: Versioning
 section: Project
+prowl:
+  - {title: "Versioning", url: "/zuzu-docs/2.x/project/versioning/"}
 ---
 
 zuzu (the kernel) and zuzuOS (the userspace) are versioned separately. They ship from one repository but move at different speeds and make different promises, so a single version number would be misleading.

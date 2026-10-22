@@ -2,6 +2,8 @@
 layout: page
 title: newlib tier
 section: SDK
+prowl:
+  - {title: "newlib", url: "/zuzu-docs/2.x/guides/newlib/"}
 ---
 
 zuzuOS exposes two application runtimes: 

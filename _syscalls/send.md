@@ -13,6 +13,9 @@ errors:
   - {code: ERR_BADHANDLE, when: "Handle names no live port"}
   - {code: ERR_BADTYPE, when: "Handle is not a port"}
   - {code: ERR_DEAD, when: "The peer is gone"}
+prowl:
+  - {title: "Call", url: "/zuzu-docs/2.x/reference/syscalls/call/"}
+prowl_note: "Send-only messages no longer exist; use Call."
 ---
 
 Send a three-word message to a port and block until a receiver takes it (synchronous rendezvous).

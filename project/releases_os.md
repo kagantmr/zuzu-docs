@@ -2,6 +2,8 @@
 layout: page
 title: zuzuOS releases
 section: Project
+prowl:
+  - {title: "zuzuOS releases", url: "/zuzu-docs/2.x/project/releases-zuzuos/"}
 ---
 
 Feature list of zuzu kernel releases. The kernel majors are codenamed after **cold, sweet, non-alcoholic (usually) drinks**.

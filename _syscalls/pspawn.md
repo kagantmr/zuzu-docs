@@ -14,6 +14,11 @@ errors:
   - {code: ERR_BADARG, when: "`size` is smaller than `sizeof(SpawnArgs)`"}
   - {code: ERR_NOMEM, when: "Could not create the process, or the caller's handle table is full"}
 see_also: [AsInject, Kickstart, PKill, Wait]
+prowl:
+  - {title: "CreateSpace", url: "/zuzu-docs/2.x/reference/syscalls/createspace/"}
+  - {title: "CreateTask", url: "/zuzu-docs/2.x/reference/syscalls/createtask/"}
+  - {title: "TaskStart", url: "/zuzu-docs/2.x/reference/syscalls/taskstart/"}
+prowl_note: "Spawning is composed from CreateSpace, MemInjectObj, CreateTask and TaskStart; util/spawn.h wraps the sequence."
 ---
 
 Create a frozen child process. First step of the three-step spawn sequence:

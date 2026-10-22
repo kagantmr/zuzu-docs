@@ -17,6 +17,10 @@ errors:
   - {code: ERR_DEAD, when: "Recipient has died before the reply could be sent."}
   - {code: ERR_NOMEM, when: "Reply capability allocation failed, or the receiver's handle table is full."}
 see_also: [MsgLsend, MsgLreply, MsgCall, Waitany]
+prowl:
+  - {title: "Call", url: "/zuzu-docs/2.x/reference/syscalls/call/"}
+  - {title: "CallTimeout", url: "/zuzu-docs/2.x/reference/syscalls/calltimeout/"}
+prowl_note: "Long messages became the per-task message box used by every Call."
 ---
 
 Long-message request/response: send from the `lmsg` buffer and block for a reply written back into it. A reply capability is minted into the receiver's table, and its slot index is what arrives in the receiver's `r0` (or `res->source` under `Waitany`).

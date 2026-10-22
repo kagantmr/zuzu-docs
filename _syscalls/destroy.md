@@ -15,6 +15,10 @@ errors:
   - {code: ERR_DEAD, when: "Port/ntfn owner is dead, and the handle was cleaned up"}
   - {code: ERR_NOPERM, when: "Calling process does not own the port/ntfn"}
 see_also: [PortCreate, Grant]
+prowl:
+  - {title: "HandleDestroy", url: "/zuzu-docs/2.x/reference/syscalls/handledestroy/"}
+  - {title: "HandleClose", url: "/zuzu-docs/2.x/reference/syscalls/handleclose/"}
+prowl_note: "Destroying and closing are separate handle operations."
 ---
 
 Destroy the object behind a handle. Dispatches on the handle's type, so it replaces the old per-type destroy calls.

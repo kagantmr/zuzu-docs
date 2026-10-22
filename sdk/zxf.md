@@ -2,6 +2,8 @@
 layout: page
 title: ZXF
 section: SDK
+prowl:
+  - {title: "ZXF", url: "/zuzu-docs/2.x/reference/formats/zxf/"}
 ---
 
 The ****Zuzu eXecutable Format (ZXF)** is the native binary format for zuzuOS executables.

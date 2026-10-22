@@ -12,6 +12,9 @@ errors:
   - {code: ERR_NOENT, when: "No thread with that tid exists"}
   - {code: ERR_NOPERM, when: "The thread belongs to another process"}
 see_also: [TMake, TQuit, Wait]
+prowl:
+  - {title: "WaitOnTask", url: "/zuzu-docs/2.x/reference/syscalls/waitontask/"}
+prowl_note: "Joining a thread became waiting on a task handle."
 ---
 
 Block until a thread in the same process exits, returning its exit status. If the thread

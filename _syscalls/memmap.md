@@ -20,6 +20,9 @@ errors:
   - {code: ERR_BUSY, when: "That handle is already mapped"}
   - {code: ERR_NOMEM, when: "Address-space cursor exhausted, or the region could not be inserted"}
 see_also: [MemUnmap, MemProtect, ShmemCreate, Destroy]
+prowl:
+  - {title: "MemMap", url: "/zuzu-docs/2.x/reference/syscalls/memmap/"}
+  - {title: "MemMapAnon", url: "/zuzu-docs/2.x/reference/syscalls/memmapanon/"}
 ---
 
 Map memory into the caller. The first argument selects the backing: `HANDLE_ANON` for

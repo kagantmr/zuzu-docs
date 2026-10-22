@@ -2,6 +2,8 @@
 layout: page
 title: ZCRT
 section: SDK
+prowl:
+  - {title: "ZCRT", url: "/zuzu-docs/2.x/guides/zcrt/"}
 ---
 
 The zuzu C Runtime (ZCRT) is the application SDK for zuzuOS.

@@ -2,6 +2,8 @@
 layout: page
 title: zuzu kernel releases
 section: Project
+prowl:
+  - {title: "zuzu releases", url: "/zuzu-docs/2.x/project/releases-zuzu/"}
 ---
 
 Feature list of zuzu kernel releases. The kernel majors are codenamed after **cat behaviours**.

@@ -2,6 +2,9 @@
 layout: page
 title: Markers & nametable
 section: Kernel
+prowl:
+  - {title: "Objects and handles", url: "/zuzu-docs/2.x/concepts/objects-handles/"}
+  - {title: "Names", url: "/zuzu-docs/2.x/os/names/"}
 ---
 
 Two small kernel-level conventions build on top of the plain [handle table]({{ '/kernel/handles/' | relative_url }}) and [ports]({{ '/kernel/ipc/' | relative_url }}): **markers**, which let one port stand in for many logical clients, and the **nametable**, the one well-known port every process starts with.

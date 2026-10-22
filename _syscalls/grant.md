@@ -18,6 +18,9 @@ errors:
   - {code: ERR_NOENT, when: "Target PID is invalid"}
   - {code: ERR_NOPERM, when: "Handle is not grantable, target is the caller, or handle is a REPLY or TASK type"}
 see_also: [PortCreate, Destroy]
+prowl:
+  - {title: "HandleGrant", url: "/zuzu-docs/2.x/reference/syscalls/handlegrant/"}
+  - {title: "HandleGrantTo", url: "/zuzu-docs/2.x/reference/syscalls/handlegrantto/"}
 ---
 
 Copy a handle to another process. This is the generic capability-transfer primitive. The source keeps its handle and the object's refcount rises since this is a copy, not a move.

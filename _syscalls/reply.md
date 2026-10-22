@@ -14,6 +14,9 @@ errors:
   - {code: ERR_BADTYPE, when: "Handle is not a reply capability"}
   - {code: ERR_DEAD, when: "The caller has died or timed out"}
 see_also: [MsgCall, MsgRecv, MsgLreply, Waitany]
+prowl:
+  - {title: "Reply", url: "/zuzu-docs/2.x/reference/syscalls/reply/"}
+  - {title: "ReplyRecv", url: "/zuzu-docs/2.x/reference/syscalls/replyrecv/"}
 ---
 
 Answer a client blocked in `MsgCall`, using the reply handle delivered by `MsgRecv`. The three

@@ -2,6 +2,8 @@
 layout: page
 title: Architecture
 section: Kernel
+prowl:
+  - {title: "Kernel internals", url: "/zuzu-docs/2.x/internals/kernel/"}
 ---
 
 zuzu is a microkernel. The kernel runs at PL1 (SVC mode) and does the minimum necessary to support isolated userspace processes.

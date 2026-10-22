@@ -13,6 +13,8 @@ errors:
   - {code: ERR_BADARG, when: "Handle does not point to a valid IRQ"}
   - {code: ERR_NOPERM, when: "Calling process does not own the IRQ"}
 see_also: [IrqBind, NtfnWait, NtfnCreate, DeviceQuery]
+prowl:
+  - {title: "IrqRearm", url: "/zuzu-docs/2.x/reference/syscalls/irqrearm/"}
 ---
 
 Signal that the device has been serviced. The kernel unmasks the IRQ line so it can fire again. 

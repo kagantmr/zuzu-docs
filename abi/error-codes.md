@@ -2,6 +2,8 @@
 layout: page
 title: System call returns
 section: ABI
+prowl:
+  - {title: "Errors", url: "/zuzu-docs/2.x/reference/errors/"}
 ---
 
 If an error occurs during service, the server (whatever process or kernel function that may be) will return a negative value in `r0`.

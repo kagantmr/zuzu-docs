@@ -15,6 +15,8 @@ errors:
   - {code: ERR_DEAD, when: "Notification object is dead"}
   - {code: ERR_BADARG, when: "Invalid IRQ number, or the device has no IRQ"}
 see_also: [IrqDone, NtfnWait, NtfnCreate, DeviceQuery]
+prowl:
+  - {title: "BindIrq", url: "/zuzu-docs/2.x/reference/syscalls/bindirq/"}
 ---
 
 Bind a device's interrupt to a notification object. When the IRQ fires, the kernel masks the line and signals the notification; the driver waits on it with `NtfnWait` or `Waitany`. This folds in the old `irq_claim`. The IRQ sets bit `irq_num & 31`.

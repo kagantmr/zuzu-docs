@@ -2,6 +2,8 @@
 layout: page
 title: Handles
 section: Kernel
+prowl:
+  - {title: "Objects and handles", url: "/zuzu-docs/2.x/concepts/objects-handles/"}
 ---
 
 A handle is a small integer that names a kernel object. Userspace never sees

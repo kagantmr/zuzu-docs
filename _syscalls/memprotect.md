@@ -15,6 +15,8 @@ errors:
   - {code: ERR_BADARG, when: "Size of 0 or not a page multiple; range not valid user memory; W+X requested; or the range could not be reprotected"}
   - {code: ERR_NOPERM, when: "`prot` contains bits outside READ/WRITE/EXEC, including `VM_PROT_USER`"}
 see_also: [MemMap, MemUnmap]
+prowl:
+  - {title: "MemProtect", url: "/zuzu-docs/2.x/reference/syscalls/memprotect/"}
 ---
 
 Change the protection of an existing mapping. Unlike `MemUnmap`, this is a true range

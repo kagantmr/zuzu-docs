@@ -2,6 +2,8 @@
 layout: page
 title: Inter-process messaging (IPC)
 section: Kernel
+prowl:
+  - {title: "IPC", url: "/zuzu-docs/2.x/concepts/ipc/"}
 ---
 
 A microkernel's strength comes from IPC. Its speed determines the speed of the whole operating system. zuzu employs four different IPC

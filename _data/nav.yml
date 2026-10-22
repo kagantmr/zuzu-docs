@@ -10,6 +10,7 @@ sections:
       - {title: Architecture,          url: /kernel/architecture/}
       - {title: Processes & threads,   url: /kernel/processes/}
       - {title: Scheduling,            url: /kernel/scheduling/}
+      - {title: Memory,                url: /kernel/memory/}
       - {title: IPC,                   url: /kernel/ipc/}
       - {title: Notifications,         url: /kernel/notifications/}
       - {title: Handles,               url: /kernel/handles/}

@@ -2,6 +2,8 @@
 layout: page
 title: Writing a driver
 section: SDK
+prowl:
+  - {title: "Writing a driver", url: "/zuzu-docs/2.x/guides/driver/"}
 ---
 
 **Warning:** Writing a driver requires technical information about both the peripheral you are writing a driver for and the driver surface of zuzuOS.

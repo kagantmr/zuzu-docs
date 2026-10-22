@@ -18,6 +18,10 @@ errors:
   - {code: ERR_DUPLICATE, when: "process already has label"}
   - {code: ERR_NOMEM, when: "Caller's handle table is full"}
 see_also: [PortCreate, Stamp, Grant, Destroy]
+prowl:
+  - {title: "Objects and handles", url: "/zuzu-docs/2.x/concepts/objects-handles/"}
+  - {title: "HandleDuplicate", url: "/zuzu-docs/2.x/reference/syscalls/handleduplicate/"}
+prowl_note: "Labels were replaced by markers set when duplicating a port handle."
 ---
 
 Add a 32-bit label value to a process. Used for distinguishing at name server level.

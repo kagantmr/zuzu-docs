@@ -14,6 +14,9 @@ errors:
   - {code: ERR_BADPTR, when: "entry or sp is not a valid user address"}
   - {code: ERR_NOMEM, when: "No free thread, or no free TCB slot in the process"}
 see_also: [TJoin, TQuit, PSpawn]
+prowl:
+  - {title: "CreateTask", url: "/zuzu-docs/2.x/reference/syscalls/createtask/"}
+  - {title: "TaskStart", url: "/zuzu-docs/2.x/reference/syscalls/taskstart/"}
 ---
 
 Create a thread in the calling process, sharing its address space and handle table. The

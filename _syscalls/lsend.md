@@ -16,6 +16,9 @@ errors:
   - {code: ERR_BADTYPE, when: "This capability is not a port."}
   - {code: ERR_DEAD, when: "Recipient has died before the message could be sent."}
 see_also: [MsgLreply, MsgLcall, MsgSend, Waitany]
+prowl:
+  - {title: "Call", url: "/zuzu-docs/2.x/reference/syscalls/call/"}
+prowl_note: "Send-only messages no longer exist; use Call."
 ---
 
 Send a long-message to a recipient process over a port.

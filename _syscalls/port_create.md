@@ -10,6 +10,8 @@ errors:
   - {code: ERR_BADARG, when: "No calling thread context"}
   - {code: ERR_NOMEM, when: "No free handle slot, or the port object could not be allocated"}
 see_also: [MsgSend, MsgRecv, Grant, Destroy, Stamp]
+prowl:
+  - {title: "CreatePort", url: "/zuzu-docs/2.x/reference/syscalls/createport/"}
 ---
 
 Create a new port (message endpoint) owned by the caller.

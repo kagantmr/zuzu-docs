@@ -15,6 +15,10 @@ errors:
   - {code: ERR_BADTYPE, when: "Handle is not a notification"}
   - {code: ERR_DEAD, when: "The notification object is dead"}
 see_also: [NtfnSignal, NtfnCreate, Waitany, IrqBind]
+prowl:
+  - {title: "WaitOnEvent", url: "/zuzu-docs/2.x/reference/syscalls/waitonevent/"}
+  - {title: "WaitOn", url: "/zuzu-docs/2.x/reference/syscalls/waiton/"}
+prowl_note: "Notifications became events."
 ---
 
 Read and clear a notification's bits, blocking until at least one is set.

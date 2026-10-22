@@ -1,6 +1,8 @@
 ---
 layout: page
 title: zuzu
+prowl:
+  - {title: "Home", url: "/zuzu-docs/2.x/"}
 ---
 
 zuzu is a lightweight microkernel written from scratch in C and ARM assembly. It is named after zuzu,

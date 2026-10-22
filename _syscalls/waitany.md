@@ -18,6 +18,9 @@ errors:
   - {code: ERR_DEAD, when: "A waited port or notification was destroyed while blocked"}
   - {code: ERR_TIMEOUT, when: "TIMEOUT_POLL and nothing was ready"}
 see_also: [MsgRecv, NtfnWait, MsgCall, MsgLcall, Stamp]
+prowl:
+  - {title: "WaitOn", url: "/zuzu-docs/2.x/reference/syscalls/waiton/"}
+prowl_note: "WaitAny became WaitOn, which accepts any waitable handle."
 ---
 
 Wait on several sources at once. It is the multiplexing primitive behind every event-loop

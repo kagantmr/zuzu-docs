@@ -2,6 +2,8 @@
 layout: page
 title: System call ABI
 section: ABI
+prowl:
+  - {title: "ABI", url: "/zuzu-docs/2.x/reference/abi/"}
 ---
 
 System calls are services offered by zuzu for userspace programs to request from the kernel that they are not allowed direct access to,

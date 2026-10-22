@@ -16,6 +16,11 @@ errors:
   - {code: ERR_BADTYPE, when: "Handle is not a device handle"}
   - {code: ERR_BADPTR, when: "Output buffer is not writable"}
 see_also: [MemMap, IrqBind, Destroy]
+prowl:
+  - {title: "The syspage (device list)", url: "/zuzu-docs/2.x/reference/syspage/"}
+  - {title: "Devices guide", url: "/zuzu-docs/2.x/guides/driver/"}
+  - {title: "Bind", url: "/zuzu-docs/2.x/reference/syscalls/bind/"}
+prowl_note: "Devices are listed in the syspage and bound through Bind."
 ---
 
 Look up a device by name or class along with its metadata (such as its IRQ). This is the gate to mapping device registers with `MemMap` and binding its interrupt with `IrqBind`.
