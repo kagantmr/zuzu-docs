@@ -7,7 +7,7 @@ hide:
 
 <div class="zz-hero" markdown>
 <img src="assets/favicon.png" alt="zuzu logo">
-<div><h1 class="zz-name">zuzu</h1><span class="zz-tag">the Scottish Fold microkernel</span></div>
+<div><h1 class="zz-name">zuzu</h1><span class="zz-tag">the microkernel</span></div>
 </div>
 
 zuzu is a lightweight microkernel written from scratch in C and ARM assembly. It is named after zuzu,
