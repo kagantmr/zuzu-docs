@@ -103,4 +103,4 @@ Every function in `<zuzu/zuzu.h>`, grouped as in the header. Syscalls are listed
 | `0x0A` | [`BindIrq`](bindirq.md) | `EVENT_IRQ (2)` | Delivers a device's interrupt as an event bit. |
 | `0x0A` | [`BindMemMgmt`](bindmemmgmt.md) | `EVENT_MEMMGMT (1)` | Subscribes an event to the kernel's memory-pressure notifications. |
 | helper | [`FormatToEventWait`](formattoeventwait.md) |  | Unpacks the registers of a WaitOn() on an event. |
-| helper | [`WaitOnEvent`](waitonevent.md) |  | Waits for bits on an event, then clears them. |
+| helper | [`WaitOnEvent`](waitonevent.md) |  | Waits for bits on an event, then clears the bits it returns. |

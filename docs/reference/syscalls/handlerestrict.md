@@ -32,3 +32,4 @@ ZUZU_OK, or an error code.
 | Error | Condition |
 |---|---|
 | [`ERR_BADHANDLE`](../errors.md#err_badhandle) | `h` is not a live handle. |
+| [`ERR_BUSY`](../errors.md#err_busy) | Can't restrict because `h` is mapped, unmap or MemProtect before you Restrict. |

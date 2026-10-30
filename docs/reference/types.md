@@ -40,6 +40,7 @@ Common types for zlibc and the zuzu kernel.
 | <a id="dma_align"></a>`DMA_ALIGN` | `64U` | DMA buffer alignment value for cache alignment. |
 | <a id="prot_rw"></a>`PROT_RW` | `((PROT_READ) \| (PROT_WRITE))` | Protection flag for a read-write memory object. |
 | <a id="device_handle_base"></a>`DEVICE_HANDLE_BASE` | `16` | The base value the Device objects are inserted into rootsvc's object table. devsvc shall start checking from this index. |
+| <a id="event_wait_all"></a>`EVENT_WAIT_ALL` | `(1u << 31)` | WaitOn argument 3 MSB: waits until all bits are signalled. |
 
 ## Enumerations
 
@@ -120,6 +121,7 @@ Event type to bind to a bit of an event.
 | `EVENT_PORT` | `3` | Call()ed on port, used to multiplex. |
 | `EVENT_TASK` | `4` | A task died. |
 | `EVENT_SPACE` | `5` | A space is hollowed out. |
+| `EVENT_EVENT` | `6` | Another Event has pending bits. |
 
 ### `MemProt` { #memprot }
 
