@@ -1,7 +1,5 @@
 # Start here
 
-# zuzu
-
 ![Boot screen](../assets/img/shell.png)
 
 zuzu is a education/learning microkernel written from scratch in C and ARM assembly targeting IoT devices. **zuzuOS** is the userspace that runs on top of it with drivers, services for protocol stacks, shell and other applications. Microkernels have a reputation for being too slow for practical use, mostly due to Mach. zuzu is an argument that this is no longer true for the embedded, IoT, and router-class systems.
