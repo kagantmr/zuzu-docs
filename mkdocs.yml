@@ -65,7 +65,7 @@ nav:
   - Start:
       - start/index.md
       - Build and run in QEMU: start/qemu.md
-      - Raspberry Pi 4: start/rpi4.md
+      - Real hardware: start/boothw.md
       - Your first program: start/first-program.md
       - Supported boards: start/boards.md
   - Concepts:
@@ -95,7 +95,7 @@ nav:
           - ZXF: reference/formats/zxf.md
   - Guides:
       - guides/index.md
-      - ZCRT: guides/zcrt.md
+      - zlibc: guides/zlibc.md
       - newlib: guides/newlib.md
       - Writing a service: guides/service.md
       - Writing a driver: guides/driver.md

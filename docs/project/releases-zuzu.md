@@ -43,9 +43,7 @@ tion handler which enables it and hands it off.
 
 - Kernel data structure optimizations
 
-## zuzu v2.0 Prowl
-
-**Planned:** 
+## zuzu v2.0 Prowl`
 
 - Pinned MMIO ranges and framebuffers for DMA
 - SHM adjustments for shared library support

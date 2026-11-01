@@ -10,8 +10,7 @@ hide:
 <div><h1 class="zz-name">zuzu</h1><span class="zz-tag">the microkernel</span></div>
 </div>
 
-zuzu is a lightweight microkernel written from scratch in C and ARM assembly. It is named after zuzu,
-the Scottish Fold cat.
+zuzu is a lightweight microkernel written from scratch in C and ARM assembly. It is named after Zuzu the Scottish Fold cat.
 
 As a microkernel, zuzu provides only the most essential services such as memory management, inter-process
 communication, and scheduling.
