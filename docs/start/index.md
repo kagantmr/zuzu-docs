@@ -2,7 +2,7 @@
 
 # zuzu
 
-![Boot screen](docs/img/shell_new.png)
+![Boot screen](../assets/img/shell.png)
 
 zuzu is a education/learning microkernel written from scratch in C and ARM assembly targeting IoT devices. **zuzuOS** is the userspace that runs on top of it with drivers, services for protocol stacks, shell and other applications. Microkernels have a reputation for being too slow for practical use, mostly due to Mach. zuzu is an argument that this is no longer true for the embedded, IoT, and router-class systems.
 
@@ -37,5 +37,5 @@ zuzu's own code is MIT-licensed. The components below keep their own licenses.
 ## Next steps
 
 - [Build and run in QEMU](qemu.md)
-- [Run on a Raspberry Pi 4](rpi4.md)
+- [Run on a Raspberry Pi 4](boothw.md)
 - [Your first program](first-program.md)

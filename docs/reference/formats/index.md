@@ -28,7 +28,7 @@ injection logic exists once.
 
 ## ZXF
 
-See the [ZXF reference](zxf) for the full format. In brief: a fixed 64-byte
+See the [ZXF reference](zxf.md) for the full format. In brief: a fixed 64-byte
 header, a segment table of 24-byte entries, an optional block table, and the
 segment bytes packed back to back. It carries a CRC32 over the whole file and
 a content-derived build identifier.

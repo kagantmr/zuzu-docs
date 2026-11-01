@@ -5,7 +5,7 @@
 
 ## Programs
 
-- [Your first program](../start/first-program.md), [ZCRT](zcrt.md), [newlib](newlib.md)
+- [Your first program](../start/first-program.md), [zlibc](zlibc.md), [newlib](newlib.md)
 
 ## Services and drivers
 
