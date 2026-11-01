@@ -14,37 +14,14 @@ SvcResult WaitOn(Handle h, Duration timeout);
 
 **Registers:** `(h, timeout) -> r0 status, r1-r3 per handle type`
 
-The generic wait for ports, events, tasks and spaces; it returns as soon as something arrives. What r1-r3 carry depends on the type of `h:`
+The generic wait for ports, events, tasks and spaces; it returns as soon as something arrives. What r1-r3 carry depends on the handle type:
 
-[Handle](../types.md#handle)
-
-r1
-
-r2
-
-r3
-
-Port
-
-sender's marker
-
-message length
-
-granted handle, or -1
-
-Event
-
-signalled bits (now cleared)
-
-Task
-
-exit status or fault reason
-
-TASK_EXITED or TASK_FAULTED
-
-Space
-
-last task's exit status
+| Handle | r1 | r2 | r3 |
+|---|---|---|---|
+| Port | sender's marker | message length | granted handle, or -1 |
+| Event | signalled bits (now cleared) |  |  |
+| Task | exit status or fault reason |  | TASK_EXITED or TASK_FAULTED |
+| Space | last task's exit status |  |  |
 
 Receiving on a port leaves the caller holding the call: it must Reply() or Hold() before receiving again. Waiting on a task that has already exited or faulted returns at once with ZUZU_OK. WaitOnPort(), WaitOnEvent(), WaitOnTask() and WaitOnSpace() unpack the result into typed structs.
 

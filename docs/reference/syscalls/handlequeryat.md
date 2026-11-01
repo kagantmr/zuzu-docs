@@ -14,41 +14,16 @@ SvcResult HandleQueryAt(Handle h, QueryWhat what, size_t index);
 
 **Registers:** `(h, what, index) -> r0 status, r1 value`
 
-`what`
-
-r1
-
-QUERY_TYPE
-
-handle type
-
-QUERY_PERMS
-
-the handle's permissions
-
-QUERY_MARKER
-
-the handle's marker
-
-QUERY_STATUS
-
-task exit status, space's last exit status, or ZUZU_OK / ERR_DEAD for a port
-
-QUERY_SIZE
-
-size in bytes of a memory object
-
-QUERY_DMA_COUNT
-
-number of DMA mappings on a device
-
-QUERY_DMA_ID
-
-id of the `index-th` mapping, 0 = newest
-
-QUERY_DMA_BUS / _LEN / _DIR
-
-bus address, length, direction of mapping `index` (an id)
+| `what` | r1 |
+|---|---|
+| QUERY_TYPE | handle type |
+| QUERY_PERMS | the handle's permissions |
+| QUERY_MARKER | the handle's marker |
+| QUERY_STATUS | task exit status, space's last exit status, or ZUZU_OK / ERR_DEAD for a port |
+| QUERY_SIZE | size in bytes of a memory object |
+| QUERY_DMA_COUNT | number of DMA mappings on a device |
+| QUERY_DMA_ID | id of the mapping at `index`, 0 = newest |
+| QUERY_DMA_BUS / _LEN / _DIR | bus address, length, direction of mapping `index` (an id) |
 
 ## Parameters
 
