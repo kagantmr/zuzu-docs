@@ -49,7 +49,7 @@ jobs:
         working-directory: v1
         env:
           JEKYLL_ENV: production
-        run: bundle exec jekyll build --baseurl /zuzu-docs/1.x --destination ../_site/1.x
+        run: bundle exec jekyll build --baseurl /1.x --destination ../_site/1.x
 
       - name: Version list and redirect
         run: |
@@ -63,9 +63,9 @@ jobs:
           <!doctype html>
           <meta charset="utf-8">
           <title>zuzu</title>
-          <meta http-equiv="refresh" content="0; url=/zuzu-docs/2.x/">
-          <link rel="canonical" href="/zuzu-docs/2.x/">
-          <a href="/zuzu-docs/2.x/">zuzu documentation</a>
+          <meta http-equiv="refresh" content="0; url=/2.x/">
+          <link rel="canonical" href="/2.x/">
+          <a href="/2.x/">zuzu documentation</a>
           EOF
           cp _site/index.html _site/404.html
 
