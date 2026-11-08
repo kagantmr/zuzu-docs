@@ -40,11 +40,13 @@ Struct representing the syspage's layout.
 | `build` | `char` | Build date. |
 | `machine` | `char` | Machine zuzu is booting on. |
 | `cpu` | `char` | CPU within the machine. |
-| `mem_total_kb` | `size_t` | Total memory in kilobytes. |
-| `mem_free_kb` | `size_t` | Free memory in kilobytes. |
+| `mem_total_kb` | `uint32_t` | Total memory in kilobytes. |
+| `mem_free_kb` | `uint32_t` | Free memory in kilobytes. |
 | `counter_freq` | `uint64_t` | Counter frequency. |
 | `counter_boot` | `uint64_t` | Counter value at boot. |
 | `dev_count` | `uint8_t` | Device count. |
 | `_reserved` | `uint32_t` | Reserved. |
 | `devs` | [`SyspageDevEntry`](#syspagedeventry) | Device names list. |
 | `_reserved2` | `uint32_t` | Reserved. |
+| `us_mult` | `uint32_t` | Counter ticks to microseconds: us = (ticks * us_mult) >> us_shift; 0 if unset. |
+| `us_shift` | `uint32_t` | Shift paired with us_mult; always at least 32. |

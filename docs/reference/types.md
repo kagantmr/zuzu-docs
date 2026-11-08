@@ -12,18 +12,18 @@ Common types for zlibc and the zuzu kernel.
 
 | Type | Definition | Description |
 |---|---|---|
-| <a id="handle"></a>`Handle` | `int32_t` | Index into the Space's object table. |
-| <a id="spid"></a>`Spid` | `int32_t` | Space ID. |
-| <a id="tid"></a>`Tid` | `int32_t` | Task ID. |
+| <a id="handle"></a>`Handle` | `int` | Index into the Space's object table. |
+| <a id="spid"></a>`Spid` | `int` | Space ID. |
+| <a id="tid"></a>`Tid` | `int` | Task ID. |
 | <a id="tick"></a>`Tick` | `uint64_t` | [Tick](#tick) from the CPU timer. |
 | <a id="physaddr"></a>`PhysAddr` | `uintptr_t` | Physical address in integer form. |
 | <a id="virtaddr"></a>`VirtAddr` | `uintptr_t` | Virtual address in integer form. |
-| <a id="irq"></a>`Irq` | `uint32_t` | Interrupt number. |
-| <a id="duration"></a>`Duration` | `uint32_t` | [Duration](#duration) of time (usually in ms). |
+| <a id="irq"></a>`Irq` | `unsigned int` | Interrupt number. |
+| <a id="duration"></a>`Duration` | `unsigned int` | [Duration](#duration) of time (usually in ms). |
 | <a id="time"></a>`Time` | `uint64_t` | [Time](#time), measured in ticks. |
-| <a id="marker"></a>`Marker` | `uint32_t` | Stamped value of a distinct object. |
-| <a id="ticket"></a>`Ticket` | `uint32_t` | Index into a port's held callers queue. |
-| <a id="eventword"></a>`EventWord` | `uint32_t` | Bits delivered on an event wakeup. |
+| <a id="marker"></a>`Marker` | `unsigned int` | Stamped value of a distinct object. |
+| <a id="ticket"></a>`Ticket` | `unsigned int` | Index into a port's held callers queue. |
+| <a id="eventword"></a>`EventWord` | `unsigned int` | Bits delivered on an event wakeup. |
 
 ## Constants
 
@@ -217,8 +217,8 @@ Arguments required to map a DMA buffer.
 |---|---|---|
 | `entry` | `void *` | Entry point for the Task. |
 | `sp` | `void *` | Stack point for the Task. Must be mapped. |
-| `r0` | `uint32_t` | First initial register value for the Task. |
-| `r1` | `uint32_t` | Second initial register value for the Task. |
+| `r0` | [`Register`](../internals/arch/arm/include/arch_impl/regs.md#register) | First initial register value for the Task. |
+| `r1` | [`Register`](../internals/arch/arm/include/arch_impl/regs.md#register) | Second initial register value for the Task. |
 
 ### `PortWaitResult` { #portwaitresult }
 
@@ -228,7 +228,7 @@ Return values for WaitOn on a port object.
 |---|---|---|
 | `status` | [`Err`](errors.md#err) | If the wait succeeded, returns ZUZU_OK. If the request was nonblocking and the wait timed out, it returns ERR_TIMEOUT. |
 | `sender` | [`Marker`](#marker) | [Marker](#marker) assigned to the sender's port object. |
-| `xlen` | `uint32_t` | Length of the message. |
+| `xlen` | `size_t` | Length of the message. |
 | `granted` | [`Handle`](#handle) | [Handle](#handle) to a granted object in the receiver's table. |
 
 ### `EventWaitResult` { #eventwaitresult }
@@ -248,7 +248,7 @@ Return values for WaitOn on a task object.
 |---|---|---|
 | `status` | [`Err`](errors.md#err) | If the wait succeeded, returns ZUZU_OK. If the request was nonblocking and the wait timed out, it returns ERR_TIMEOUT. |
 | `outcome` | [`TaskWaitOutcome`](#taskwaitoutcome) | Why the task stopped. |
-| `value` | `int32_t` | If exited gracefully, the task's return code. |
+| `value` | [`Err`](errors.md#err) | If exited gracefully, the task's return code. |
 
 ### `SpaceWaitResult` { #spacewaitresult }
 
@@ -267,7 +267,7 @@ Return values for DmaMap.
 |---|---|---|
 | `status` | [`Err`](errors.md#err) | ZUZU_OK on success, negative on failure. |
 | `bus_addr` | `uintptr_t` | Address as seen by the device. |
-| `id` | `uint32_t` | ID of the mapping, for adoption. |
+| `id` | `size_t` | ID of the mapping, for adoption. |
 
 ### `InjectObjArgs` { #injectobjargs }
 

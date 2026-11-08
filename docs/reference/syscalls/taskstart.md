@@ -9,7 +9,7 @@ Starts a task created by CreateTask().
 | `0x0C` SVC_MANAGETASK | `MNGTASK_START (0)` | no | 2.0 |
 
 ```c
-Err TaskStart(Handle h, void *entry, void *sp, uint32_t r0, uint32_t r1);
+Err TaskStart(Handle h, void *entry, void *sp, Register r0, Register r1);
 ```
 
 **Registers:** `(task, &args) -> r0 status`

@@ -24,11 +24,11 @@ Target architecture of an image.
 
 | Name | Value | Description |
 |---|---|---|
-| `ARM32` | `1` | 32-bit ARM. |
-| `ARM64` | `2` | 64-bit ARM. |
-| `X86_64` | `3` | x86-64. |
-| `RISCV` | `4` | RISC-V. |
-| `POWPC` | `5` | PowerPC. |
+| `ZXF_ARM` | `1` | 32-bit ARM. |
+| `ZXF_AARCH64` | `2` | 64-bit ARM. |
+| `ZXF_X86_64` | `3` | x86-64. |
+| `ZXF_RISCV` | `4` | RISC-V. |
+| `ZXF_PPC` | `5` | PowerPC. |
 
 ### `ZXFBlockType` { #zxfblocktype }
 
@@ -96,7 +96,7 @@ A parsed ZXF image, pointing into the caller's buffer.
 |---|---|---|
 | `base` | `const uint8_t *` | Start of the image bytes. |
 | `size` | `size_t` | Image size in bytes. |
-| `entry` | `uint32_t` | Entry point address. |
+| `entry` | [`VirtAddr`](../../types.md#virtaddr) | Entry point address. |
 | `seg_count` | `uint16_t` | Number of segments. |
 | `segs` | const [`ZXFSegment`](#zxfsegment) * | The segment table, inside the image. |
 

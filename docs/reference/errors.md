@@ -12,7 +12,7 @@ Names error types from the kernel and the userspace IPC contracts.
 
 | Type | Definition | Description |
 |---|---|---|
-| <a id="err"></a>`Err` | `int32_t` | Generic error code type. Non-positive error code. Never positive Check zuzu/err.h for error codes. |
+| <a id="err"></a>`Err` | `int` | Generic error code type. Non-positive error code. Never positive Check zuzu/err.h for error codes. |
 
 ## Constants
 

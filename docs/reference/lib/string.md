@@ -247,6 +247,29 @@ Examples: zu (unsigned size_t), zd (signed size_t), zx (size_t in hex)
 | `fstring` | in | Format string. |
 | `args` | inout | Pointer to va_list of arguments matching the format specifiers. |
 
+### `strfmt_float` { #strfmt_float }
+
+```c
+int strfmt_float(va_list *args, char spec, int prec, int alt, int plus, int space, char *numbuf, char *signch_out);
+```
+
+Formats one f, e or g conversion for vstrfmt().
+
+The kernel cannot use floating point, so its stand-in in core/strfmt_float.c consumes no argument and writes the conversion letter.
+
+| Parameter | Direction | Description |
+|---|---|---|
+| `args` | inout | Argument list from vstrfmt. |
+| `spec` | in | Conversion letter (f, F, e, E, g or G). |
+| `prec` | in | Precision |
+| `alt` | in | Nonzero for the # flag |
+| `plus` | in | Nonzero for the + flag |
+| `space` | in | Nonzero for the space flag |
+| `numbuf` | out | Receives the digits without the sign |
+| `signch_out` | out | Receives the sign character or 0 for none. |
+
+**Returns:** Number of characters written to `numbuf`.
+
 ### `vsnprintf` { #vsnprintf }
 
 ```c
