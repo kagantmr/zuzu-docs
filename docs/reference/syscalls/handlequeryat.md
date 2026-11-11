@@ -21,6 +21,7 @@ SvcResult HandleQueryAt(Handle h, QueryWhat what, size_t index);
 | QUERY_MARKER | the handle's marker |
 | QUERY_STATUS | task exit status, space's last exit status, or ZUZU_OK / ERR_DEAD for a port |
 | QUERY_SIZE | size in bytes of a memory object |
+| QUERY_FAULTED | 1 if a space is frozen by a faulted task, else 0 |
 | QUERY_DMA_COUNT | number of DMA mappings on a device |
 | QUERY_DMA_ID | id of the mapping at `index`, 0 = newest |
 | QUERY_DMA_BUS / _LEN / _DIR | bus address, length, direction of mapping `index` (an id) |

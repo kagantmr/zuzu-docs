@@ -42,6 +42,7 @@ Every function in `<zuzu/zuzu.h>`, grouped as in the header. Syscalls are listed
 | `0x0C` | [`TaskKill`](taskkill.md) | `MNGTASK_KILL (1)` | Terminates another task, as if it had called Quit(ERR_DEAD). |
 | `0x0C` | [`TaskResume`](taskresume.md) | `MNGTASK_RESUME (6)` | Lets a suspended task run again, or continues a faulted task. |
 | `0x0C` | [`TaskSetMaxPriority`](tasksetmaxpriority.md) | `MNGTASK_SET_MAX_PRIO (3)` | Sets the highest priority a task may give itself; lowers its base priority if needed. |
+| `0x0C` | [`TaskSetMaxTimeSlice`](tasksetmaxtimeslice.md) | `MNGTASK_SET_MAX_TIMESLICE (9)` | Sets the longest timeslice a task may give itself; shortens its current slice if needed. |
 | `0x0C` | [`TaskSetPriority`](tasksetpriority.md) | `MNGTASK_SET_PRIORITY (2)` | Sets a task's base priority. |
 | `0x0C` | [`TaskSetRegs`](tasksetregs.md) | `MNGTASK_SET_REGS (8)` | Writes the user registers of a faulted or suspended task. |
 | `0x0C` | [`TaskSetTimeSlice`](tasksettimeslice.md) | `MNGTASK_SET_TIMESLICE (4)` | Sets how long a task runs before same-priority tasks get a turn. |
@@ -83,7 +84,7 @@ Every function in `<zuzu/zuzu.h>`, grouped as in the header. Syscalls are listed
 | `0x05` | [`CallTimeout`](calltimeout.md) |  | Sends a message to a port and blocks until the server replies, or until a timeout. |
 | `0x06` | [`Reply`](reply.md) |  | Answers the call the caller is holding. |
 | `0x06` | [`ReplyRecv`](replyrecv.md) |  | Answers the call in hand (if any), then waits for the next one, in one syscall. |
-| `0x06` | [`ReplyTo`](replyto.md) | `(ticket in r3)` | Answers a call parked with Hold(). |
+| `0x06` | [`ReplyTo`](replyto.md) | `(RECV_TICKET (-2) in r2, ticket in r3)` | Answers a call parked with Hold(). |
 | `0x0D` | [`Hold`](hold.md) |  | Parks the call in hand so the server can receive others, and returns a ticket for it. |
 | helper | [`Call`](call.md) |  | Call() with no timeout: blocks until the server replies. |
 | helper | [`CallPort`](callport.md) |  | Call() that stores the reply length and any granted handle. |

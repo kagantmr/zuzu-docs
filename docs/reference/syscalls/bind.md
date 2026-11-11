@@ -18,7 +18,7 @@ Err Bind(EventType type, Handle ev_handle, Handle target, uint32_t bit);
 |---|---|---|
 | EVENT_PORT | port | a caller is queued, nobody receiving |
 | EVENT_TASK | task | the task exits or faults |
-| EVENT_SPACE | space | the space has no live tasks left |
+| EVENT_SPACE | space | the space has no live tasks left, or a task in it faulted (see QUERY_FAULTED) |
 | EVENT_EVENT | event | the child event has pending bits |
 
 If the condition already holds, the bit is set at once. The bit then belongs to the kernel: Signal() may not set it. An object accepts at most four bindings.

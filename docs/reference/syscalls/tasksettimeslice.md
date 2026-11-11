@@ -32,4 +32,4 @@ ZUZU_OK, or an error code.
 | [`ERR_BADARG`](../errors.md#err_badarg) | `slice_us` is out of range. |
 | [`ERR_BADHANDLE`](../errors.md#err_badhandle) | `h` is not a live handle. |
 | [`ERR_BADTYPE`](../errors.md#err_badtype) | `h` is not a task. |
-| [`ERR_NOPERM`](../errors.md#err_noperm) | `h` lacks PERM_CNTL. |
+| [`ERR_NOPERM`](../errors.md#err_noperm) | `h` lacks PERM_CNTL, or `slice_us` is above the task's maximum timeslice. |

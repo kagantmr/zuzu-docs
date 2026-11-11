@@ -14,7 +14,7 @@ Err HandleClose(Handle h);
 
 **Registers:** `(h) -> r0 status`
 
-The object lives on while other handles or mappings refer to it; closing the last handle to a port kills the port, failing its waiting callers with ERR_DEAD.
+The object lives on while other handles or mappings refer to it; closing the last handle to a port kills the port, failing its waiting callers with ERR_DEAD. Closing the last handle to an event kills it too, even while it is still bound to a port, task, space, interrupt or memory pressure; those bindings are dropped.
 
 ## Parameters
 

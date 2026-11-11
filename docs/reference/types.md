@@ -22,13 +22,14 @@ Common types for zlibc and the zuzu kernel.
 | <a id="duration"></a>`Duration` | `unsigned int` | [Duration](#duration) of time (usually in ms). |
 | <a id="time"></a>`Time` | `uint64_t` | [Time](#time), measured in ticks. |
 | <a id="marker"></a>`Marker` | `unsigned int` | Stamped value of a distinct object. |
-| <a id="ticket"></a>`Ticket` | `unsigned int` | Index into a port's held callers queue. |
+| <a id="ticket"></a>`Ticket` | `uintptr_t` | Names a call parked with Hold(); register-wide, so 64 bits on AArch64. |
 | <a id="eventword"></a>`EventWord` | `unsigned int` | Bits delivered on an event wakeup. |
 
 ## Constants
 
 | Name | Value | Description |
 |---|---|---|
+| <a id="recv_ticket"></a>`RECV_TICKET` | `(-2)` | Receive-port value for Reply that means "answer the held call whose ticket is in r3". |
 | <a id="timeout_poll"></a>`TIMEOUT_POLL` | `0u` | Pass this sentinel into timeout arguments for the system call to return without blocking. |
 | <a id="timeout_infinite"></a>`TIMEOUT_INFINITE` | `UINT32_MAX` | Pass this sentinel into timeout arguments for the system call to block until the request completes. |
 | <a id="timeslice_default_us"></a>`TIMESLICE_DEFAULT_US` | `50000u` | Default timeslice for a newly created Task. |
@@ -164,6 +165,7 @@ Query operation code.
 | `QUERY_DMA_BUS` | `7` | Query the bus ID for this object. |
 | `QUERY_DMA_LEN` | `8` | Query the DMA length for this object. |
 | `QUERY_DMA_DIR` | `9` | Query the DMA direction for this object. |
+| `QUERY_FAULTED` | `10` | Query whether a Space is frozen by a faulted task. |
 
 ### `ManageHandleVerb` { #managehandleverb }
 
@@ -194,6 +196,7 @@ ManageTask operation code.
 | `MNGTASK_RESUME` | `6` | Resume an owned task. |
 | `MNGTASK_GET_REGS` | `7` | Get the register frame of an owned task. |
 | `MNGTASK_SET_REGS` | `8` | Change the register frame of an owned task. |
+| `MNGTASK_SET_MAX_TIMESLICE` | `9` | Change the longest timeslice the caller or an owned task may set. |
 
 ## Structures
 

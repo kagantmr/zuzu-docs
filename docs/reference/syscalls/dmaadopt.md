@@ -14,13 +14,13 @@ Handle DmaAdopt(Handle dev, uint32_t id);
 
 **Registers:** `(dev, id) -> r0 status, r1 memory handle`
 
-For a restarted driver to take over buffers its predecessor mapped. The new handle has PERM_MAP only.
+For a restarted driver to take over buffers its predecessor mapped. The new handle has at most PERM_MAP and PERM_WRITE, and never more than the handle the mapping was made through. The memory object keeps its owner.
 
 ## Parameters
 
 | Name | Direction | Description |
 |---|---|---|
-| `dev` | in | Device handle with PERM_MAP. |
+| `dev` | in | Device handle with PERM_MAP and PERM_CNTL. |
 | `id` | in | Mapping id, e.g. from HandleQueryAt() with QUERY_DMA_ID. |
 
 ## Returns
@@ -34,5 +34,5 @@ The new memory handle, or a negative error code.
 | [`ERR_NOENT`](../errors.md#err_noent) | No mapping with that id. |
 | [`ERR_BADHANDLE`](../errors.md#err_badhandle) | `dev` is not a live handle. |
 | [`ERR_BADTYPE`](../errors.md#err_badtype) | `dev` is not a device. |
-| [`ERR_NOPERM`](../errors.md#err_noperm) | `dev` lacks PERM_MAP. |
+| [`ERR_NOPERM`](../errors.md#err_noperm) | `dev` lacks PERM_MAP or PERM_CNTL. |
 | [`ERR_NOMEM`](../errors.md#err_nomem) | The caller's handle table is full. |

@@ -23,7 +23,7 @@ The generic wait for ports, events, tasks and spaces; it returns as soon as some
 | Task | exit status or fault reason |  | TASK_EXITED or TASK_FAULTED |
 | Space | last task's exit status |  |  |
 
-Receiving on a port leaves the caller holding the call: it must Reply() or Hold() before receiving again. Waiting on a task that has already exited or faulted returns at once with ZUZU_OK. WaitOnPort(), WaitOnEvent(), WaitOnTask() and WaitOnSpace() unpack the result into typed structs.
+Receiving on a port leaves the caller holding the call: it should Reply() or Hold() before receiving again. A call still unanswered at the next receive is failed with ERR_DEAD. Waiting on a task that has already exited or faulted returns at once with ZUZU_OK. WaitOnPort(), WaitOnEvent(), WaitOnTask() and WaitOnSpace() unpack the result into typed structs.
 
 ## Parameters
 
@@ -45,5 +45,4 @@ r0 is the status; r1-r3 as in the table above.
 | [`ERR_NOPERM`](../errors.md#err_noperm) | `h` lacks PERM_WAIT. |
 | [`ERR_BADTYPE`](../errors.md#err_badtype) | `h` is not a port, event, task or space. |
 | [`ERR_DEAD`](../errors.md#err_dead) | The port or event was destroyed, or the space was torn down. |
-| [`ERR_BUSY`](../errors.md#err_busy) | Port only: the caller still holds an unanswered call. |
 | [`ERR_BADARG`](../errors.md#err_badarg) | `h` is the caller's own task or own space. |

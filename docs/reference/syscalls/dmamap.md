@@ -20,8 +20,8 @@ Cached memory is cleaned and invalidated at map time; use DmaSync() around later
 
 | Name | Direction | Description |
 |---|---|---|
-| `dev` | in | Device handle with PERM_MAP. |
-| `mem` | in | MEM_CONTIG memory object with PERM_MAP. |
+| `dev` | in | Device handle with PERM_MAP and PERM_CNTL. |
+| `mem` | in | MEM_CONTIG memory object with PERM_MAP, plus PERM_WRITE unless `dir` is DMA_TO_DEVICE. |
 | `offset` | in | Page-aligned byte offset into `mem`. |
 | `len` | in | Page-aligned length; must fit in `mem`. |
 | `dir` | in | Direction of the transfers. |
@@ -36,7 +36,7 @@ The status, the address the device must use, and the mapping id.
 |---|---|
 | [`ERR_BADHANDLE`](../errors.md#err_badhandle) | `dev` or `mem` is not a live handle. |
 | [`ERR_BADTYPE`](../errors.md#err_badtype) | `dev` is not a device, or `mem` is not MEM_CONTIG memory. |
-| [`ERR_NOPERM`](../errors.md#err_noperm) | A handle lacks PERM_MAP. |
+| [`ERR_NOPERM`](../errors.md#err_noperm) | A handle lacks PERM_MAP, `dev` lacks PERM_CNTL, or the device would write to `mem` without PERM_WRITE. |
 | [`ERR_BADARG`](../errors.md#err_badarg) | Bad direction, misaligned or out-of-range window, or beyond the device's DMA reach. |
 | [`ERR_NOMEM`](../errors.md#err_nomem) | The device has no mapping slots left. |
 | [`ERR_BADPTR`](../errors.md#err_badptr) | The argument block is unreadable. |

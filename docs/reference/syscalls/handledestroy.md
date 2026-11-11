@@ -32,3 +32,4 @@ ZUZU_OK, or an error code.
 |---|---|
 | [`ERR_BADHANDLE`](../errors.md#err_badhandle) | `h` is not a live handle. |
 | [`ERR_BADARG`](../errors.md#err_badarg) | `h` names the caller's own space or one of its ancestors. |
+| [`ERR_NOPERM`](../errors.md#err_noperm) | `h` is a space handle without PERM_CNTL; the handle is kept. |

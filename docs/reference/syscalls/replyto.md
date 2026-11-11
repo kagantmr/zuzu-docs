@@ -6,13 +6,13 @@ Answers a call parked with Hold().
 
 | Number | Selector | Blocking | Since |
 |---|---|---|---|
-| `0x06` SVC_REPLY | `(ticket in r3)` | no | 2.0 |
+| `0x06` SVC_REPLY | `(RECV_TICKET (-2) in r2, ticket in r3)` | no | 2.0 |
 
 ```c
 Err ReplyTo(Ticket t, uint32_t xlen, Handle grant);
 ```
 
-**Registers:** `(xlen, grant, -1, ticket) -> r0 status`
+**Registers:** `(xlen, grant, RECV_TICKET, ticket) -> r0 status`
 
 The reply is the first `xlen` bytes of the answering thread's message box. Any thread of the space that parked the call may answer; a ticket answers once and is meaningless in other spaces. The call in hand, if any, is not affected.
 
