@@ -24,15 +24,17 @@ devsvc commands.
 | Name | Value | Description |
 |---|---|---|
 | `DEVM_REQUEST` | `0` | Ask for the first device matching one of a list of compatible strings. |
+| `DEVM_REQUEST_NTH` | `1` | Ask for the nth device, in boot-list order, matching one of the strings. |
 
 ## Structures
 
 ### `DevmRequest` { #devmrequest }
 
-A request as devsvc unpacks it. On the wire it is cmd and count as two 32-bit words, then `count` NUL-terminated strings back to back.
+A request as devsvc unpacks it. On the wire it is cmd and count as two 32-bit words (plus nth for DEVM_REQUEST_NTH), then `count` NUL-terminated strings back to back.
 
 | Field | Type | Description |
 |---|---|---|
-| `cmd` | [`DevmRequestType`](#devmrequesttype) | DEVM_REQUEST. |
+| `cmd` | [`DevmRequestType`](#devmrequesttype) | DEVM_REQUEST or DEVM_REQUEST_NTH. |
+| `nth` | `uint32_t` | DEVM_REQUEST_NTH only: matches to skip, 0 for the first. |
 | `count` | `uint32_t` | Number of strings, 1 to DEVM_MAX_COMPAT. |
 | `strings` | `const char *` | The strings, pointing into the message buffer. |

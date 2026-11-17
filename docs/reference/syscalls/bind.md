@@ -21,7 +21,7 @@ Err Bind(EventType type, Handle ev_handle, Handle target, uint32_t bit);
 | EVENT_SPACE | space | the space has no live tasks left, or a task in it faulted (see QUERY_FAULTED) |
 | EVENT_EVENT | event | the child event has pending bits |
 
-If the condition already holds, the bit is set at once. The bit then belongs to the kernel: Signal() may not set it. An object accepts at most four bindings.
+If the condition already holds, the bit is set at once. The bit then belongs to the kernel: Signal() may not set it. An object accepts at most sixteen bindings.
 
 ## Parameters
 
@@ -45,4 +45,4 @@ ZUZU_OK, or an error code.
 | [`ERR_NOPERM`](../errors.md#err_noperm) | `ev_handle` lacks PERM_CNTL, or `target` lacks PERM_WAIT. |
 | [`ERR_BADARG`](../errors.md#err_badarg) | `bit` is out of range, or `type` is unknown. |
 | [`ERR_DEAD`](../errors.md#err_dead) | The event or the port has died. |
-| [`ERR_NOMEM`](../errors.md#err_nomem) | `target` already has four bindings. |
+| [`ERR_NOMEM`](../errors.md#err_nomem) | `target` already has sixteen bindings. |

@@ -19,7 +19,7 @@ One client at a time. Every request gets exactly one reply, sent once the transf
 | <a id="sd_cmd_write"></a>`SD_CMD_WRITE` | `3` | Write blocks. [SdRequest](#sdrequest) {cmd, lba, count}; the data is taken from buffer offset 0. |
 | <a id="sd_err_io"></a>`SD_ERR_IO` | `ERR_IO` | A block transfer failed: CRC error, timeout, or FIFO overrun or underrun. |
 | <a id="sd_block_size"></a>`SD_BLOCK_SIZE` | `512u` | Bytes per block. |
-| <a id="sd_buf_size"></a>`SD_BUF_SIZE` | `4096u` | Size of the transfer buffer: one page, so at most 8 blocks per request. |
+| <a id="sd_buf_size"></a>`SD_BUF_SIZE` | `65536u` | Size of the transfer buffer: 16 pages, so at most 128 blocks per request. |
 
 ## Structures
 

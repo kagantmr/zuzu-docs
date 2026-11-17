@@ -41,6 +41,7 @@ Names error types from the kernel and the userspace IPC contracts.
 | <a id="err_outdated"></a>`ERR_OUTDATED` | `(-107)` | This request is outdated, or operation cannot continue due to an issue with outdated code/data. |
 | <a id="err_connreset"></a>`ERR_CONNRESET` | `(-108)` | TCP connection reset. |
 | <a id="err_connrefused"></a>`ERR_CONNREFUSED` | `(-109)` | TCP connection refused. |
+| <a id="err_intr"></a>`ERR_INTR` | `(-110)` | A blocking call was interrupted (^C on a terminal). |
 
 ## Enumerations
 

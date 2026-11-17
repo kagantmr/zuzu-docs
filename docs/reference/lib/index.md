@@ -17,7 +17,9 @@ The support libraries in `include/`. Each header that is listed in `docs/doc-pub
 | [`<ctype.h>`](ctype.md) | Character classification and case conversion, for the C locale. |
 | [`<dirent.h>`](dirent.md) | Minimal opendir/readdir/closedir for tier-2 (newlib) programs. |
 | [`<elf.h>`](elf.md) | The parts of the ELF32 format the loader reads. |
+| [`<inttypes.h>`](inttypes.md) | printf format macros for the fixed-width integer types. |
 | [`<list.h>`](list.md) | Intrusive circular doubly linked list with a sentinel head. |
+| [`<lv_conf.h>`](lv_conf.md) | Configuration file for v9.6.0. |
 | [`<malloc.h>`](malloc.md) | Userspace heap allocator. |
 | [`<math.h>`](math.md) | Floating-point constants, classification macros and libm declarations. |
 | [`<newlib_compat.h>`](newlib_compat.md) | POSIX declarations this newlib build leaves out. |
@@ -26,6 +28,8 @@ The support libraries in `include/`. Each header that is listed in `docs/doc-pub
 | [`<stdio.h>`](stdio.md) | Console I/O over ttysvc: printf and scanf families, and choosing the terminal. |
 | [`<stdlib.h>`](stdlib.md) | Freestanding stdlib subset: conversions, sorting, searching and rand(). |
 | [`<string.h>`](string.md) | Memory and string functions, and the formatting core. |
+| [`<syslog.h>`](syslog.md) | POSIX system log, backed by logsvc through LogWrite(). |
+| [`<termios.h>`](termios.md) | POSIX terminal interface, backed by ttysvc through the console. |
 | [`<vector.h>`](vector.md) | Type-safe growable arrays, generated per element type by DEFINE_VEC(). |
 
 ## dev/
@@ -33,12 +37,18 @@ The support libraries in `include/`. Each header that is listed in `docs/doc-pub
 | Header | Summary |
 |---|---|
 | [`<dev/devm.h>`](dev/devm.md) | devsvc protocol: asking rootsvc's device service for a device by compatible string. |
+| [`<dev/hid.h>`](dev/hid.md) | USB HID keyboard usage IDs (usage page 7), the key identifiers used above the hardware. |
+| [`<dev/keymap.h>`](dev/keymap.md) | Turns key events (HID usage plus pressed or released) into the bytes a terminal expects. |
+| [`<dev/log.h>`](dev/log.md) | Client interface to the log service (logsvc). |
 | [`<dev/tty.h>`](dev/tty.md) | ttysvc protocol and client helpers. |
 
 ## dev/protocols/
 
 | Header | Summary |
 |---|---|
+| [`<dev/protocols/fb.h>`](dev/protocols/fb.md) | Framebuffer protocol served by gfxsvc ("/svc/gfx"). |
+| [`<dev/protocols/fbdrv.h>`](dev/protocols/fbdrv.md) | Driver side of the display stack. |
+| [`<dev/protocols/mbox.h>`](dev/protocols/mbox.md) | VideoCore property-mailbox protocol ("/svc/mbox"). |
 | [`<dev/protocols/mmcdrv.h>`](dev/protocols/mmcdrv.md) | Block-device protocol shared by every SD/MMC driver ("/dev/mmc0"). |
 
 ## fs/
@@ -76,8 +86,12 @@ The support libraries in `include/`. Each header that is listed in `docs/doc-pub
 | [`<util/devices.h>`](util/devices.md) | Look-ups in the syspage device list. |
 | [`<util/fnv1a.h>`](util/fnv1a.md) | 32-bit FNV-1a string hash. |
 | [`<util/imgcache.h>`](util/imgcache.md) | Small cache of loaded program images, keyed by path. |
-| [`<util/log.h>`](util/log.md) | Leveled logging. |
+| [`<util/log.h>`](util/log.md) | Userspace leveled logging: LOG_DEBUG()..LOG_ERROR() go through LogWrite() with a run-time minimum level. |
+| [`<util/path.h>`](util/path.md) | Absolute path handling shared by the shell and the C library: joining a path onto a working directory and cleaning up "." and ".." parts. |
+| [`<util/pipe.h>`](util/pipe.md) | Pipes are a one way stream between spaces. |
 | [`<util/spawn.h>`](util/spawn.md) | Starting programs: load a ZXF or ELF32 image into a new space and run it. |
+| [`<util/stdio_core.h>`](util/stdio_core.md) | Standard input, output and error as pipes. |
+| [`<util/stdio_redir.h>`](util/stdio_redir.md) | A parent can point a child's stdin and stdout at pipes. |
 | [`<util/tls.h>`](util/tls.md) | Per-thread control block (TCB): identity, priority and message box. |
 | [`<util/version.h>`](util/version.md) | zuzuOS (userspace) version, separate from the kernel's version. |
 | [`<util/zxf.h>`](util/zxf.md) | ZXF, zuzu's executable container: header, segment table and optional blocks. |

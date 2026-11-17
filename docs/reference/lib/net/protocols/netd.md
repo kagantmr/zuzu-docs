@@ -33,7 +33,7 @@ One-byte opcodes on netd's service port.
 | `NETD_GET_NETIF` | `1` | Read the interface configuration ([NetdNetif](#netdnetif)). |
 | `NETD_DRVHANDSHAKE_INIT` | `2` | Driver begins: grants its doorbell and sends its MAC. |
 | `NETD_DRVHANDSHAKE_STAGE2` | `3` | Grants the tx ring's memory. |
-| `NETD_DRVHANDSHAKE_STAGE3` | `4` | Grants the rx ring's memory; the reply holds the name. |
+| `NETD_DRVHANDSHAKE_STAGE3` | `4` | Grants the rx ring's memory; the reply holds the name and grants netd's event. |
 | `NETD_DRVNOTIFY` | `5` | Reserved; unused. |
 | `NETD_DRVWATCH` | `6` | Reserved; unused. |
 | `SOCKET_UDP` | `7` | Reserved; sockets use the SOCK_* commands in net/socket.h. |

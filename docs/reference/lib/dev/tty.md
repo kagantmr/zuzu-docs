@@ -4,7 +4,9 @@
 
 ttysvc protocol and client helpers.
 
-ttysvc joins providers (UART and console drivers) to consumers (programs) through named endpoints. Each session, either kind, shares one page with ttysvc that holds two byte rings: `up` carries bytes from the session's owner to ttysvc, `down` carries bytes from ttysvc to the owner. For a driver, up is what was received and down is what to transmit; for a program, up is its output and down is its input.
+ttysvc joins providers (UART, keyboard and console drivers) to consumers (programs) through named endpoints. Each session, either kind, shares one page with ttysvc that holds two byte rings: `up` carries bytes from the session's owner to ttysvc, `down` carries bytes from ttysvc to the owner. For a driver, up is what was received and down is what to transmit; for a program, up is its output and down is its input.
+
+An endpoint may have several providers, each with a direction. An input provider (a keyboard) only fills its up ring; an output provider (a display) only drains its down ring; a UART does both. Input from every input provider reaches the foreground program, and a program's output goes to every output provider.
 
 A session's `index` is (generation << 8) | slot, so an index from a closed session never matches a reused slot. It is guessable, so any peer can close or re-mode another's session.
 
@@ -25,17 +27,30 @@ A session's `index` is (generation << 8) | slot, so an index from a closed sessi
 |---|---|---|
 | <a id="tty_name_max"></a>`TTY_NAME_MAX` | `16` | Longest endpoint alias, including the NUL. |
 | <a id="tty_ring_data_size"></a>`TTY_RING_DATA_SIZE` | `1024u` | Bytes in each ring. |
+| <a id="tty_err_data_size"></a>`TTY_ERR_DATA_SIZE` | `512u` | Size of the standard error ring. |
 | <a id="tty_provide"></a>`TTY_PROVIDE` | `1` | Provide an endpoint (drivers). [TtyConnectRequest](#ttyconnectrequest); grants the session page. Replies [TtyConnectReply](#ttyconnectreply) and grants ttysvc's doorbell. |
 | <a id="tty_attach"></a>`TTY_ATTACH` | `2` | Attach to an endpoint (programs). Same request and reply as TTY_PROVIDE. |
+| <a id="tty_dir_in"></a>`TTY_DIR_IN` | `(1u << 0)` | Provider direction: supplies input, ttysvc reads its up ring. |
+| <a id="tty_dir_out"></a>`TTY_DIR_OUT` | `(1u << 1)` | Provider direction: consumes output, ttysvc fills its down ring. |
+| <a id="tty_dir_both"></a>`TTY_DIR_BOTH` | `(TTY_DIR_IN \| TTY_DIR_OUT)` | Provider direction: both, as a UART. The default. |
 | <a id="tty_notify"></a>`TTY_NOTIFY` | `3` | Give ttysvc the caller's event. [TtyNotifyRequest](#ttynotifyrequest); grants the event. |
 | <a id="tty_setmode"></a>`TTY_SETMODE` | `4` | Set a consumer's mode. [TtySetModeRequest](#ttysetmoderequest). |
 | <a id="tty_close"></a>`TTY_CLOSE` | `5` | End a session. [TtyCloseRequest](#ttycloserequest). |
 | <a id="tty_watch"></a>`TTY_WATCH` | `6` | Tie a session to the caller's life. [TtyWatchRequest](#ttywatchrequest); grants a port the caller owns (PERM_WAIT \| PERM_TXFR). ttysvc closes the session when that port dies. |
 | <a id="tty_focus"></a>`TTY_FOCUS` | `7` | Take the endpoint's input (consumers). [TtyFocusRequest](#ttyfocusrequest). |
+| <a id="tty_getmode"></a>`TTY_GETMODE` | `8` | Read a consumer's mode. [TtyGetModeRequest](#ttygetmoderequest); replies [TtyModeReply](#ttymodereply). |
+| <a id="tty_setwinsz"></a>`TTY_SETWINSZ` | `9` | Set the endpoint's window size (providers). [TtySetWinszRequest](#ttysetwinszrequest). |
+| <a id="tty_getwinsz"></a>`TTY_GETWINSZ` | `10` | Read the endpoint's window size. [TtyGetWinszRequest](#ttygetwinszrequest); replies [TtyWinszReply](#ttywinszreply). |
 | <a id="tty_mode_raw"></a>`TTY_MODE_RAW` | `0u` | Mode: bytes pass through untouched. The default. |
-| <a id="tty_mode_cooked"></a>`TTY_MODE_COOKED` | `(1u << 0)` | Mode: line editing (^H, DEL, ^U, ^W), input delivered a line at a time, ^D signals EOF and ^C an interrupt; ' ' becomes "\r\n" on output. |
-| <a id="tty_mode_echo"></a>`TTY_MODE_ECHO` | `(1u << 1)` | Mode: ttysvc echoes typed characters. |
-| <a id="tty_mode_all"></a>`TTY_MODE_ALL` | `(TTY_MODE_COOKED \| TTY_MODE_ECHO)` | Every mode flag. |
+| <a id="tty_icanon"></a>`TTY_ICANON` | `(1u << 0)` | Input is collected a line at a time, with line editing (^H, DEL, ^U, ^W) and ^D as EOF. |
+| <a id="tty_echo"></a>`TTY_ECHO` | `(1u << 1)` | ttysvc echoes typed characters. |
+| <a id="tty_isig"></a>`TTY_ISIG` | `(1u << 2)` | ^C raises an interrupt (intr_seq) instead of arriving as a byte. |
+| <a id="tty_icrnl"></a>`TTY_ICRNL` | `(1u << 3)` | A typed carriage return becomes a newline. |
+| <a id="tty_opost"></a>`TTY_OPOST` | `(1u << 4)` | Output processing is on; required for TTY_ONLCR. |
+| <a id="tty_onlcr"></a>`TTY_ONLCR` | `(1u << 5)` | With TTY_OPOST, a newline in output (and echo) becomes a carriage return and a newline. |
+| <a id="tty_mode_cooked"></a>`TTY_MODE_COOKED` |  | The usual line mode: ICANON, ISIG, ICRNL, OPOST and ONLCR. Echo is separate. |
+| <a id="tty_mode_echo"></a>`TTY_MODE_ECHO` | `TTY_ECHO` | Mode: ttysvc echoes typed characters. |
+| <a id="tty_mode_all"></a>`TTY_MODE_ALL` |  | Every mode flag. |
 
 ## Structures
 
@@ -45,22 +60,24 @@ Out-of-band signals from ttysvc to a consumer.
 
 | Field | Type | Description |
 |---|---|---|
-| `eof_seq` | `volatile uint32_t` | Bumped by ttysvc for each ^D in cooked mode. |
-| `eof_ack` | `volatile uint32_t` | Last eof_seq the consumer has handled. |
-| `eof_pos` | `volatile uint32_t` | down ring position the EOF applies at. |
-| `intr_seq` | `volatile uint32_t` | Bumped by ttysvc for each ^C in cooked mode. |
+| `winch_seq` | `volatile uint32_t` | Bumped by ttysvc when the endpoint's window size changes. |
 
 ### `TtyShm` { #ttyshm }
 
-The page a session shares with ttysvc.
+The page a session shares with ttysvc. The three rings are pipes: a consumer reads `down` as stdin and writes `up` and `err` as stdout and stderr (see TtyConnPipes()). The control words next to each carry the terminal's ^D and ^C.
 
 | Field | Type | Description |
 |---|---|---|
-| `up_hdr` | `ShmRingHdr` | Owner to ttysvc ring. |
+| `up_hdr` | `ShmRingHdr` | Owner to ttysvc ring: stdout. |
 | `up_data` | `uint8_t` | Its data. |
-| `down_hdr` | `ShmRingHdr` | ttysvc to owner ring. |
+| `down_hdr` | `ShmRingHdr` | ttysvc to owner ring: stdin. |
 | `down_data` | `uint8_t` | Its data. |
-| `ctl` | [`TtyCtl`](#ttyctl) | EOF and interrupt signals. |
+| `err_hdr` | `ShmRingHdr` | Owner to ttysvc ring: stderr. |
+| `err_data` | `uint8_t` | Its data. |
+| `up_ctl` | [`PipeCtl`](../util/pipe.md#pipectl) | Control words of the stdout pipe. |
+| `down_ctl` | [`PipeCtl`](../util/pipe.md#pipectl) | Control words of the stdin pipe: ^D and ^C. |
+| `err_ctl` | [`PipeCtl`](../util/pipe.md#pipectl) | Control words of the stderr pipe. |
+| `ctl` | [`TtyCtl`](#ttyctl) | Window size signal. |
 
 ### `TtyConnectRequest` { #ttyconnectrequest }
 
@@ -70,6 +87,7 @@ TTY_PROVIDE and TTY_ATTACH request.
 |---|---|---|
 | `cmd` | `uint32_t` | TTY_PROVIDE or TTY_ATTACH. |
 | `alias` | `char` | Endpoint name; empty attaches to the default endpoint. |
+| `dir` | `uint32_t` | TTY_PROVIDE: TTY_DIR_* flags, 0 for TTY_DIR_BOTH. Ignored by TTY_ATTACH. |
 
 ### `TtyNotifyRequest` { #ttynotifyrequest }
 
@@ -90,6 +108,54 @@ TTY_SETMODE request.
 | `cmd` | `uint32_t` | TTY_SETMODE. |
 | `index` | `uint32_t` | Session index. |
 | `flags` | `uint32_t` | TTY_MODE_* flags. |
+
+### `TtyGetModeRequest` { #ttygetmoderequest }
+
+TTY_GETMODE request.
+
+| Field | Type | Description |
+|---|---|---|
+| `cmd` | `uint32_t` | TTY_GETMODE. |
+| `index` | `uint32_t` | Session index. |
+
+### `TtyModeReply` { #ttymodereply }
+
+TTY_GETMODE reply.
+
+| Field | Type | Description |
+|---|---|---|
+| `status` | [`Err`](../../errors.md#err) | ZUZU_OK, or an error code. |
+| `flags` | `uint32_t` | The session's TTY_* mode flags. |
+
+### `TtySetWinszRequest` { #ttysetwinszrequest }
+
+TTY_SETWINSZ request.
+
+| Field | Type | Description |
+|---|---|---|
+| `cmd` | `uint32_t` | TTY_SETWINSZ. |
+| `index` | `uint32_t` | Provider session index. |
+| `cols` | `uint32_t` | Character columns. |
+| `rows` | `uint32_t` | Character rows. |
+
+### `TtyGetWinszRequest` { #ttygetwinszrequest }
+
+TTY_GETWINSZ request.
+
+| Field | Type | Description |
+|---|---|---|
+| `cmd` | `uint32_t` | TTY_GETWINSZ. |
+| `index` | `uint32_t` | Session index. |
+
+### `TtyWinszReply` { #ttywinszreply }
+
+TTY_GETWINSZ reply.
+
+| Field | Type | Description |
+|---|---|---|
+| `status` | [`Err`](../../errors.md#err) | ZUZU_OK, ERR_NOENT if no provider has set a size. |
+| `cols` | `uint32_t` | Character columns. |
+| `rows` | `uint32_t` | Character rows. |
 
 ### `TtyCloseRequest` { #ttycloserequest }
 
@@ -122,3 +188,5 @@ A session with ttysvc, for providers and consumers alike.
 | `bit` | `uint32_t` | Bit to ring on `doorbell`. |
 | `index` | `uint32_t` | Session index. |
 | `live` | [`Handle`](../../types.md#handle) | Port this client owns; ttysvc watches it to notice the client's death. |
+| `my_event` | [`Handle`](../../types.md#handle) | The caller's event, which ttysvc rings. |
+| `my_bit` | `uint32_t` | Bit ttysvc rings on `my_event`. |

@@ -13,7 +13,8 @@ Shared memory and doorbell protocol between a NIC driver and netd.
 | Name | Value | Description |
 |---|---|---|
 | <a id="nic_doorbell_tx"></a>`NIC_DOORBELL_TX` | `(1u << 0)` | Doorbell bit, netd to driver: frames queued in the tx ring. |
-| <a id="nic_doorbell_rx"></a>`NIC_DOORBELL_RX` | `(1u << 1)` | Doorbell bit, driver to netd: frames queued in the rx ring. |
+| <a id="nic_netd_bit"></a>`NIC_NETD_BIT` | `30` | Bit on netd's event that the driver signals when rx frames are queued or link_down changes. |
+| <a id="nic_netd_doorbell"></a>`NIC_NETD_DOORBELL` | `(1u << NIC_NETD_BIT)` | Mask of NIC_NETD_BIT. |
 | <a id="nic_stats_offset"></a>`NIC_STATS_OFFSET` |  | Offset of the [NicStatsBlock](#nicstatsblock): in the rx ring's pages, just after the ring. |
 
 ## Enumerations
@@ -42,3 +43,4 @@ Counters the driver keeps in the shared memory for netd and tools to read.
 | Field | Type | Description |
 |---|---|---|
 | `stat` | `volatile uint32_t` | Counters, indexed by [NicStat](#nicstat). |
+| `link_down` | `volatile uint32_t` | Nonzero while the driver sees no link; 0 means up. |

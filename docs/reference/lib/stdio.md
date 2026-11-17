@@ -146,6 +146,20 @@ The setting survives a reconnect.
 
 **Returns:** 0 on success, or -1.
 
+### `stdio_on_interrupt` { #stdio_on_interrupt }
+
+```c
+void stdio_on_interrupt(void(*handler)(void));
+```
+
+Sets what happens when the user presses ^C while the program is in cooked mode.
+
+The default ends the program with status 130. A handler runs in the program's own thread, the next time it reads or writes the console. Raw mode receives ^C as the byte 0x03 instead.
+
+| Parameter | Direction | Description |
+|---|---|---|
+| `handler` | in | Function to call, or NULL for the default. |
+
 ### `stdio_close_tty` { #stdio_close_tty }
 
 ```c

@@ -24,6 +24,12 @@ Scheduling settings for a new program.
 |---|---|---|
 | `prio` | `int32_t` | Base priority, or SPAWN_PRIO_INHERIT. |
 | `max_prio` | `int32_t` | Maximum priority, or SPAWN_PRIO_INHERIT. |
+| `stdin_pipe` | const [`PipeEnd`](pipe.md#pipeend) * | Reader end the child gets as stdin, or NULL for the console. |
+| `stdout_pipe` | const [`PipeEnd`](pipe.md#pipeend) * | Writer end the child gets as stdout, or NULL for the console. |
+| `stderr_pipe` | const [`PipeEnd`](pipe.md#pipeend) * | Writer end the child gets as stderr, or NULL for the console. |
+| `envbuf` | `const char *` | The child's environment: "NAME=value" strings, NUL-separated. |
+| `envbuf_len` | `size_t` | Bytes in `envbuf`, terminators included. |
+| `envc` | `uint32_t` | Number of strings in `envbuf`; 0 for no environment. |
 
 ## Functions
 

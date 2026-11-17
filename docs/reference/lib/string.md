@@ -165,6 +165,37 @@ The result is not NUL-terminated if `src` has `n` or more characters.
 
 **Returns:** Pointer to dest.
 
+### `strcat` { #strcat }
+
+```c
+char * strcat(char *dest, const char *src);
+```
+
+Append a string to the end of another.
+
+| Parameter | Direction | Description |
+|---|---|---|
+| `dest` | inout | Destination string, with room for the result and its NUL. |
+| `src` | in | String to append. |
+
+**Returns:** Pointer to dest.
+
+### `strncat` { #strncat }
+
+```c
+char * strncat(char *dest, const char *src, size_t n);
+```
+
+Append at most `n` characters of a string to the end of another, then a NUL.
+
+| Parameter | Direction | Description |
+|---|---|---|
+| `dest` | inout | Destination string, with room for the result, `n` bytes and a NUL. |
+| `src` | in | String to append from. |
+| `n` | in | Most characters to append. |
+
+**Returns:** Pointer to dest.
+
 ### `strcmp` { #strcmp }
 
 ```c
