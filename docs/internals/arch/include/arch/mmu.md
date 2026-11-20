@@ -34,12 +34,31 @@ void ArchMmuFreeTables(PhysAddr ttbr_pa, AddressSpaceType type);
 
 Free page tables for a given address space type.
 
-Frees the root table and every lower-level table it points to, but not the pages they map; see ArchMmuFreeUserPages(). A `ttbr_pa` of 0 is ignored.
+Frees the root table and every lower-level table it points to, but not the pages they map. A `ttbr_pa` of 0 is ignored.
 
 | Parameter | Direction | Description |
 |---|---|---|
 | `ttbr_pa` | in | Base address of the root page table. |
 | `type` | in | The type of the address space. |
+
+### `ArchMmuFreeTablesChunk` { #archmmufreetableschunk }
+
+```c
+bool ArchMmuFreeTablesChunk(PhysAddr ttbr_pa, AddressSpaceType type, size_t *pos, size_t budget);
+```
+
+Frees some of an address space's tables, deepest tables first, so a teardown can stop between calls.
+
+The tables must no longer be in use and their TLB entries must be flushed. The pages they map are not freed. Call until it returns false; the root table goes last.
+
+| Parameter | Direction | Description |
+|---|---|---|
+| `ttbr_pa` | in | Physical address of the root table; 0 is ignored. |
+| `type` | in | Kind of address space. |
+| `pos` | inout | Where to resume; 0 on the first call. |
+| `budget` | in | The most tables to free. |
+
+**Returns:** true if tables are left.
 
 ### `ArchMmuMap` { #archmmumap }
 
@@ -220,19 +239,25 @@ Clears one page mapping, without TLB maintenance.
 
 **Returns:** false if the page was not mapped by a page-level entry.
 
-### `ArchMmuFreeUserPages` { #archmmufreeuserpages }
+### `ArchMmuUnmapCollect` { #archmmuunmapcollect }
 
 ```c
-void ArchMmuFreeUserPages(AddressSpace *as);
+size_t ArchMmuUnmapCollect(AddressSpace *as, VirtAddr va, size_t size, PhysAddr *out, size_t max);
 ```
 
-Frees the anonymous memory still mapped in a user space, and all of its tables.
+Unmaps the pages in a range, stores their frames, and flushes them from the TLB.
 
-Pages that belong to memory objects, device mappings and the syspage are left alone. The space's TLB entries are flushed first, and pt_root_physaddr is 0 afterwards, so AddressSpaceDestroy() skips the flush and the per-region unmaps.
+Only page-level entries are cleared; sections and blocks are left alone, and so are the page tables. The caller frees the stored frames once this returns.
 
 | Parameter | Direction | Description |
 |---|---|---|
-| `as` | in | Address space; ignored if NULL. |
+| `as` | inout | Address space. |
+| `va` | in | Start of the range; page-aligned. |
+| `size` | in | Length in bytes; page-aligned and at most `max` pages. |
+| `out` | out | Frames of the pages that were mapped. |
+| `max` | in | Capacity of `out`. |
+
+**Returns:** Number of frames stored in `out`.
 
 ### `ArchMmuInitTtbr1` { #archmmuinitttbr1 }
 

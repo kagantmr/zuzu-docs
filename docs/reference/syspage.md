@@ -45,7 +45,7 @@ Struct representing the syspage's layout.
 | `counter_freq` | `uint64_t` | Counter frequency. |
 | `counter_boot` | `uint64_t` | Counter value at boot. |
 | `dev_count` | `uint8_t` | Device count. |
-| `_reserved` | `uint32_t` | Reserved. |
+| `lbx_pending` | `uint32_t` | Objects queued on lbx, not yet reclaimed. |
 | `devs` | [`SyspageDevEntry`](#syspagedeventry) | Device names list. |
 | `_reserved2` | `uint32_t` | Reserved. |
 | `us_mult` | `uint32_t` | Counter ticks to microseconds: us = (ticks * us_mult) >> us_shift; 0 if unset. |

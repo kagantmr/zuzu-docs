@@ -32,3 +32,18 @@ A '
 | Parameter | Direction | Description |
 |---|---|---|
 | `c` | in | Character to write. |
+
+### `ArchBootStackRange` { #archbootstackrange }
+
+```c
+void ArchBootStackRange(PhysAddr *base, PhysAddr *end);
+```
+
+Gives the physical range of the stack that early boot and kmain() run on.
+
+Exception-mode stacks are not part of it. Nothing uses it after kmain()'s last Schedule().
+
+| Parameter | Direction | Description |
+|---|---|---|
+| `base` | out | Page-aligned physical start. |
+| `end` | out | Page-aligned physical end. |

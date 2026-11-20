@@ -32,4 +32,5 @@ A memory handle with all permissions, or a negative error code.
 | Error | Condition |
 |---|---|
 | [`ERR_BADARG`](../errors.md#err_badarg) | `page_count` is 0, `flags` has unknown bits, or MEM_UNCACHED without MEM_CONTIG. |
+| [`ERR_OVERFLOW`](../errors.md#err_overflow) | `page_count` is above MEM_MAX_PAGES without MEM_CONTIG; create several objects instead. |
 | [`ERR_NOMEM`](../errors.md#err_nomem) | Not enough free (or contiguous) memory, or the handle table is full. |

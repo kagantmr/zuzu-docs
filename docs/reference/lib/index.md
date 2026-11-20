@@ -10,7 +10,7 @@ The support libraries in `include/`. Each header that is listed in `docs/doc-pub
 |---|---|
 | [`<ansi.h>`](ansi.md) | ANSI terminal escape sequences. |
 | [`<assert.h>`](assert.md) | assert(): panics in the kernel, quits the program in userspace; nothing with NDEBUG. |
-| [`<bitmap.h>`](bitmap.md) | Fixed-size bitmaps stored in 32-bit words. |
+| [`<bitmap.h>`](bitmap.md) | Fixed-size bitmaps stored in machine words. |
 | [`<compiler.h>`](compiler.md) | Branch and placement hints shared by the kernel and userspace. |
 | [`<convert.h>`](convert.md) | Number and string conversion, and byte-order helpers. |
 | [`<cpio.h>`](cpio.md) | Finding files in a cpio archive (new ASCII format), as used for the initrd. |

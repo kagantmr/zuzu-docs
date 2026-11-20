@@ -14,7 +14,7 @@ DmaMapResult DmaMap(Handle dev, Handle mem, size_t offset, size_t len, DmaDir di
 
 **Registers:** `(&args) -> r0 status, r1 bus address, r2 id`
 
-Cached memory is cleaned and invalidated at map time; use DmaSync() around later transfers. The mapping belongs to the device, not the caller, so it survives the driver exiting; DmaAdopt() lets a restarted driver take it over.
+No cache maintenance is done here: for cached memory, call DmaSync() before and after every transfer. The mapping belongs to the device, not the caller, so it survives the driver exiting; DmaAdopt() lets a restarted driver take it over.
 
 ## Parameters
 

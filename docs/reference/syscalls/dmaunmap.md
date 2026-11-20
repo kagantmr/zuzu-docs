@@ -14,6 +14,8 @@ Err DmaUnmap(Handle dev, uint32_t id);
 
 **Registers:** `(dev, id) -> r0 status`
 
+No cache maintenance is done; sync for the CPU first if it will read the data.
+
 ## Parameters
 
 | Name | Direction | Description |

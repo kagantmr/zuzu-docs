@@ -7,9 +7,3 @@ ARMv7-A CPU control.
 ```c
 #include <arch_impl/cpu.h>
 ```
-
-## Types
-
-| Type | Definition | Description |
-|---|---|---|
-| <a id="irqstate"></a>`IrqState` | `uint32_t` | A saved CPSR, as returned by ArchIrqSave(). |

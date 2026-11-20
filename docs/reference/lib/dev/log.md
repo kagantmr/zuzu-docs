@@ -28,7 +28,7 @@ Each client owns one pipe to logsvc and writes records into it without blocking.
 | <a id="log_event"></a>`LOG_EVENT` | `2` | Give logsvc the pipe's event. [LogIndexRequest](#logindexrequest); grants the event. Session handle. |
 | <a id="log_close"></a>`LOG_CLOSE` | `4` | End a session. [LogIndexRequest](#logindexrequest). Session handle. |
 | <a id="log_read"></a>`LOG_READ` | `5` | Reader: choose what to receive. [LogReadRequest](#logreadrequest). Session handle. |
-| <a id="log_setlevel"></a>`LOG_SETLEVEL` | `6` | Set one source's minimum level, or the console mirror level. [LogLevelRequest](#loglevelrequest). A session handle may set the level of its own source tag only. The console level, which has an all-zero source, needs the admin handle. |
+| <a id="log_setlevel"></a>`LOG_SETLEVEL` | `6` | Set one source's minimum level. [LogLevelRequest](#loglevelrequest). A session handle may set the level of its own source tag only; the admin handle may set any. |
 | <a id="log_stats"></a>`LOG_STATS` | `7` | Read counters. [LogIndexRequest](#logindexrequest); replies [LogStatsReply](#logstatsreply). Any handle. |
 | <a id="log_crash"></a>`LOG_CRASH` | `8` | Store a record in the crash history. [LogCrashRequest](#logcrashrequest). Admin handle only. |
 | <a id="log_claim"></a>`LOG_CLAIM` | `9` | Take the admin handle. [LogIndexRequest](#logindexrequest); grants the admin handle. Public handle only. Succeeds once per logsvc: the first caller gets it, and later calls return ERR_BUSY. |
@@ -112,7 +112,7 @@ LOG_SETLEVEL request.
 |---|---|---|
 | `cmd` | `uint32_t` | LOG_SETLEVEL. |
 | `level` | `uint32_t` | The new minimum [LogLevel](../util/log.md#loglevel). |
-| `source` | `char` | The source it applies to; all zero for the console mirror. |
+| `source` | `char` | The source it applies to. |
 
 ### `LogStatsReply` { #logstatsreply }
 
@@ -126,7 +126,6 @@ LOG_STATS reply.
 | `records` | `uint32_t` | Records in the history now. |
 | `dropped` | `uint32_t` | Records clients could not fit, added up over all sessions. |
 | `malformed` | `uint32_t` | Records logsvc threw away as invalid. |
-| `console_level` | `uint32_t` | Current console mirror level. |
 
 ### `LogCrashRequest` { #logcrashrequest }
 

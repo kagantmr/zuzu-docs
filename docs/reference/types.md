@@ -24,6 +24,7 @@ Common types for zlibc and the zuzu kernel.
 | <a id="marker"></a>`Marker` | `unsigned int` | Stamped value of a distinct object. |
 | <a id="ticket"></a>`Ticket` | `uintptr_t` | Names a call parked with Hold(); register-wide, so 64 bits on AArch64. |
 | <a id="eventword"></a>`EventWord` | `unsigned int` | Bits delivered on an event wakeup. |
+| <a id="prio"></a>`Prio` | `uint32_t` | A priority is an integer denoting how much this task is allowed to use the CPU. |
 
 ## Constants
 
@@ -42,6 +43,7 @@ Common types for zlibc and the zuzu kernel.
 | <a id="prot_rw"></a>`PROT_RW` | `((PROT_READ) \| (PROT_WRITE))` | Protection flag for a read-write memory object. |
 | <a id="device_handle_base"></a>`DEVICE_HANDLE_BASE` | `16` | The base value the Device objects are inserted into rootsvc's object table. devsvc shall start checking from this index. |
 | <a id="event_wait_all"></a>`EVENT_WAIT_ALL` | `(1u << 31)` | WaitOn argument 3 MSB: waits until all bits are signalled. |
+| <a id="mem_max_pages"></a>`MEM_MAX_PAGES` | `8192u` | Largest page count CreateMem() accepts without MEM_CONTIG (32 MiB). |
 
 ## Enumerations
 

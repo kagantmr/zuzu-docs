@@ -10,13 +10,23 @@ Architecture-netural CPU state.
 
 ## Functions
 
+### `ArchIrqPending` { #archirqpending }
+
+```c
+bool ArchIrqPending(void);
+```
+
+Include arch implementation.
+
+Check whether an IRQ is waiting to be taken. Works with IRQs masked.
+
+**Returns:** true if an IRQ is pending at this CPU.
+
 ### `ArchCpuIdle` { #archcpuidle }
 
 ```c
 void ArchCpuIdle(void);
 ```
-
-Include arch implementation.
 
 Wait until an interrupt occurs.
 
